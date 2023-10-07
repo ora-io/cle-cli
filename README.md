@@ -1,4 +1,4 @@
-# @hyperoracle/zkgraph-cli(WIP)
+# zkGraph CLI (WIP)
  
 [![NPM version](https://img.shields.io/npm/v/@hyperoracle/zkgraph-cli?color=a1b858&label=)](https://www.npmjs.com/package/@hyperoracle/zkgraph-cli)
 
@@ -84,13 +84,13 @@ Please save the `ZKGRAPH_STATE_OUTPUT` string for following prove steps.
 
 #### Usage
 ```bash
-zkgraph exec -- <block id> [root]
+zkgraph exec <block id> [root]
 ```
 
 
 #### Arguments
 
-| Options      | Description                                     |
+| Arguments      | Description                                     |
 | ------------ | ----------------------------------------------- |
 | `<block id>` | Block number (or block hash) as runtime context |
 
@@ -109,7 +109,7 @@ Set Up Full Image
 
 #### Usage
 ```bash
-zkgraph setup
+zkgraph setup [root]
 ```
 
 #### Options
@@ -125,12 +125,12 @@ Prove Full Image
 
 #### Usage
 ```bash
-zkgraph prove -- <block id> <expected state>
+zkgraph prove <block id> <expected state> [root]
 ```
 
 #### Arguments
 
-| Options            | Description                                     |
+| Arguments            | Description                                     |
 | ------------------ | ----------------------------------------------- |
 | `<block id>`       | Block number (or block hash) as runtime context |
 | `<expected state>` | State output of the zkGraph execution           |
@@ -151,11 +151,11 @@ Deploy Verification Contract for Full Image.
 
 Please save the `verifer_contract_address` from the output dialog for following publish steps.
 
-- `network_name`: Specify the network name of deployed verification smart contract, instead of loading `dataDestinations.network` from `zkgraph.yaml`. eg. `zkgraph deploy -- --network-name <network (eg. goerli)>`.
+- `network_name`: Specify the network name of deployed verification smart contract, instead of loading `dataDestinations.network` from `zkgraph.yaml`. eg. `zkgraph deploy --network-name <network (eg. goerli)>`.
 
 #### Usage
 ```bash
-zkgraph deploy -n [network_name (sepolia / goerli)]
+zkgraph deploy -n [network_name (sepolia / goerli)] [root]
 ```
 
 #### Options
@@ -173,7 +173,7 @@ Please save the `ipfs_hash` from the output dialog for following publish steps.
 
 #### Usage
 ```bash
-zkgraph upload
+zkgraph upload [root]
 ```
 
 #### Options
@@ -189,14 +189,14 @@ Verify Proof Onchain.
 
 #### Usage
 ```bash
-zkgraph verify -- <prove_task_id>
+zkgraph verify <prove task id>
 ```
 
 #### Arguments
 
-| Options           | Description           |
+| Arguments           | Description           |
 | ----------------- | --------------------- |
-| `<prove_task_id>` | Task id of prove task |
+| `<prove task id>` | Task id of prove task |
 
 
 ### Publish
@@ -207,12 +207,12 @@ See also: [Verifier Contract Interface](https://github.com/DelphinusLab/halo2agg
 
 #### Usage
 ```bash
-zkgraph publish -- <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>
+zkgraph publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>
 ```
 
 #### Arguments
 
-| Options                       | Description                                                |
+| Arguments                       | Description                                                |
 | ----------------------------- | ---------------------------------------------------------- |
 | `<deployed contract address>` | Contract address of deployed verification contract address |
 | `<ipfs hash>`                 | IPFS hash of uploaded zkGraph                              |
