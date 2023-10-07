@@ -241,7 +241,7 @@ zkgraph --config my-config.js
 
 ### Config Intellisense
 
-Since Vite ships with TypeScript typings, you can leverage your IDE's intellisense with jsdoc type hints:
+Since zkGraph ships with TypeScript typings, you can leverage your IDE's intellisense with jsdoc type hints:
 
 ```js
 /** @type {import('@hyperoracle/zkgraph-cli').UserConfig} */
