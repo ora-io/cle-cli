@@ -1,6 +1,5 @@
 {
   "name": "@hyperoracle/zkgraph-cli",
-  "type": "module",
   "version": "0.0.0",
   "packageManager": "pnpm@8.6.0",
   "description": "",
@@ -33,12 +32,19 @@
       ]
     }
   },
+  "bin": {
+    "zkgraph": "bin/zkgraph.js"
+  },
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "scripts": {
     "build": "unbuild",
     "dev": "unbuild --stub",
     "start": "esno src/index.ts"
+  },
+  "dependencies": {
+    "cac": "^6.7.14"
   }
 }
