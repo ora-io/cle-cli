@@ -1,6 +1,7 @@
 import { createConfigLoader } from 'unconfig'
 import { DEFAULT_CONFIG, TAGS } from './constants'
 import { parseTemplateTag } from './tag'
+import type { LogLevel } from './logger'
 
 export interface UserConfig {
   /**
@@ -40,6 +41,14 @@ export interface UserConfig {
    * @default "build/zkgraph_local.wasm"
    */
   LocalWasmBinPath?: string
+
+  logger?: {
+    /**
+     * logger level
+     * @default "info"
+     */
+    level?: LogLevel
+  }
 }
 
 export type UserConfigFnObject = (...args: any[]) => UserConfig

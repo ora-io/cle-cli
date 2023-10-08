@@ -16,6 +16,10 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
 
   WasmBinPath: '[root]/build/zkgraph_full.wasm',
   LocalWasmBinPath: '[root]/build/zkgraph_local.wasm',
+
+  logger: {
+    level: 'info',
+  },
 }
 
 export const TAGS = {

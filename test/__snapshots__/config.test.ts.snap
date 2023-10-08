@@ -14,6 +14,9 @@ exports[`config > load default config 1`] = `
   "UserPrivateKey": "0x0",
   "WasmBinPath": "build/zkgraph_full.wasm",
   "ZkwasmProviderUrl": "https://zkwasm-explorer.delphinuslab.com:8090",
+  "logger": {
+    "level": "info",
+  },
 }
 `;
 
@@ -31,6 +34,9 @@ exports[`config > load function config 1`] = `
   "UserPrivateKey": "0x0",
   "WasmBinPath": "build/zkgraph_full.wasm",
   "ZkwasmProviderUrl": "https://zkwasm-explorer.delphinuslab.com:8090",
+  "logger": {
+    "level": "info",
+  },
 }
 `;
 
@@ -47,5 +53,8 @@ exports[`config > merge config 1`] = `
   "UserPrivateKey": "UserPrivateKey",
   "WasmBinPath": "WasmBinPath",
   "ZkwasmProviderUrl": "https://zkwasm-explorer.delphinuslab.com:8090",
+  "logger": {
+    "level": "info",
+  },
 }
 `;
