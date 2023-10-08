@@ -42,7 +42,6 @@ exports[`config > merge config 1`] = `
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "sepolia": "https://rpc.ankr.com/eth_sepolia",
   },
-  "LocalWasmBinPath": "build/zkgraph_local.wasm",
   "PinataEndpoint": "https://api.pinata.cloud/pinning/pinFileToIPFS",
   "PinataJWT": "PinataJWT",
   "UserPrivateKey": "UserPrivateKey",

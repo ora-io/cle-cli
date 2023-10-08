@@ -301,9 +301,14 @@ Please note that (during testnet phrase) your address balance (in zkwasm server)
 #### WasmBinPath
 
 - **Type:** `string`
-- **Default**: `build/zkgraph_full.wasm`
+- **Default**: `[root]/build/zkgraph_full.wasm`
+
+zkGraph CLI Build-In a tag name is `root`.  
+The `root` is user project root path.  
+Of course, you can also place this tag at any position within the string.  
+`LocalWasmBinPath` is the same.
 
 #### LocalWasmBinPath
 
 - **Type:** `string`
-- **Default**: `build/zkgraph_local.wasm`
+- **Default**: `[root]/build/zkgraph_local.wasm`

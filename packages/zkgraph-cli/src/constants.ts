@@ -14,6 +14,10 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
 
-  WasmBinPath: 'build/zkgraph_full.wasm',
-  LocalWasmBinPath: 'build/zkgraph_local.wasm',
+  WasmBinPath: '[root]/build/zkgraph_full.wasm',
+  LocalWasmBinPath: '[root]/build/zkgraph_local.wasm',
+}
+
+export const TAGS = {
+  root: process.cwd(),
 }

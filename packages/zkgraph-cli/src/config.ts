@@ -1,5 +1,6 @@
 import { createConfigLoader } from 'unconfig'
-import { DEFAULT_CONFIG } from './constants'
+import { DEFAULT_CONFIG, TAGS } from './constants'
+import { parseTemplateTag } from './tag'
 
 export interface UserConfig {
   /**
@@ -81,5 +82,9 @@ export async function loadConfigFromFile(configFile?: string, configRoot: string
 
 export async function getConfig(configFile?: string, configRoot?: string) {
   const userConfig = await loadConfigFromFile(configFile, configRoot)
+
+  userConfig.WasmBinPath = parseTemplateTag(userConfig.WasmBinPath || '', TAGS)
+  userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
+
   return userConfig
 }
