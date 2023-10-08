@@ -16,6 +16,9 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@hyperoracle/zkgraph-cli": "workspace:*"
+  },
   "devDependencies": {
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",

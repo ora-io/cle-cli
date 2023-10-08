@@ -45,6 +45,9 @@
     "start": "esno src/index.ts"
   },
   "dependencies": {
-    "cac": "^6.7.14"
+    "@antfu/utils": "^0.7.6",
+    "add": "^2.0.6",
+    "cac": "^6.7.14",
+    "unconfig": "^0.3.11"
   }
 }
