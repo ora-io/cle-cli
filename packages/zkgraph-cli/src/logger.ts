@@ -19,7 +19,7 @@ export const LogLevels: Record<LogLevel, number> = {
 
 export function createLogger(
   level: LogLevel = 'info',
-  prefix: '[zkGraph]',
+  prefix = '[zkGraph]',
 ) {
   const thresh = LogLevels[level]
 

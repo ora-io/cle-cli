@@ -1,24 +1,38 @@
 import cac from 'cac'
 import { version } from '../package.json'
-import { compile } from './compile'
-import { exec } from './exec'
-import { setup } from './setup'
-import { prove as proveHandler } from './prove'
-import { deploy } from './deploy'
-import { upload } from './upload'
-import { verify } from './verify'
-import { publish } from './publish'
+import { compile } from './commands/compile'
+import { exec } from './commands/exec'
+import { setup } from './commands/setup'
+import { prove as proveHandler } from './commands/prove'
+import { deploy } from './commands/deploy'
+import { upload } from './commands/upload'
+import { verify } from './commands/verify'
+import { publish } from './commands/publish'
+import { getConfig } from './config'
+import { createLogger } from './logger'
 
-export function run() {
+export async function run() {
   try {
     const cli = cac('zkgraph')
+    const config = await getConfig()
+    const logger = createLogger(config.logger?.level || 'info')
 
     cli
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
       .option('--local', 'Compile for Local Image')
+      .option('--yaml-path <path>', 'Path to yaml file')
+      .option('--mapping-path <path>', 'Path to mapping file')
       .action((options) => {
-        const { local = false } = options
-        compile(local)
+        const { local = false, yamlPath = '', mappingPath = '' } = options
+        compile({
+          local,
+          yamlPath: yamlPath || config.YamlPath,
+          logger,
+          compilerServerEndpoint: config.CompilerServerEndpoint,
+          wasmPath: config.WasmBinPath,
+          watPath: config.WasmBinPath.replace(/\.wasm/, '.wat'),
+          mappingPath: mappingPath || config.MappingPath,
+        })
       })
 
     cli

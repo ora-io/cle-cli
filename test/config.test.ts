@@ -17,11 +17,13 @@ describe('config', () => {
   })
 
   it('merge config', async () => {
-    const config = await getConfig('zkgraph.merge.config.ts', configFixturesRoot)
+    const config = await getConfig('zkgraph.merge.config.ts', configFixturesRoot) as any
     // its value will change at runtime
     // so in order to pass the test correctly
     // delete it.
     delete config.LocalWasmBinPath
+    delete config.YamlPath
+    delete config.MappingPath
     expect(config).toMatchSnapshot()
   })
 })
