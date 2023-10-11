@@ -1,0 +1,22 @@
+specVersion: 0.0.1
+name: ex_addr
+description: Demo graph for zkAutomation. Use the source contract address as the trigger payload.
+repository: https://github.com/hyperoracle/zkgraph
+dataSources:
+  - kind: ethereum/contract
+    network: sepolia
+    source:
+      address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.1
+      language: wasm/assemblyscript
+      file: ./mapping.ts
+      eventHandlers:
+        - event: 'Sync(uint112,uint112)'
+          handler: handleEvents
+dataDestinations:
+  - kind: ethereum/contract
+    network: sepolia
+    destination:
+      address: '0x0000000000000000000000000000000000000001'

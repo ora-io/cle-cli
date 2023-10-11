@@ -1,12 +1,16 @@
 import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
-  entries: [
-    'src/index',
-  ],
-  declaration: true,
+  entries: ['src/index'],
   clean: true,
   rollup: {
-    emitCJS: true,
+    inlineDependencies: true,
+    esbuild: {
+      target: 'node18',
+      minify: true,
+    },
+  },
+  alias: {
+    prompts: 'prompts/lib/index.js',
   },
 })
