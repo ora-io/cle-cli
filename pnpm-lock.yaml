@@ -19,8 +19,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-lib':
-        specifier: file:/Users/murong/Documents/hyperoracle/zkgraph-lib
-        version: file:../zkgraph-lib
+        specifier: 0.0.9-alpha
+        version: 0.0.9-alpha
       '@murongg/eslint-config':
         specifier: ^0.2.0
         version: 0.2.0(eslint@8.51.0)(typescript@5.2.2)
@@ -99,9 +99,6 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.6
         version: 0.7.6
-      '@hyperoracle/zkgraph-lib':
-        specifier: file:/Users/murong/Documents/hyperoracle/zkgraph-lib
-        version: file:../zkgraph-lib
       assemblyscript:
         specifier: ^0.27.12
         version: 0.27.12
@@ -139,6 +136,9 @@ importers:
         specifier: ^0.3.11
         version: 0.3.11
     devDependencies:
+      '@hyperoracle/zkgraph-lib':
+        specifier: 0.0.9-alpha
+        version: 0.0.9-alpha
       '@types/js-yaml':
         specifier: ^4.0.6
         version: 4.0.6
@@ -823,6 +823,12 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@hyperoracle/zkgraph-lib@0.0.9-alpha:
+    resolution: {integrity: sha512-gcSVW+3PRUAv5nyNoAsDojjaV1girpnfas4llQCBRoRrdiM5aMK0E24AC4Z3+rGc0MxJom3OD/3twAvy2eblyw==}
+    dependencies:
+      assemblyscript: 0.27.12
     dev: true
 
   /@isaacs/cliui@8.0.2:
@@ -5109,10 +5115,3 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
-
-  file:../zkgraph-lib:
-    resolution: {directory: ../zkgraph-lib, type: directory}
-    name: '@hyperoracle/zkgraph-lib'
-    version: 0.0.8
-    dependencies:
-      assemblyscript: 0.27.12
