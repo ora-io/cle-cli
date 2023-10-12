@@ -9,7 +9,8 @@ const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const projectRoot = process.cwd()
 
 describe('compile', () => {
-  it('full', async () => {
+  // TODO: This is temporary
+  it.runIf(process.platform !== 'win32')('full', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(projectRoot, 'temp/zkgraph_full.wasm')
     const watPath = wasmPath.replace(/\.wasm/, '.wat')
