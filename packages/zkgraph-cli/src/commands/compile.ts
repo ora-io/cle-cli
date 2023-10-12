@@ -17,6 +17,7 @@ export interface CompileOptions {
   wasmPath: string
   watPath: string
   mappingPath: string
+  isUseAscLib?: boolean
 }
 
 const innerPrePrePath = `${process.cwd()}/temp/inner_pre_pre.wasm`
@@ -42,6 +43,7 @@ async function compileServer(options: CompileOptions) {
     wasmPath,
     watPath,
     mappingPath,
+    isUseAscLib = true,
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
@@ -65,8 +67,12 @@ async function compileServer(options: CompileOptions) {
   // const mappingRoot = path.join(mappingPath, '..')
   // const entryFilename = getEntryFilename('full')
   // const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN)
-  zkGraphCache.copyDirToCacheDir(mappingPath)
-  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts'))
+
+  // NOTE: This is temporary
+  if (!isUseAscLib)
+    zkGraphCache.copyDirToCacheDir(mappingPath)
+
+  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts', mappingPath, isUseAscLib))
 
   if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
@@ -112,7 +118,9 @@ async function compileServer(options: CompileOptions) {
   // Log status
   logger.info('[+] Output written to `build` folder.')
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
-  zkGraphCache.clearCacheDir()
+  // NOTE: This is temporary
+  if (!isUseAscLib)
+    zkGraphCache.clearCacheDir()
 }
 
 async function compileLocal(options: CompileOptions) {
@@ -121,56 +129,93 @@ async function compileLocal(options: CompileOptions) {
     watPath,
     mappingPath,
     logger = createLogger(),
+    isUseAscLib = true,
   } = options
   // const mappingRoot = path.join(mappingPath, '..')
   // const entryFilename = getEntryFilename('local')
   // const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN_LOCAL)
-  zkGraphCache.copyDirToCacheDir(mappingPath)
+  // NOTE: This is temporary
+  if (!isUseAscLib)
+    zkGraphCache.copyDirToCacheDir(mappingPath)
 
-  const [compileErr] = await to(ascCompileLocal('node_modules/.zkgraph/main_local.ts', wasmPath, watPath))
+  const [compileErr] = await to(ascCompileLocal('node_modules/.zkgraph/main_local.ts', wasmPath, watPath, mappingPath, isUseAscLib))
   if (compileErr)
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-  zkGraphCache.clearCacheDir()
+
+  // NOTE: This is temporary
+  if (!isUseAscLib)
+    zkGraphCache.clearCacheDir()
 }
 
-async function ascCompile(innerTsFilePath: string) {
-  const commands = [
+async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAscLib: boolean) {
+  let commands: string[] = [
     'npx asc',
-    innerTsFilePath,
-    '-o', innerPrePrePath,
-    '--runtime', 'stub',
-    '--use', 'abort=node_modules/.zkgraph/common/type/abort',
+  ]
+  const common = [
+    `-o ${innerPrePrePath}`,
     '--disable', 'bulk-memory',
     '--disable', 'mutable-globals',
     '--exportRuntime',
     '--exportStart', wasmStartName,
     '--memoryBase', '70000',
+    '--runtime stub',
   ]
-  return await execAndRmSync(commands.join(' '), innerTsFilePath)
+  if (isUseAscLib) {
+    commands = commands.concat([
+      'node_modules/@hyperoracle/zkgraph-lib/common/inner.ts',
+      '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
+      `--lib ${mappingPath}`,
+    ])
+  }
+  else {
+    commands = commands.concat([
+      innerTsFilePath,
+      '--use', 'abort=node_modules/.zkgraph/common/type/abort',
+    ])
+  }
+  commands = commands.concat(common)
+
+  return await execAndRmSync(commands.join(' '))
 }
 
-async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string) {
-  const commands = [
+async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string, mappingPath: string, isUseAscLib: boolean) {
+  let commands: string[] = [
     'npx asc',
-    innerTsFilePath,
+  ]
+  const common = [
     '-t', watPath,
     '-O', '--noAssert',
     '-o', wasmPath,
     '--runtime', 'stub',
-    '--use', 'abort=node_modules/.zkgraph/common/type/abort',
     '--disable', 'bulk-memory',
     '--exportRuntime',
     '--exportStart', wasmStartName,
     '--memoryBase', '70000',
   ]
-  return execAndRmSync(commands.join(' '), innerTsFilePath)
+  if (isUseAscLib) {
+    commands = commands.concat([
+      'node_modules/@hyperoracle/zkgraph-lib/main_local.ts',
+      '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
+      `--lib ${mappingPath}`,
+    ])
+  }
+  else {
+    commands.concat([
+      'npx asc',
+      innerTsFilePath,
+      '--use', 'abort=node_modules/.zkgraph/common/type/abort',
+    ])
+  }
+  commands = commands.concat(common)
+
+  return execAndRmSync(commands.join(' '))
 }
 
-async function execAndRmSync(command: string, filepath: string) {
+async function execAndRmSync(command: string) {
   return new Promise<void>((resolve, reject) => {
     try {
       execSync(command)
-      fs.rmSync(filepath)
+      // fs.rmSync(filepath)
       resolve()
     }
     catch (error) {
