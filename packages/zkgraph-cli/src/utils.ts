@@ -1,3 +1,5 @@
+import path from 'node:path'
+import fs from 'node:fs'
 import yaml from 'js-yaml'
 import semver from 'semver'
 import { ethers } from 'ethers'
@@ -163,4 +165,24 @@ export const randomUniqueKey = (length = 6) => {
     key += chars.charAt(Math.floor(Math.random() * maxPos))
 
   return key
+}
+
+export const getRelativePath = (a: string, b: string) => {
+  const relativePath1 = path.relative(path.dirname(a), b)
+  const relativePath2 = path.relative(path.dirname(b), a)
+
+  return [relativePath1, relativePath2]
+}
+
+export async function codegen(mappingRoot: string, filename: string, content: string) {
+  return new Promise<string>((resolve, reject) => {
+    try {
+      const filepath = path.join(mappingRoot, filename)
+      fs.writeFileSync(filepath, content, 'utf-8')
+      resolve(filename)
+    }
+    catch (error) {
+      reject(error)
+    }
+  })
 }

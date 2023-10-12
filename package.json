@@ -22,9 +22,10 @@
   "devDependencies": {
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/zkgraph-lib": "^0.0.8",
+    "@hyperoracle/zkgraph-lib": "file:/Users/murong/Documents/hyperoracle/zkgraph-lib",
     "@murongg/eslint-config": "^0.2.0",
     "@types/node": "^18.18.4",
+    "assemblyscript": "^0.27.12",
     "bumpp": "^9.2.0",
     "consola": "^3.2.3",
     "eslint": "^8.51.0",

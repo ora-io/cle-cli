@@ -32,7 +32,7 @@ export const TAGS = {
 export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
 
 export const COMPILE_CODEGEN = `
-import { inner_real, registerHandle } from "@hyperoracle/zkgraph-lib"
+import { inner_real } from "@hyperoracle/zkgraph-lib"
 export { asmain } from "@hyperoracle/zkgraph-lib"
 import { handleEvents } from "./mapping"
 
@@ -42,16 +42,12 @@ export function inner(
   matched_event_offsets_ptr: usize,
   re_state_len: usize,
 ): usize {
-  registerHandle(handleEvents)
   return inner_real(
     raw_receipts_ptr, 
     match_event_cnt, 
     matched_event_offsets_ptr,
     re_state_len
   )
-}
-export function full_run(): void {
-  registerHandle(handleEvents)
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
 `
