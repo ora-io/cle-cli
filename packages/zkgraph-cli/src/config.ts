@@ -34,13 +34,23 @@ export interface UserConfig {
   PinataJWT?: string
 
   /**
-   * @default "build/zkgraph_full.wasm"
+   * @default "[root]/build/zkgraph_full.wasm"
    */
   WasmBinPath?: string
   /**
-   * @default "build/zkgraph_local.wasm"
+   * @default "[root]/build/zkgraph_local.wasm"
    */
   LocalWasmBinPath?: string
+
+  /**
+   * @default "[root]/src/zkgraph.yaml"
+   */
+  YamlPath?: string
+
+  /**
+   * @default "[root]/src/mapping.ts"
+   */
+  MappingPath?: string
 
   logger?: {
     /**
@@ -94,6 +104,8 @@ export async function getConfig(configFile?: string, configRoot?: string) {
 
   userConfig.WasmBinPath = parseTemplateTag(userConfig.WasmBinPath || '', TAGS)
   userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
+  userConfig.YamlPath = parseTemplateTag(userConfig.YamlPath || '', TAGS)
+  userConfig.MappingPath = parseTemplateTag(userConfig.MappingPath || '', TAGS)
 
-  return userConfig
+  return userConfig as Required<UserConfig>
 }

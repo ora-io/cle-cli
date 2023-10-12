@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`utils > test loadYamlContent 1`] = `
+{
+  "dataDestinations": [
+    {
+      "destination": {
+        "address": "0x0000000000000000000000000000000000000001",
+      },
+      "kind": "ethereum/contract",
+      "network": "sepolia",
+    },
+  ],
+  "dataSources": [
+    {
+      "kind": "ethereum/contract",
+      "mapping": {
+        "apiVersion": "0.0.1",
+        "eventHandlers": [
+          {
+            "event": "Sync(uint112,uint112)",
+            "handler": "handleEvents",
+          },
+        ],
+        "file": "./mapping.ts",
+        "kind": "ethereum/events",
+        "language": "wasm/assemblyscript",
+      },
+      "network": "sepolia",
+      "source": {
+        "address": "0xa60ecf32309539dd84f27a9563754dca818b815e",
+      },
+    },
+  ],
+  "description": "Demo graph for zkAutomation. Use the source contract address as the trigger payload.",
+  "name": "ex_addr",
+  "repository": "https://github.com/hyperoracle/zkgraph",
+  "specVersion": "0.0.1",
+}
+`;
