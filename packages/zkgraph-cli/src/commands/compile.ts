@@ -6,13 +6,12 @@ import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import { fromHexString, loadZKGraphSources, parseYaml } from '../utils'
 import type { ZkGraphYaml } from '../types'
-import { type Logger, createLogger } from '../logger'
+import { logger } from '../logger'
 import { zkGraphCache } from '../cache'
 
 export interface CompileOptions {
   local: boolean
   yamlPath?: string
-  logger?: Logger
   compilerServerEndpoint: string
   wasmPath: string
   watPath: string
@@ -38,7 +37,6 @@ export async function compile(options: CompileOptions) {
 async function compileServer(options: CompileOptions) {
   const {
     yamlPath,
-    logger = createLogger(),
     compilerServerEndpoint,
     wasmPath,
     watPath,
@@ -128,7 +126,6 @@ async function compileLocal(options: CompileOptions) {
     wasmPath,
     watPath,
     mappingPath,
-    logger = createLogger(),
     isUseAscLib = true,
   } = options
   // const mappingRoot = path.join(mappingPath, '..')

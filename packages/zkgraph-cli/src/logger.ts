@@ -58,3 +58,10 @@ export function createLogger(
   }
   return logger
 }
+
+// eslint-disable-next-line import/no-mutable-exports
+export let logger = createLogger()
+
+export function setLogger(newLogger: Logger) {
+  logger = newLogger
+}

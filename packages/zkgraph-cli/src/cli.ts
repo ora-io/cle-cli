@@ -9,13 +9,13 @@ import { upload } from './commands/upload'
 import { verify } from './commands/verify'
 import { publish } from './commands/publish'
 import { getConfig } from './config'
-import { createLogger } from './logger'
+import { createLogger, setLogger } from './logger'
 
 export async function run() {
   try {
     const cli = cac('zkgraph')
     const config = await getConfig()
-    const logger = createLogger(config.logger?.level || 'info')
+    setLogger(createLogger(config.logger?.level || 'info'))
 
     cli
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
@@ -29,7 +29,6 @@ export async function run() {
         compile({
           local,
           yamlPath: yamlPath || config.YamlPath,
-          logger,
           compilerServerEndpoint: config.CompilerServerEndpoint,
           wasmPath,
           watPath: wasmPath.replace(/\.wasm/, '.wat'),
@@ -42,7 +41,15 @@ export async function run() {
       .option('--local', 'Execute Local Image')
       .action((blockId, options) => {
         const { local = false } = options
-        exec(blockId, local)
+        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+
+        exec({
+          local,
+          blockId: Number(blockId),
+          wasmPath,
+          yamlPath: config.YamlPath,
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+        })
       })
 
     cli
