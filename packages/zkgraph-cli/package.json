@@ -44,6 +44,9 @@
     "dev": "unbuild --stub",
     "start": "esno src/index.ts"
   },
+  "peerDependencies": {
+    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha"
+  },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
     "@hyperoracle/zkgraph-api": "^0.1.7",
