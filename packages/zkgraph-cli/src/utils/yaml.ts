@@ -1,5 +1,5 @@
 import yaml from 'js-yaml'
-import semver from 'semver'
+import { gt } from 'semver'
 import type { ZkGraphYaml } from '../types'
 import { isEthereumAddress } from './utils'
 
@@ -29,7 +29,7 @@ export function yamlHealthCheck(config: Partial<ZkGraphYaml> = {}) {
   if (!config.specVersion || typeof config.specVersion !== 'string' || config.specVersion.trim() === '')
     throw new Error('specVersion is missing or empty')
 
-  if (semver.gt(config.specVersion, '0.0.1'))
+  if (gt(config.specVersion, '0.0.1'))
     throw new Error('Invalid specVersion, it should be <= 0.0.1')
 
   // 3. datasources can have multiple objects, but should not be empty
@@ -54,7 +54,7 @@ export function yamlHealthCheck(config: Partial<ZkGraphYaml> = {}) {
     if (!dataSource.mapping.apiVersion || typeof dataSource.mapping.apiVersion !== 'string' || dataSource.mapping.apiVersion.trim() === '')
       throw new Error('apiVersion is missing or empty in one of the dataSources')
 
-    if (semver.gt(dataSource.mapping.apiVersion, '0.0.1'))
+    if (gt(dataSource.mapping.apiVersion, '0.0.1'))
       throw new Error('Invalid apiVersion, it should be <= 0.0.1')
 
     // 7. source must contain address
