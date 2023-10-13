@@ -24,13 +24,15 @@ export async function run() {
       .option('--mapping-path <path>', 'Path to mapping file')
       .action((options) => {
         const { local = false, yamlPath = '', mappingPath = '' } = options
+        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+
         compile({
           local,
           yamlPath: yamlPath || config.YamlPath,
           logger,
           compilerServerEndpoint: config.CompilerServerEndpoint,
-          wasmPath: config.WasmBinPath,
-          watPath: config.WasmBinPath.replace(/\.wasm/, '.wat'),
+          wasmPath,
+          watPath: wasmPath.replace(/\.wasm/, '.wat'),
           mappingPath: mappingPath || config.MappingPath,
         })
       })
