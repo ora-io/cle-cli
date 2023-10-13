@@ -1,6 +1,6 @@
 {
   "name": "create-zkgraph",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "author": "MuRong <hi@mrong.me>",
