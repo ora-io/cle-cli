@@ -1,6 +1,18 @@
+
+<p align="center">
+  <a href="https://www.hyperoracle.io" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://github.com/hyperoracle/media-kit/blob/main/Logos/Colored_Logo.png?raw=true" alt="HyperOracle logo">
+  </a>
+</p>
+<br/>
+<p align="center">
+  <a href="https://npmjs.com/package/@hyperoracle/zkgraph-cli"><img src="https://img.shields.io/npm/v/@hyperoracle/zkgraph-cli/alpha.svg" alt="npm package"></a>
+  <a href="https://github.com/hyperoracle/zkgraph-cli/actions/workflows/ci.yml"><img src="https://github.com/hyperoracle/zkgraph-cli/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
+  <a href="https://www.npmjs.com/package/@hyperoracle/zkgraph-lib"><img alt="npm peer dependency version (scoped)" src="https://img.shields.io/npm/dependency-version/%40hyperoracle%2Fzkgraph-cli/peer/%40hyperoracle%2Fzkgraph-lib"></a>
+</p>
+<br/>
+
 # zkGraph CLI (WIP)
- 
-[![NPM version](https://img.shields.io/npm/v/@hyperoracle/zkgraph-cli?color=a1b858&label=)](https://www.npmjs.com/package/@hyperoracle/zkgraph-cli)
 
 ## Getting Started
 
