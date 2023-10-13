@@ -2,7 +2,6 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { compile } from '../packages/zkgraph-cli/src/commands/compile'
-import { createLogger } from '../packages/zkgraph-cli/src/logger'
 import { instantiateWasm } from './utils/wasm'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
@@ -22,7 +21,6 @@ describe('compile', () => {
       compilerServerEndpoint: 'http://compiler.hyperoracle.io/compile',
       wasmPath,
       watPath,
-      logger: createLogger(),
       mappingPath,
     })
     const hasWasm = fs.existsSync(wasmPath)
@@ -58,7 +56,6 @@ describe('compile', () => {
       compilerServerEndpoint: '',
       wasmPath,
       watPath,
-      logger: createLogger(),
       mappingPath,
     })
     const hasWasm = fs.existsSync(wasmPath)

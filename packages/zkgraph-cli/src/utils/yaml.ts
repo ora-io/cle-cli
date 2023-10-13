@@ -1,9 +1,7 @@
-import path from 'node:path'
-import fs from 'node:fs'
 import yaml from 'js-yaml'
 import semver from 'semver'
-import { ethers } from 'ethers'
-import type { DataSource, ZkGraphYaml } from './types'
+import type { ZkGraphYaml } from '../types'
+import { isEthereumAddress } from './utils'
 
 /**
  * Parse yaml
@@ -99,90 +97,3 @@ export function yamlHealthCheck(config: Partial<ZkGraphYaml> = {}) {
   // }
 }
 
-/**
- * Check if the address is ethereum address
- * @param address
- * @returns
- */
-export function isEthereumAddress(address: string) {
-  try {
-    const parsedAddress = ethers.getAddress(address)
-    return parsedAddress !== '0x0000000000000000000000000000000000000000'
-  }
-  catch (error) {
-    return false
-  }
-}
-
-/**
- * Load ZKGraph sources
- * @param config
- * @returns
- */
-export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
-  const loadFromDataSource = (dataSource: DataSource): [string, string[]] => {
-    const source_address = dataSource.source.address
-    const edefs = dataSource.mapping.eventHandlers.map(
-      eh => eh.event,
-    )
-    const source_esigs = edefs.map(ed =>
-      ethers.keccak256(ethers.toUtf8Bytes(ed)),
-    )
-    return [source_address, source_esigs]
-  }
-
-  const sourceAddressList: string[] = []
-  const sourceEsigsList: string[][] = []
-  config.dataSources?.forEach((ds) => {
-    const [sa, se] = loadFromDataSource(ds)
-    sourceAddressList.push(sa)
-    sourceEsigsList.push(se)
-  })
-  return [sourceAddressList, sourceEsigsList]
-}
-
-/**
- * Convert hex string to Uint8Array
- * @param hexString
- * @returns
- */
-export function fromHexString(hexString: string) {
-  hexString = hexString.startsWith('0x') ? hexString.slice(2) : hexString
-  hexString = hexString.length % 2 ? `0${hexString}` : hexString
-  return Uint8Array.from(Buffer.from(hexString, 'hex'))
-}
-
-/**
- * Generate a random key
- * @param length
- * @returns
- */
-export const randomUniqueKey = (length = 6) => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz1234567890'
-  const maxPos = chars.length
-  let key = ''
-  for (let i = 0; i < length; i++)
-    key += chars.charAt(Math.floor(Math.random() * maxPos))
-
-  return key
-}
-
-export const getRelativePath = (a: string, b: string) => {
-  const relativePath1 = path.relative(path.dirname(a), b)
-  const relativePath2 = path.relative(path.dirname(b), a)
-
-  return [relativePath1, relativePath2]
-}
-
-export async function codegen(mappingRoot: string, filename: string, content: string) {
-  return new Promise<string>((resolve, reject) => {
-    try {
-      const filepath = path.join(mappingRoot, filename)
-      fs.writeFileSync(filepath, content, 'utf-8')
-      resolve(filename)
-    }
-    catch (error) {
-      reject(error)
-    }
-  })
-}
