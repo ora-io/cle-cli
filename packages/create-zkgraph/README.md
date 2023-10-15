@@ -6,19 +6,19 @@
 
 With NPM:
 ```bash
-npm create zkgraph@latest
+npm create zkgraph@alpha
 ```
 
 With Yarn:
 
 ```bash
-yarn create zkgraph
+yarn create zkgraph@alpha
 ```
 
 With PNPM:
 
 ```bash
-pnpm create zkgraph
+pnpm create zkgraph@alpha
 ```
 
 With CLI
@@ -38,14 +38,14 @@ To scaffold a **uniswapprice** template, you can directly specify the project na
 
 ```sh
 # npm 6.x
-npm create zkgraph@latest my-zkgraph-uniswapprice --template uniswapprice
+npm create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
 
 # npm 7+, extra double-dash is needed:
-npm create zkgraph@latest my-zkgraph-uniswapprice -- --template uniswapprice
+npm create zkgraph@alpha my-zkgraph-uniswapprice -- --template uniswapprice
 
 # yarn
-yarn create zkgraph my-zkgraph-uniswapprice --template uniswapprice
+yarn create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
 
 # pnpm
-pnpm create zkgraph my-zkgraph-uniswapprice --template uniswapprice
+pnpm create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
 ```
