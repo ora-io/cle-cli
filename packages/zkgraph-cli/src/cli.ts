@@ -58,7 +58,15 @@ export async function run() {
       .option('-k, --circuit-size <size>', 'Circuit size (k in 2^k) of image')
       .action((options) => {
         const { circuitSize = '', local = false } = options
-        setup(circuitSize, local)
+        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+        const size = !circuitSize || circuitSize === 0 ? local ? 20 : 22 : Number(circuitSize)
+        setup({
+          circuitSize: size,
+          wasmPath,
+          local,
+          userPrivateKey: config.UserPrivateKey,
+          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+        })
       })
 
     cli
