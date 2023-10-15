@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "nr build",
-    "publish": "esno scripts/publish.ts",
+    "publish": "nr prepublishOnly && esno scripts/publish.ts",
     "release": "esno scripts/release.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
