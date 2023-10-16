@@ -104,7 +104,15 @@ export async function run() {
       .option('-n, --network-name <name>', 'Name of deployed network for verification contract (sepolia/goerli)')
       .action((options) => {
         const { networkName = '', local = false } = options
-        deploy(networkName, local)
+        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+        deploy({
+          local,
+          network: networkName,
+          wasmPath,
+          yamlPath: config.YamlPath,
+          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          userPrivateKey: config.UserPrivateKey,
+        })
       })
 
     cli
