@@ -20,6 +20,8 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
   YamlPath: '[root]/src/zkgraph.yaml',
   MappingPath: '[root]/src/mapping.ts',
 
+  OutputProofFilePath: '[root]/build/proof_[taskId].txt',
+
   logger: {
     level: 'info',
   },

@@ -9,7 +9,7 @@ import { upload } from './commands/upload'
 import { verify } from './commands/verify'
 import { publish } from './commands/publish'
 import { getConfig } from './config'
-import { createLogger, setLogger } from './logger'
+import { createLogger, logger, setLogger } from './logger'
 
 export async function run() {
   try {
@@ -61,7 +61,7 @@ export async function run() {
         setup(circuitSize, local)
       })
 
-    cli
+    const proveCLI = cli
       .command('prove <block id> <expected state>', 'Prove Full Image')
       .option('--local', 'Prove Local Image')
       .option('-i, --inputgen', 'Run in input generation Mode')
@@ -69,7 +69,25 @@ export async function run() {
       .option('-p, --prove', 'Run in prove Mode')
       .action((blockId, expectedState, options) => {
         const { inputgen = false, test = false, prove = false, local = false } = options
-        proveHandler(blockId, expectedState, inputgen, test, prove, local)
+        if (!(inputgen || test || prove)) {
+          logger.error('error: missing running mode (-i / -t / -p)\n')
+          proveCLI.outputHelp()
+        }
+        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+        proveHandler({
+          blockId: Number(blockId),
+          expectedState,
+          inputgen,
+          test,
+          prove,
+          local,
+          wasmPath,
+          yamlPath: config.YamlPath,
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          userPrivateKey: config.UserPrivateKey,
+          outputProofFilePath: config.OutputProofFilePath,
+        })
       })
 
     cli

@@ -11,3 +11,4 @@ node_modules
 temp
 
 test/fixtures/**/entry_*.ts
+test/fixtures/**/proof.txt
