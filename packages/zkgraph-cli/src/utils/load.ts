@@ -1,10 +1,11 @@
+import to from 'await-to-js'
 import { ethers } from 'ethers'
 import type { DataSource, ZkGraphYaml } from '../types'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
 import { getTargetNetwork } from './network'
-import { yamlHealthCheck } from './yaml'
+import { parseYaml, yamlHealthCheck } from './yaml'
 
 export function loadZKGraphDataSources(config: Partial<ZkGraphYaml>) {
   return config.dataSources
@@ -81,4 +82,14 @@ export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
     sourceEsigsList.push(se)
   })
   return [sourceAddressList, sourceEsigsList]
+}
+
+export async function loadYaml(yamlContent: string) {
+  const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
+  if (yamlErr) {
+    logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
+    return yaml
+  }
+
+  return yaml
 }

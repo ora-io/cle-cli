@@ -3,8 +3,7 @@ import { providers } from 'ethers'
 import to from 'await-to-js'
 // @ts-expect-error non-types
 import { getBlockByNumber, getRawReceipts, prove as proveApi, proveInputGenOnRawReceipts, proveMock } from '@hyperoracle/zkgraph-api'
-import { loadJsonRpcProviderUrl, parseYaml, validateProvider } from '../utils'
-import type { ZkGraphYaml } from '../types'
+import { loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -62,16 +61,11 @@ export async function prove(options: ProveOptions) {
   }
 
   const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-  if (yamlErr) {
-    logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-    return
-  }
+  const yaml = await loadYaml(yamlContent)
   if (!yaml) {
     logger.error('invalid yaml')
     return
   }
-
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
