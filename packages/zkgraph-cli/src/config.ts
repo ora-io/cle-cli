@@ -52,6 +52,11 @@ export interface UserConfig {
    */
   MappingPath?: string
 
+  /**
+   * @default "[root]/build/proof_[taskId].txt"
+   */
+  OutputProofFilePath?: string
+
   logger?: {
     /**
      * logger level
