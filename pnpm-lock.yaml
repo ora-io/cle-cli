@@ -45,6 +45,9 @@ importers:
       esno:
         specifier: ^0.16.3
         version: 0.16.3
+      fast-glob:
+        specifier: ^3.3.1
+        version: 3.3.1
       fs-extra:
         specifier: ^11.1.1
         version: 11.1.1
@@ -7647,7 +7650,7 @@ packages:
     dev: true
 
   github.com/DelphinusLab/zkWasm-service-helper/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6:
-    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6}
+    resolution: {commit: 1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6, repo: git+ssh://git@github.com/DelphinusLab/zkWasm-service-helper.git, type: git}
     name: zkwasm-service-helper
     version: 1.0.0
     prepare: true
