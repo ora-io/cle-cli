@@ -1,4 +1,4 @@
-import { defineConfig } from '@hyperoracle/zkgraph-cli'
+import { defineConfig } from '../../../packages/zkgraph-cli/src/config'
 
 export default defineConfig({
   JsonRpcProviderUrl: {

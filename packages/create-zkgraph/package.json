@@ -15,6 +15,24 @@
     "url": "https://github.com/hyperoracle/zkgraph-cli/issues"
   },
   "keywords": [],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "bin": {
     "create-zkgraph": "bin/index.js",
     "cza": "bin/index.js"

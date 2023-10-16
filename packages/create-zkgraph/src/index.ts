@@ -44,10 +44,7 @@ const renameFiles: Record<string, string | undefined> = {
   _gitignore: '.gitignore',
 }
 
-async function init() {
-  const argTargetDir = formatTargetDir(argv._[0])
-  const argTemplate = argv.template || argv.t
-
+export async function init(argTargetDir?: string, argTemplate?: string) {
   let targetDir = argTargetDir || defaultTargetDir
   const getProjectName = () =>
     targetDir === '.' ? path.basename(path.resolve()) : targetDir
@@ -187,6 +184,12 @@ async function init() {
   console.log()
 }
 
+export async function defaultInit() {
+  const argTargetDir = formatTargetDir(argv._[0])
+  const argTemplate = argv.template || argv.t
+  await init(argTargetDir, argTemplate)
+}
+
 function formatTargetDir(targetDir: string | undefined) {
   return targetDir?.trim().replace(/\/+$/g, '')
 }
@@ -252,6 +255,3 @@ function copy(src: string, dest: string) {
     fs.copyFileSync(src, dest)
 }
 
-init().catch((e) => {
-  console.error(e)
-})
