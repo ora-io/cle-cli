@@ -137,7 +137,8 @@ export async function run() {
       })
 
     cli
-      .command('create <target directory>', 'Create zkGraph template')
+      .command('init <target directory>', 'Init zkGraph template')
+      .alias('create')
       .option('-t, --template <template>', 'Use template')
       .action((directory, options) => {
         create(directory, options.template)
