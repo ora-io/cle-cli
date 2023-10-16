@@ -1,3 +1,6 @@
 #!/usr/bin/env node
 
-import '../dist/index.mjs'
+import { defaultInit } from '../dist/index.mjs'
+defaultInit().catch((e) => {
+  console.error(e)
+})

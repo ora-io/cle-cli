@@ -120,6 +120,9 @@ importers:
       cac:
         specifier: ^6.7.14
         version: 6.7.14
+      create-zkgraph:
+        specifier: workspace:*
+        version: link:../create-zkgraph
       ethers:
         specifier: ^5.7.2
         version: 5.7.2

@@ -10,6 +10,7 @@ import { verify } from './commands/verify'
 import { publish } from './commands/publish'
 import { getConfig } from './config'
 import { createLogger, logger, setLogger } from './logger'
+import { create } from './commands/create'
 
 export async function run() {
   try {
@@ -133,6 +134,13 @@ export async function run() {
       .command('publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
       .action((contractAddress, ipfsHash, bountyRewardPerTrigger) => {
         publish(contractAddress, ipfsHash, bountyRewardPerTrigger)
+      })
+
+    cli
+      .command('create <target directory>', 'Create zkGraph template')
+      .option('-t, --template <template>', 'Use template')
+      .action((directory, options) => {
+        create(directory, options.template)
       })
 
     cli.help()
