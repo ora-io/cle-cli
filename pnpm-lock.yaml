@@ -7650,7 +7650,7 @@ packages:
     dev: true
 
   github.com/DelphinusLab/zkWasm-service-helper/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6:
-    resolution: {commit: 1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6, repo: git+ssh://git@github.com/DelphinusLab/zkWasm-service-helper.git, type: git}
+    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6}
     name: zkwasm-service-helper
     version: 1.0.0
     prepare: true
