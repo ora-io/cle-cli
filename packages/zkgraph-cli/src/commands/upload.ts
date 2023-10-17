@@ -1,6 +1,7 @@
 // @ts-expect-error non-types
 import { upload as uploadApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
+import { logDivider } from '../utils'
 export interface UploadOptions {
   local: boolean
   wasmPath: string
@@ -26,6 +27,7 @@ export async function upload(options: UploadOptions) {
     true,
   )
 
+  logDivider()
   if (isUploadSuccess)
     logger.info('>> UPLOAD SUCCESS')
 
