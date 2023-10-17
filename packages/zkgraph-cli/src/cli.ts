@@ -121,7 +121,15 @@ export async function run() {
       .option('--local', 'Upload Local zkGraph (Code and Local Image)')
       .action((options) => {
         const { local = false } = options
-        upload(local)
+        upload({
+          local,
+          wasmPath: local ? config.LocalWasmBinPath : config.WasmBinPath,
+          yamlPath: config.YamlPath,
+          pinataEndpoint: config.PinataEndpoint,
+          pinataJWT: config.PinataJWT,
+          mappingPath: config.MappingPath,
+          userPrivateKey: config.UserPrivateKey,
+        })
       })
 
     cli
