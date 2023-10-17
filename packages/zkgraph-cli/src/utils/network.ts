@@ -19,17 +19,14 @@ export function getTargetNetwork(inputtedNetworkName: string) {
 }
 
 export async function validateProvider(ethersProvider: providers. JsonRpcProvider) {
-  // eslint-disable-next-line no-async-promise-executor
-  return new Promise<void>(async (resolve, reject) => {
-    try {
-      await ethersProvider.detectNetwork()
-      resolve()
-    }
-    catch (err: any) {
-      if (err.code === 'NETWORK_ERROR')
-        reject(new Error('[-] could not detect network, please provide a valid provider in config file'))
-      else
-        reject(err)
-    }
-  })
+  try {
+    await ethersProvider.detectNetwork()
+    Promise.resolve()
+  }
+  catch (err: any) {
+    if (err.code === 'NETWORK_ERROR')
+      Promise.reject(new Error('[-] could not detect network, please provide a valid provider in config file'))
+    else
+      Promise.reject(err)
+  }
 }
