@@ -3619,7 +3619,7 @@ packages:
   /eth-lib@0.1.29:
     resolution: {integrity: sha512-bfttrr3/7gG4E02HoWTDUcDDslN003OlOoBxk9virpAZQ1ja/jDgwkWB8QfJF7ojuEowrqy+lzp9VcJG7/k5bQ==}
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.11.6
       elliptic: 6.5.4
       nano-json-stream-parser: 0.1.2
       servify: 0.1.12
@@ -3634,7 +3634,7 @@ packages:
   /eth-lib@0.2.8:
     resolution: {integrity: sha512-ArJ7x1WcWOlSpzdoTBX8vkwlkSQ85CjjifSZtV4co64vWxSV8geWfPI9x4SVYu3DSxnX4yWFVTtGL+j9DUFLNw==}
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.11.6
       elliptic: 6.5.4
       xhr-request-promise: 0.1.3
     dev: false
@@ -7621,7 +7621,7 @@ packages:
     dev: true
 
   github.com/DelphinusLab/zkWasm-service-helper/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6:
-    resolution: {commit: 1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6, repo: git+ssh://git@github.com/DelphinusLab/zkWasm-service-helper.git, type: git}
+    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/1b05cb49c5ceb2e8a9a2ae4771a905fcc53a78d6}
     name: zkwasm-service-helper
     version: 1.0.0
     prepare: true
