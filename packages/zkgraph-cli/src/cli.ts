@@ -145,7 +145,7 @@ export async function run() {
     cli
       .command('publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
       .action((contractAddress, ipfsHash, bountyRewardPerTrigger) => {
-        publish(contractAddress, ipfsHash, bountyRewardPerTrigger)
+        publish({ contractAddress, ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, userPrivateKey: config.UserPrivateKey })
       })
 
     cli
