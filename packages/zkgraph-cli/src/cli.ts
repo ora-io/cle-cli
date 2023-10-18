@@ -135,7 +135,11 @@ export async function run() {
     cli
       .command('verify <prove task id>', 'Verify Proof Onchain')
       .action((taskId) => {
-        verify(taskId)
+        verify({
+          taskId,
+          yamlPath: config.YamlPath,
+          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+        })
       })
 
     cli

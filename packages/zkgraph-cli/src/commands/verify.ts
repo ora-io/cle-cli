@@ -5,7 +5,6 @@ import { logger } from '../logger'
 import { logDivider } from '../utils'
 
 export interface VerifyOptions {
-  local: boolean
   taskId: string
   yamlPath: string
   zkWasmProviderUrl: string
