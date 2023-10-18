@@ -26,11 +26,11 @@ async function build() {
     execSync('pnpm run clean', { stdio: 'inherit' })
   }
 
-  consola.info('CLI build')
-  execSync('pnpm run -C packages/zkgraph-cli build', { stdio: 'inherit' })
-
   consola.info('Create zkGraph build')
   execSync('pnpm run -C packages/create-zkgraph build', { stdio: 'inherit' })
+
+  consola.info('CLI build')
+  execSync('pnpm run -C packages/zkgraph-cli build', { stdio: 'inherit' })
 
   buildMetaFiles()
 }
