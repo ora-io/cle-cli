@@ -3,7 +3,7 @@ import path from 'node:path'
 import consola from 'consola'
 import fs, { readJSONSync } from 'fs-extra'
 import fg from 'fast-glob'
-import { haveWorkspacePackages } from './constants'
+import { haveWorkspacePackages, packages } from './constants'
 
 const { version } = readJSONSync('package.json')
 
@@ -63,7 +63,7 @@ async function buildMetaFiles() {
 
     const packageJSON = await fs.readJSON(path.join(packageRoot, 'package.json'))
     for (const key of Object.keys(packageJSON.dependencies || {})) {
-      if (haveWorkspacePackages.includes(key))
+      if (packages.includes(key))
         packageJSON.dependencies[key] = version
     }
     await fs.writeJSON(path.join(packageDist, 'package.json'), packageJSON, { spaces: 2 })
