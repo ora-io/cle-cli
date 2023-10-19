@@ -26,4 +26,10 @@ describe('config', () => {
     delete config.MappingPath
     expect(config).toMatchSnapshot()
   })
+
+  it('load object config', async () => {
+    const funcConfigPath = 'zkgraph.object.config.ts'
+    const config = await loadConfigFromFile(funcConfigPath, configFixturesRoot)
+    expect(config).toMatchSnapshot()
+  })
 })

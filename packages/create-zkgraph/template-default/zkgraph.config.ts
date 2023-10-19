@@ -1,5 +1,5 @@
-import { defineConfig } from '@hyperoracle/zkgraph-cli'
+import { UserConfig } from '@hyperoracle/zkgraph-cli'
 
-export default defineConfig({
+export default {
   // set your config
-})
+} as UserConfig
