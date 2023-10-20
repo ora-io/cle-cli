@@ -20,10 +20,10 @@
     "publish": "zkgraph publish"
   },
   "dependencies": {
-    "@hyperoracle/zkgraph-cli": "0.0.1-alpha.8",
     "@hyperoracle/zkgraph-lib": "0.0.9-alpha"
   },
   "devDependencies": {
+    "@hyperoracle/zkgraph-cli": "0.0.1-alpha.8",
     "assemblyscript": "^0.27.0"
   }
 }
