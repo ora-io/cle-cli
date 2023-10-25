@@ -8,6 +8,7 @@ import { fromHexString, loadZKGraphSources, parseYaml } from '../utils'
 import type { ZkGraphYaml } from '../types'
 import { logger } from '../logger'
 import { zkGraphCache } from '../cache'
+import { createOnNonexist } from '../utils'
 
 export interface CompileOptions {
   local: boolean
@@ -106,7 +107,11 @@ async function compileServer(options: CompileOptions) {
   }
   const wasmModuleHex = response.data.wasmModuleHex
   const wasmWat = response.data.wasmWat
+  
+  createOnNonexist(wasmPath)
   fs.writeFileSync(wasmPath, fromHexString(wasmModuleHex))
+
+  createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
   // Log compiled file size by line count
