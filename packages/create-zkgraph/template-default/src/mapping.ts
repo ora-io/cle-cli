@@ -1,5 +1,5 @@
 import { Bytes, require } from '@hyperoracle/zkgraph-lib'
-import type { Event } from '@hyperoracle/zkgraph-lib'
+import { Event } from '@hyperoracle/zkgraph-lib'
 
 export function handleEvents(events: Event[]): Bytes {
   let state = new Bytes(0)

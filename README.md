@@ -39,7 +39,7 @@ With CLI
 
 ```bash
 # install zkgraph-cli
-npm install @hyperoracle/zkgraph-cli -g
+npm install @hyperoracle/zkgraph-cli@alpha -g
 # run create command
 zkgraph create
 # or

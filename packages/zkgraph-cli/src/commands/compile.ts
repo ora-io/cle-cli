@@ -4,7 +4,7 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { fromHexString, loadZKGraphSources, parseYaml } from '../utils'
+import { createOnNonexist, fromHexString, loadZKGraphSources, parseYaml } from '../utils'
 import type { ZkGraphYaml } from '../types'
 import { logger } from '../logger'
 import { zkGraphCache } from '../cache'
@@ -106,7 +106,11 @@ async function compileServer(options: CompileOptions) {
   }
   const wasmModuleHex = response.data.wasmModuleHex
   const wasmWat = response.data.wasmWat
+
+  createOnNonexist(wasmPath)
   fs.writeFileSync(wasmPath, fromHexString(wasmModuleHex))
+
+  createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
   // Log compiled file size by line count
