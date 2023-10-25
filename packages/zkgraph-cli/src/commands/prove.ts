@@ -121,75 +121,97 @@ export async function prove(options: ProveOptions) {
   }
   else if (test) {
     // Test mode
-
-    const mockSuccess = await proveMock(
-      wasmUnit8Array,
-      privateInputStr,
-      publicInputStr,
-    )
-
-    if (mockSuccess)
-      logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
-
-    else
-      logger.error('[-] ZKWASM MOCK EXECUTION FAILED')
+    await testMode(wasmUnit8Array, privateInputStr, publicInputStr)
   }
   else if (prove) {
     // Prove mode
-    const feeInWei = ethers.utils.parseEther(TdConfig.fee)
-    const dispatcherContract = getDispatcherContract(userPrivateKey)
-    const tx = await dispatcherContract.prove(
-      md5,
-      privateInputStr,
-      publicInputStr,
-      {
-        value: feeInWei,
-      },
-    )
-
-    const txhash = tx.hash
-    logger.info(
-      `[+] Prove Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
-    )
-
-    await tx.wait()
-
-    logger.info('[+] Transaction Confirmed. Creating Prove Task')
-
-    const taskId = await queryTaskId(txhash)
-    if (!taskId) {
-      logger.error('[+] PROVE TASK FAILED. \n')
-      return
-    }
-    logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
-
-    const result = await waitProve(zkWasmProviderUrl, taskId, true)
-
-    if (
-      result.instances === null
-      && result.batch_instances === null
-      && result.proof === null
-      && result.aux === null
-    ) {
-      logger.warn('[-] PROOF NOT FOUND')
-      return
-    }
-
-    // write proof to file as txt
-    const outputProofFile = parseTemplateTag(outputProofFilePath, {
-      ...TAGS,
-      taskId: result.taskId,
-    })
-
-    logger.info(`[+] Proof written to ${outputProofFile}.\n`)
-
-    fs.writeFileSync(
-      outputProofFile,
-      `Instances:\n${result.instances
-      }\n\nBatched Instances:\n${result.batch_instances
-      }\n\nProof transcripts:\n${result.proof
-      }\n\nAux data:\n${result.aux
-      }\n`,
-    )
+    await proveMode(userPrivateKey, md5, privateInputStr, publicInputStr, zkWasmProviderUrl, outputProofFilePath)
   }
+}
+/**
+ * test mode
+ * @param wasmUnit8Array
+ * @param privateInputStr
+ * @param publicInputStr
+ */
+async function testMode(wasmUnit8Array: Uint8Array, privateInputStr: string, publicInputStr: string) {
+  const mockSuccess = await proveMock(
+    wasmUnit8Array,
+    privateInputStr,
+    publicInputStr,
+  )
+
+  if (mockSuccess)
+    logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
+
+  else
+    logger.error('[-] ZKWASM MOCK EXECUTION FAILED')
+}
+
+/**
+ * prove mode
+ * @param userPrivateKey
+ * @param md5
+ * @param privateInputStr
+ * @param publicInputStr
+ * @param zkWasmProviderUrl
+ * @param outputProofFilePath
+ * @returns
+ */
+async function proveMode(userPrivateKey: string, md5: string, privateInputStr: string, publicInputStr: string, zkWasmProviderUrl: string, outputProofFilePath: string) {
+  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
+  const dispatcherContract = getDispatcherContract(userPrivateKey)
+  const tx = await dispatcherContract.prove(
+    md5,
+    privateInputStr,
+    publicInputStr,
+    {
+      value: feeInWei,
+    },
+  )
+
+  const txhash = tx.hash
+  logger.info(
+    `[+] Prove Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
+  )
+
+  await tx.wait()
+
+  logger.info('[+] Transaction Confirmed. Creating Prove Task')
+
+  const taskId = await queryTaskId(txhash)
+  if (!taskId) {
+    logger.error('[+] PROVE TASK FAILED. \n')
+    return
+  }
+  logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
+
+  const result = await waitProve(zkWasmProviderUrl, taskId, true)
+
+  if (
+    result.instances === null
+    && result.batch_instances === null
+    && result.proof === null
+    && result.aux === null
+  ) {
+    logger.warn('[-] PROOF NOT FOUND')
+    return
+  }
+
+  // write proof to file as txt
+  const outputProofFile = parseTemplateTag(outputProofFilePath, {
+    ...TAGS,
+    taskId: result.taskId,
+  })
+
+  logger.info(`[+] Proof written to ${outputProofFile}.\n`)
+
+  fs.writeFileSync(
+    outputProofFile,
+    `Instances:\n${result.instances
+    }\n\nBatched Instances:\n${result.batch_instances
+    }\n\nProof transcripts:\n${result.proof
+    }\n\nAux data:\n${result.aux
+    }\n`,
+  )
 }
