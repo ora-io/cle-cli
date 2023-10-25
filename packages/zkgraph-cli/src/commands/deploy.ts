@@ -1,8 +1,11 @@
 import fs from 'node:fs'
 // @ts-expect-error non-types
-import { deploy as deployApi } from '@hyperoracle/zkgraph-api'
+import { waitDeploy } from '@hyperoracle/zkgraph-api'
+import { ethers } from 'ethers'
 import { logger } from '../logger'
-import { getTargetNetwork, loadYaml, loadZKGraphDataDestinations, logDivider } from '../utils'
+import { convertToMd5, getTargetNetwork, loadYaml, loadZKGraphDataDestinations, logDivider } from '../utils'
+import { TdConfig } from '../constants'
+import { getDispatcherContract, queryTaskId } from '../utils/td'
 
 export interface DeployOptions {
   wasmPath: string
@@ -41,14 +44,38 @@ export async function deploy(options: DeployOptions) {
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUnit8Array = new Uint8Array(wasm)
+  const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
 
-  const deployedVerificationContractAddress = await deployApi(
-    wasmUnit8Array,
-    targetNetwork?.value,
+  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
+  const dispatcherContract = getDispatcherContract(userPrivateKey)
+  const tx = await dispatcherContract.deploy(md5, targetNetwork?.value, {
+    value: feeInWei,
+  })
+
+  const txhash = tx.hash
+  logger.info(
+    `[+] Deploy Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
+  )
+
+  await tx.wait()
+
+  logger.info('[+] Transaction Confirmed. Creating Deploy Task')
+
+  const taskId = await queryTaskId(txhash)
+  if (!taskId) {
+    logger.error('[+] DEPLOY TASK FAILED. \n')
+    return
+  }
+  logger.info(`[+] DEPLOY TASK STARTED. TASK ID: ${taskId}`)
+
+  const deployedVerificationContractAddress = await waitDeploy(
     zkWasmProviderUrl,
-    userPrivateKey,
+    taskId,
+    md5,
+    targetNetwork?.value,
     true,
   )
+
   logDivider()
 
   if (deployedVerificationContractAddress)

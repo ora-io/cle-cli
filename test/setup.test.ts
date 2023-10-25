@@ -9,7 +9,6 @@ describe('setup', () => {
     const wasmPath = path.join(commandsFixturesRoot, 'zkgraph_full.wasm')
 
     const res = await setup({
-      local: false,
       wasmPath,
       zkWasmProviderUrl: 'https://zkwasm-explorer.delphinuslab.com:8090',
       userPrivateKey: '0x12',

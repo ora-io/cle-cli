@@ -1,35 +1,51 @@
-import fs from 'node:fs'
+import { ethers } from 'ethers'
 // @ts-expect-error non-types
-import { setup as apiSetup } from '@hyperoracle/zkgraph-api'
+import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
+import { TdConfig } from '../constants'
+import { getDispatcherContract, queryTaskId, uploadWasmToTd } from '../utils/td'
 
 export interface SetupOptions {
   wasmPath: string
   circuitSize: number
-  local: boolean
   userPrivateKey: string
   zkWasmProviderUrl: string
 }
 export async function setup(options: SetupOptions) {
-  const { wasmPath, circuitSize, local, zkWasmProviderUrl, userPrivateKey } = options
-  const wasm = fs.readFileSync(wasmPath)
-  const wasmUnit8Array = new Uint8Array(wasm)
+  const { wasmPath, circuitSize, zkWasmProviderUrl, userPrivateKey } = options
 
   logger.info('>> SET UP')
 
-  const { md5, taskId, success } = await apiSetup(
-    'poc.wasm',
-    wasmUnit8Array,
-    circuitSize,
-    userPrivateKey,
-    zkWasmProviderUrl,
-    local,
-    true,
+  const md5 = await uploadWasmToTd(wasmPath)
+  logger.info(`[*] IMAGE MD5: ${md5}`)
+
+  const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
+  if (deatails[0].data.result[0] !== null) {
+    logger.error('[*] IMAGE ALREADY EXISTS')
+    return
+  }
+
+  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
+  const dispatcherContract = getDispatcherContract(userPrivateKey)
+  const tx = await dispatcherContract.setup(md5, circuitSize, {
+    value: feeInWei,
+  })
+
+  const txhash = tx.hash
+  logger.info(
+    `[+] Setup Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
   )
 
-  return {
-    md5,
-    taskId,
-    success,
+  await tx.wait()
+
+  logger.info('[+] Transaction Confirmed. Creating Setup Task')
+  const taskId = await queryTaskId(txhash)
+  if (!taskId) {
+    logger.error('[+] SETUP TASK FAILED. \n')
+    return
   }
+  logger.info(`[+] SETUP TASK STARTED. TASK ID: ${taskId}`)
+
+  const result = await waitSetup(zkWasmProviderUrl, taskId, true)
+  return result
 }

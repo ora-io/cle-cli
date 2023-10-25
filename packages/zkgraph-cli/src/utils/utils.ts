@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { Md5 } from 'ts-md5'
 
 /**
  * Check if the address is ethereum address
@@ -39,4 +40,13 @@ export const randomUniqueKey = (length = 6) => {
     key += chars.charAt(Math.floor(Math.random() * maxPos))
 
   return key
+}
+
+export function convertToMd5(value: Uint8Array): string {
+  const md5 = new Md5()
+  md5.appendByteArray(value)
+  const hash = md5.end()
+  if (!hash)
+    return ''
+  return hash.toString()
 }

@@ -1,13 +1,14 @@
 import fs from 'node:fs'
-import { providers } from 'ethers'
+import { ethers, providers } from 'ethers'
 import to from 'await-to-js'
 // @ts-expect-error non-types
-import { getBlockByNumber, getRawReceipts, prove as proveApi, proveInputGenOnRawReceipts, proveMock } from '@hyperoracle/zkgraph-api'
-import { loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
+import { getBlockByNumber, getRawReceipts, proveInputGenOnRawReceipts, proveMock, waitProve } from '@hyperoracle/zkgraph-api'
+import { convertToMd5, loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
-import { TAGS } from '../constants'
+import { TAGS, TdConfig } from '../constants'
+import { getDispatcherContract, queryTaskId } from '../utils/td'
 
 export interface ProveOptions {
   blockId: number
@@ -99,6 +100,7 @@ export async function prove(options: ProveOptions) {
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUnit8Array = new Uint8Array(wasm)
+  const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
 
   const [privateInputStr, publicInputStr] = await proveInputGenOnRawReceipts(
     yamlContent,
@@ -134,14 +136,34 @@ export async function prove(options: ProveOptions) {
   }
   else if (prove) {
     // Prove mode
-    const result = await proveApi(
-      wasmUnit8Array,
+    const feeInWei = ethers.utils.parseEther(TdConfig.fee)
+    const dispatcherContract = getDispatcherContract(userPrivateKey)
+    const tx = await dispatcherContract.prove(
+      md5,
       privateInputStr,
       publicInputStr,
-      zkWasmProviderUrl,
-      userPrivateKey,
-      true,
+      {
+        value: feeInWei,
+      },
     )
+
+    const txhash = tx.hash
+    logger.info(
+      `[+] Prove Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
+    )
+
+    await tx.wait()
+
+    logger.info('[+] Transaction Confirmed. Creating Prove Task')
+
+    const taskId = await queryTaskId(txhash)
+    if (!taskId) {
+      logger.error('[+] PROVE TASK FAILED. \n')
+      return
+    }
+    logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
+
+    const result = await waitProve(zkWasmProviderUrl, taskId, true)
 
     if (
       result.instances === null
