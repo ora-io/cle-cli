@@ -9,9 +9,8 @@ export const getRelativePath = (a: string, b: string) => {
 }
 
 export function createOnNonexist(filePath: string): void {
-  const directoryPath = path.dirname(filePath);
-  
-  if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath, { recursive: true });
-  }
+  const directoryPath = path.dirname(filePath)
+
+  if (!fs.existsSync(directoryPath))
+    fs.mkdirSync(directoryPath, { recursive: true })
 }
