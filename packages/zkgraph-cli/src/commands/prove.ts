@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import { ethers, providers } from 'ethers'
 import to from 'await-to-js'
 // @ts-expect-error non-types
+import prompts from 'prompts'
 import { getBlockByNumber, getRawReceipts, proveInputGenOnRawReceipts, proveMock, waitProve } from '@hyperoracle/zkgraph-api'
 import { convertToMd5, loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
 import { logger } from '../logger'
@@ -159,6 +160,21 @@ async function testMode(wasmUnit8Array: Uint8Array, privateInputStr: string, pub
  * @returns
  */
 async function proveMode(userPrivateKey: string, md5: string, privateInputStr: string, publicInputStr: string, zkWasmProviderUrl: string, outputProofFilePath: string) {
+  const response = await prompts({
+    type: 'confirm',
+    name: 'value',
+    message: `You are going to publish a Prove request to the Sepolia testnet, which would require ${TdConfig.fee} SepoliaETH. Proceed?`,
+    initial: true,
+  }, {
+    onCancel: () => {
+      logger.error('Operation cancelled')
+    },
+  })
+
+  if (response.value === false) {
+    logger.error('Operation cancelled')
+    return
+  }
   const feeInWei = ethers.utils.parseEther(TdConfig.fee)
   const dispatcherContract = getDispatcherContract(userPrivateKey)
   const tx = await dispatcherContract.prove(

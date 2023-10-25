@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 // @ts-expect-error non-types
+import prompts from 'prompts'
 import { waitDeploy } from '@hyperoracle/zkgraph-api'
 import { ethers } from 'ethers'
 import { logger } from '../logger'
@@ -45,6 +46,22 @@ export async function deploy(options: DeployOptions) {
   const wasm = fs.readFileSync(wasmPath)
   const wasmUnit8Array = new Uint8Array(wasm)
   const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
+
+  const response = await prompts({
+    type: 'confirm',
+    name: 'value',
+    message: `You are going to publish a Deploy request to the Sepolia testnet, which would require ${TdConfig.fee} SepoliaETH. Proceed?`,
+    initial: true,
+  }, {
+    onCancel: () => {
+      logger.error('Operation cancelled')
+    },
+  })
+
+  if (response.value === false) {
+    logger.error('Operation cancelled')
+    return
+  }
 
   const feeInWei = ethers.utils.parseEther(TdConfig.fee)
   const dispatcherContract = getDispatcherContract(userPrivateKey)

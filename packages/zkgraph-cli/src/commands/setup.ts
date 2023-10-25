@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 // @ts-expect-error non-types
+import prompts from 'prompts'
 import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
@@ -22,6 +23,22 @@ export async function setup(options: SetupOptions) {
   const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
   if (deatails[0].data.result[0] !== null) {
     logger.error('[*] IMAGE ALREADY EXISTS')
+    return
+  }
+
+  const response = await prompts({
+    type: 'confirm',
+    name: 'value',
+    message: `You are going to publish a Setup request to the Sepolia testnet, which would require ${TdConfig.fee} SepoliaETH. Proceed?`,
+    initial: true,
+  }, {
+    onCancel: () => {
+      logger.error('Operation cancelled')
+    },
+  })
+
+  if (response.value === false) {
+    logger.error('Operation cancelled')
     return
   }
 
