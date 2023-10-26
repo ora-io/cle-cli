@@ -116,7 +116,7 @@ async function compileServer(options: CompileOptions) {
   // Log compiled file size by line count
   const compiledFileContent = fs.readFileSync(watPath, 'utf-8')
   const compiledFileLineCount = compiledFileContent.split('\n').length
-  logger.info(`[*]${compiledFileLineCount}${compiledFileLineCount > 1 ? 'lines' : 'line'}in ${watPath}`)
+  logger.info(`[*] ${compiledFileLineCount}${compiledFileLineCount > 1 ? 'lines' : 'line'}in ${watPath}`)
   // Log status
   logger.info('[+] Output written to `build` folder.')
   logger.info('[+] COMPILATION SUCCESS!' + '\n')

@@ -98,7 +98,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
             ? reset(
                 `"${argTemplate}" isn't a valid template. Please choose from below: `,
             )
-            : reset('Select a framework:'),
+            : reset('Select a template:'),
         initial: 0,
         choices: FRAMEWORKS.map((framework) => {
           const frameworkColor = framework.color
