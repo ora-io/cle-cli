@@ -80,6 +80,7 @@ export async function run() {
         if (!(inputgen || test || prove)) {
           logger.error('error: missing running mode (-i / -t / -p)\n')
           proveCLI.outputHelp()
+          return
         }
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
         proveHandler({
@@ -97,6 +98,8 @@ export async function run() {
           outputProofFilePath: config.OutputProofFilePath,
         })
       })
+
+    proveCLI.usage('prove <block id> <expected state> -i|-t|-p')
 
     cli
       .command('deploy', 'Deploy Verification Contract for Full Image')
