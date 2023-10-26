@@ -64,7 +64,6 @@ export async function run() {
         setup({
           circuitSize: size,
           wasmPath,
-          local,
           userPrivateKey: config.UserPrivateKey,
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
         })
