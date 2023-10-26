@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
-// @ts-expect-error non-types
 import prompts from 'prompts'
+// @ts-expect-error non-types
 import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'

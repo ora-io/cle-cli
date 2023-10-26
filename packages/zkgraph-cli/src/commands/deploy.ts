@@ -1,6 +1,6 @@
 import fs from 'node:fs'
-// @ts-expect-error non-types
 import prompts from 'prompts'
+// @ts-expect-error non-types
 import { waitDeploy } from '@hyperoracle/zkgraph-api'
 import { ethers } from 'ethers'
 import { logger } from '../logger'

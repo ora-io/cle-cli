@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import { ethers, providers } from 'ethers'
 import to from 'await-to-js'
-// @ts-expect-error non-types
 import prompts from 'prompts'
+// @ts-expect-error non-types
 import { getBlockByNumber, getRawReceipts, proveInputGenOnRawReceipts, proveMock, waitProve } from '@hyperoracle/zkgraph-api'
 import { convertToMd5, loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
 import { logger } from '../logger'
