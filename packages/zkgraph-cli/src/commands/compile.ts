@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import fs from 'node:fs'
+import path from 'node:path'
 import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
@@ -19,7 +20,6 @@ export interface CompileOptions {
   isUseAscLib?: boolean
 }
 
-const innerPrePrePath = `${process.cwd()}/temp/inner_pre_pre.wasm`
 const wasmStartName = '__as_start'
 
 // const ascBin = path.join(`${__dirname}`, '../..', 'node_modules/.bin/asc')
@@ -70,7 +70,10 @@ async function compileServer(options: CompileOptions) {
   if (!isUseAscLib)
     zkGraphCache.copyDirToCacheDir(mappingPath)
 
-  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts', mappingPath, isUseAscLib))
+  const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
+  createOnNonexist(innerPrePrePath)
+
+  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts', mappingPath, isUseAscLib, innerPrePrePath))
 
   if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
@@ -148,7 +151,7 @@ async function compileLocal(options: CompileOptions) {
     zkGraphCache.clearCacheDir()
 }
 
-async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAscLib: boolean) {
+async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAscLib: boolean, innerPrePrePath: string) {
   let commands: string[] = [
     'npx asc',
   ]
