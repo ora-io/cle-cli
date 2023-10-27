@@ -2,8 +2,8 @@ import type { UserConfig } from './config'
 
 export const DEFAULT_CONFIG: Required<UserConfig> = {
   JsonRpcProviderUrl: {
-    mainnet: '',
-    sepolia: '',
+    mainnet: 'https://rpc.ankr.com/eth',
+    sepolia: 'https://rpc.ankr.com/eth_sepolia',
     goerli: '',
   },
 
