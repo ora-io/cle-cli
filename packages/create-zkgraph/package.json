@@ -38,6 +38,7 @@
     "cza": "bin/index.js"
   },
   "files": [
+    "templates",
     "template-*",
     "dist",
     "bin"

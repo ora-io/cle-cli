@@ -138,7 +138,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
 
   const templateDir = path.resolve(
     fileURLToPath(import.meta.url),
-    '../..',
+    '../../templates',
     `template-${template}`,
   )
 

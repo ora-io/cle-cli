@@ -1,2 +1,3 @@
 packages/create-zkgraph/template-*/**/*
 test/fixtures/**/*
+packages/create-zkgraph/templates/**/**/*
