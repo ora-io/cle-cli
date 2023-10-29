@@ -198,6 +198,8 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
       break
   }
   console.log()
+  console.log('Read docs: https://github.com/hyperoracle/zkgraph-cli#cli')
+  console.log()
 }
 
 export async function defaultInit() {
