@@ -1,5 +1,7 @@
 import { UserConfig } from '@hyperoracle/zkgraph-cli'
 
 export default {
-  // set your config
+  // Set up your config here
+  // Please set up your private key
+  UserPrivateKey: ''
 } as UserConfig
