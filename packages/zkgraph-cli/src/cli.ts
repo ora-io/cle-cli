@@ -11,6 +11,7 @@ import { publish } from './commands/publish'
 import { getConfig } from './config'
 import { createLogger, logger, setLogger } from './logger'
 import { create } from './commands/create'
+import { proveCLIHasModeOption } from './utils'
 
 export async function run() {
   try {
@@ -76,7 +77,12 @@ export async function run() {
       .option('-t, --test', 'Run in test Mode')
       .option('-p, --prove', 'Run in prove Mode')
       .action((blockId, expectedState, options) => {
-        const { inputgen = false, test = false, prove = false, local = false } = options
+        // eslint-disable-next-line prefer-const
+        let { inputgen = false, test = false, prove = false, local = false } = options
+        const hasMode = proveCLIHasModeOption()
+        if (!hasMode)
+          test = true
+
         if (!(inputgen || test || prove)) {
           logger.error('error: missing running mode (-i / -t / -p)\n')
           proveCLI.outputHelp()
