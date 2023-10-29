@@ -17,6 +17,11 @@ export async function setup(options: SetupOptions) {
 
   logger.info('>> SET UP')
 
+  if (!userPrivateKey) {
+    logger.error('[-] USER PRIVATE KEY IS NOT DEFINED.')
+    return
+  }
+
   const md5 = await uploadWasmToTd(wasmPath)
   logger.info(`[*] IMAGE MD5: ${md5}`)
 
