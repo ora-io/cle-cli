@@ -12,6 +12,7 @@ import {
   reset,
   yellow,
 } from 'kolorist'
+import { generateConfigFileContent } from './template'
 const argv = minimist<{
   t?: string
   template?: string
@@ -49,7 +50,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   const getProjectName = () =>
     targetDir === '.' ? path.basename(path.resolve()) : targetDir
   let result: prompts.Answers<
-    'projectName' | 'overwrite' | 'packageName' | 'framework'
+    'projectName' | 'overwrite' | 'packageName' | 'framework' | 'privateKey'
   >
   try {
     result = await prompts([
@@ -108,6 +109,15 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
           }
         }),
       },
+      {
+        type: 'password',
+        name: 'privateKey',
+        message: 'Input your private key:',
+        choices: [
+          { title: 'Yes', value: 'yes', description: 'No need to input' },
+          { title: 'Postpone', value: 'no', description: 'In zkgraph.config.ts file input UserPrivateKey yourself' },
+        ],
+      },
     ], {
       onCancel: () => {
         throw new Error(`${red('✖')} Operation cancelled`)
@@ -118,7 +128,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
     console.log(error.message)
     return
   }
-  const { framework, overwrite, packageName } = result
+  const { framework, overwrite, packageName, privateKey } = result
 
   const root = path.join(cwd, targetDir)
 
@@ -152,9 +162,10 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   }
 
   const files = fs.readdirSync(templateDir)
-  for (const file of files.filter(f => f !== 'package.json'))
+  for (const file of files.filter(f => f !== 'package.json' || 'zkgraph.config.ts'))
     write(file)
 
+  // write package.json
   const pkg = JSON.parse(
     fs.readFileSync(path.join(templateDir, 'package.json'), 'utf-8'),
   )
@@ -162,6 +173,11 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   pkg.name = packageName || getProjectName()
 
   write('package.json', `${JSON.stringify(pkg, null, 2)}\n`)
+
+  // write zkgraph.config.ts
+  const configContent = generateConfigFileContent(privateKey)
+  write('zkgraph.config.ts', configContent)
+
   const cdProjectName = path.relative(cwd, root)
   console.log('\nDone. Now run:\n')
   if (root !== cwd) {
