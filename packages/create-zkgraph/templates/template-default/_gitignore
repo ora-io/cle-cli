@@ -19,3 +19,6 @@ build
 .DS_Store
 
 .idea/
+
+# zkgraph config file
+zkgraph.config.ts
