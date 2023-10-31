@@ -24,6 +24,7 @@ export async function run() {
       .option('--local', 'Compile for Local Image')
       .option('--yaml-path <path>', 'Path to yaml file')
       .option('--mapping-path <path>', 'Path to mapping file')
+      .example('zkgraph compile')
       .action((options) => {
         const { local = false, yamlPath = '', mappingPath = '' } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
@@ -41,6 +42,7 @@ export async function run() {
     cli
       .command('exec <block id>', 'Execute Full Image')
       .option('--local', 'Execute Local Image')
+      .example('zkgraph exec 0000000')
       .action((blockId, options) => {
         const { local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
@@ -58,6 +60,7 @@ export async function run() {
       .command('setup', 'Set Up Full Image')
       .option('--local', 'Set Up Local Image')
       .option('-k, --circuit-size <size>', 'Circuit size (k in 2^k) of image')
+      .example('zkgraph setup -k 20')
       .action((options) => {
         const { circuitSize = '', local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
@@ -76,6 +79,9 @@ export async function run() {
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
       .option('-p, --prove', 'Run in prove Mode')
+      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -t')
+      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -i')
+      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -p')
       .action((blockId, expectedState, options) => {
         // eslint-disable-next-line prefer-const
         let { inputgen = false, test = false, prove = false, local = false } = options
@@ -111,6 +117,7 @@ export async function run() {
       .command('deploy', 'Deploy Verification Contract for Full Image')
       .option('--local', 'Deploy Verification Contract for Local Image')
       .option('-n, --network-name <name>', 'Name of deployed network for verification contract (sepolia/goerli)')
+      .example('zkgraph deploy -n sepolia')
       .action((options) => {
         const { networkName = '', local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
@@ -127,6 +134,7 @@ export async function run() {
     cli
       .command('upload', 'Upload zkGraph (Code and Full Image)')
       .option('--local', 'Upload Local zkGraph (Code and Local Image)')
+      .example('zkgraph upload')
       .action((options) => {
         const { local = false } = options
         upload({
@@ -142,6 +150,7 @@ export async function run() {
 
     cli
       .command('verify <prove task id>', 'Verify Proof Onchain')
+      .example('zkgraph verify 000000')
       .action((taskId) => {
         verify({
           taskId,
@@ -152,6 +161,7 @@ export async function run() {
 
     cli
       .command('publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
+      .example('zkgraph publish 0x00000000000000000000000000000000 0x00000000000000000000000000000000 100')
       .action((contractAddress, ipfsHash, bountyRewardPerTrigger) => {
         publish({ contractAddress, ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, userPrivateKey: config.UserPrivateKey })
       })
@@ -160,6 +170,7 @@ export async function run() {
       .command('init <target directory>', 'Init zkGraph template')
       .alias('create')
       .option('-t, --template <template>', 'Use template')
+      .example('zkgraph init -t default')
       .action((directory, options) => {
         create(directory, options.template)
       })
