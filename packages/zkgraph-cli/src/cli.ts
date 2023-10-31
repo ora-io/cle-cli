@@ -79,9 +79,9 @@ export async function run() {
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
       .option('-p, --prove', 'Run in prove Mode')
-      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -t')
-      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -i')
-      .example('zkgraph prove 0000000 0x00000000000000000000000000000000 -p')
+      .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -t')
+      .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -i')
+      .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -p')
       .action((blockId, expectedState, options) => {
         // eslint-disable-next-line prefer-const
         let { inputgen = false, test = false, prove = false, local = false } = options
