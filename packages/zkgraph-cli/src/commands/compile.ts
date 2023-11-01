@@ -121,7 +121,7 @@ async function compileServer(options: CompileOptions) {
   const compiledFileLineCount = compiledFileContent.split('\n').length
   logger.info(`[*] ${compiledFileLineCount}${compiledFileLineCount > 1 ? 'lines' : 'line'}in ${watPath}`)
   // Log status
-  logger.info('[+] Output written to `build` folder.')
+  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
   // NOTE: This is temporary
   if (!isUseAscLib)
@@ -143,8 +143,13 @@ async function compileLocal(options: CompileOptions) {
     zkGraphCache.copyDirToCacheDir(mappingPath)
 
   const [compileErr] = await to(ascCompileLocal('node_modules/.zkgraph/main_local.ts', wasmPath, watPath, mappingPath, isUseAscLib))
-  if (compileErr)
+  if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
+    return
+  }
+
+  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
+  logger.info('[+] COMPILATION SUCCESS!' + '\n')
 
   // NOTE: This is temporary
   if (!isUseAscLib)
