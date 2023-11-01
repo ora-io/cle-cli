@@ -79,8 +79,9 @@ export async function deploy(options: DeployOptions) {
   logger.info('[+] Transaction Confirmed. Creating Deploy Task')
 
   const taskId = await queryTaskId(txhash)
+
   if (!taskId) {
-    logger.error('[+] DEPLOY TASK FAILED. \n')
+    logger.error('[+] DEPLOY TASK FAILED. TASK ID IS NOT FOUND! \n')
     return
   }
   logger.info(`[+] DEPLOY TASK STARTED. TASK ID: ${taskId}`)
