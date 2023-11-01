@@ -203,6 +203,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   }
   logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
 
+  logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTED')
   const result = await waitProve(zkWasmProviderUrl, taskId, true)
 
   if (
