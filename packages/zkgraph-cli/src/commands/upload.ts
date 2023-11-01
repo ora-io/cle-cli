@@ -1,7 +1,7 @@
 // @ts-expect-error non-types
 import { upload as uploadApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
-import { logDivider } from '../utils'
+import { checkPinataAuthentication, logDivider } from '../utils'
 export interface UploadOptions {
   local: boolean
   wasmPath: string
@@ -16,6 +16,11 @@ export async function upload(options: UploadOptions) {
   logger.info('>> UPLOAD')
 
   const { wasmPath, userPrivateKey, yamlPath, mappingPath, pinataEndpoint, pinataJWT } = options
+
+  if (!await checkPinataAuthentication(pinataJWT)) {
+    logger.error('[-] PINATA AUTHENTICATION FAILED.')
+    return
+  }
 
   const isUploadSuccess = await uploadApi(
     mappingPath,

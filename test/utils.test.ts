@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { fromHexString, isEthereumAddress, loadZKGraphSources, parseYaml, yamlHealthCheck } from '../packages/zkgraph-cli/src/utils'
+import { checkPinataAuthentication, fromHexString, isEthereumAddress, loadZKGraphSources, parseYaml, yamlHealthCheck } from '../packages/zkgraph-cli/src/utils'
 import type { ZkGraphYaml } from '../packages/zkgraph-cli/src/types'
 
 describe('utils', () => {
@@ -38,5 +38,10 @@ describe('utils', () => {
 
   it('test fromHexString', () => {
     expect(fromHexString('0x0000000000000000000000000000000000000000')).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+  })
+
+  it('test checkPinataAuthentication', async () => {
+    expect(await checkPinataAuthentication('')).toBeFalsy()
+    expect(await checkPinataAuthentication('12132')).toBeFalsy()
   })
 })

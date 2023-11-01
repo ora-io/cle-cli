@@ -50,6 +50,7 @@
   "dependencies": {
     "@antfu/utils": "^0.7.6",
     "@hyperoracle/zkgraph-api": "^0.1.8",
+    "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
     "axios": "^1.5.1",
