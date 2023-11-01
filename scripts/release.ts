@@ -26,19 +26,19 @@ async function release() {
 
   await updateTemplateVersion()
 
-  execSync('npm run build', { stdio: 'inherit' })
-  execSync('git add .', { stdio: 'inherit' })
+  // execSync('npm run build', { stdio: 'inherit' })
+  // execSync('git add .', { stdio: 'inherit' })
 
-  execSync(`git commit -m "chore: release v${version}"`, { stdio: 'inherit' })
-  execSync(`git tag -a v${version} -m "v${version}"`, { stdio: 'inherit' })
+  // execSync(`git commit -m "chore: release v${version}"`, { stdio: 'inherit' })
+  // execSync(`git tag -a v${version} -m "v${version}"`, { stdio: 'inherit' })
 
-  execSync('git push', { stdio: 'inherit' })
-  execSync('git push --tags', { stdio: 'inherit' })
+  // execSync('git push', { stdio: 'inherit' })
+  // execSync('git push --tags', { stdio: 'inherit' })
 }
 
 async function updateTemplateVersion() {
   const createZkGraphPath = path.resolve(rootDir, 'packages', 'create-zkgraph')
-  const dirs = await fg('template-*', { cwd: createZkGraphPath, onlyDirectories: true, markDirectories: true })
+  const dirs = await fg('templates/template-*', { cwd: createZkGraphPath, onlyDirectories: true, markDirectories: true })
 
   for (const dir of dirs) {
     const packageJSON = await fs.readJSON(path.join(createZkGraphPath, dir, 'package.json'))
