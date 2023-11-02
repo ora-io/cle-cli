@@ -11,10 +11,14 @@ export class ZkGraphClass {
     fs.mkdirSync(this.cacheDir, { recursive: true })
   }
 
-  copyDirToCacheDir(mappingPath: string) {
-    const sourcePath = path.join(process.cwd(), 'node_modules/@hyperoracle/zkgraph-lib')
+  copyDirToCacheDir(path: string) {
     this.checkCacheDir()
-    copyFolderRecursiveSync(sourcePath, this.cacheDir)
+    copyFolderRecursiveSync(path, this.cacheDir)
+  }
+
+  copyLibToCacheDir(mappingPath: string) {
+    const sourcePath = path.join(process.cwd(), 'node_modules/@hyperoracle/zkgraph-lib')
+    this.copyDirToCacheDir(sourcePath)
     this.rewriteReceive(mappingPath)
   }
 
