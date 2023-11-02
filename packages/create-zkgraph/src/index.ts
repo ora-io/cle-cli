@@ -50,7 +50,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   const getProjectName = () =>
     targetDir === '.' ? path.basename(path.resolve()) : targetDir
   let result: prompts.Answers<
-    'projectName' | 'overwrite' | 'packageName' | 'framework' | 'privateKey'
+    'projectName' | 'overwrite' | 'packageName' | 'framework' | 'privateKey' | 'pinataJWT'
   >
   try {
     result = await prompts([
@@ -113,10 +113,11 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
         type: 'password',
         name: 'privateKey',
         message: 'Input your private key:',
-        choices: [
-          { title: 'Yes', value: 'yes', description: 'No need to input' },
-          { title: 'Postpone', value: 'no', description: 'In zkgraph.config.ts file input UserPrivateKey yourself' },
-        ],
+      },
+      {
+        type: 'password',
+        name: 'pinataJWT',
+        message: 'Input your pinata JWT:',
       },
     ], {
       onCancel: () => {
@@ -128,7 +129,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
     console.log(error.message)
     return
   }
-  const { framework, overwrite, packageName, privateKey } = result
+  const { framework, overwrite, packageName, privateKey = '', pinataJWT } = result
 
   const root = path.join(cwd, targetDir)
 
@@ -175,7 +176,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   write('package.json', `${JSON.stringify(pkg, null, 2)}\n`)
 
   // write zkgraph.config.ts
-  const configContent = generateConfigFileContent(privateKey)
+  const configContent = generateConfigFileContent(privateKey, pinataJWT)
   write('zkgraph.config.ts', configContent)
 
   const cdProjectName = path.relative(cwd, root)
