@@ -176,7 +176,8 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
   write('package.json', `${JSON.stringify(pkg, null, 2)}\n`)
 
   // write zkgraph.config.ts
-  const configContent = generateConfigFileContent(privateKey, pinataJWT)
+  const realPrivateKey = (privateKey as string).startsWith('0x') ? privateKey : `0x${privateKey}`
+  const configContent = generateConfigFileContent(realPrivateKey, pinataJWT)
   write('zkgraph.config.ts', configContent)
 
   const cdProjectName = path.relative(cwd, root)
