@@ -143,11 +143,11 @@ async function testMode(wasmUnit8Array: Uint8Array, privateInputStr: string, pub
     publicInputStr,
   )
 
-  if (mockSuccess)
+  if (mockSuccess) {
     logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
-
-  else
-    logger.error('[-] ZKWASM MOCK EXECUTION FAILED')
+    logger.info('[+] REAL PROOF PLEASE RUN: zkgraph prove <block id> <expected state> --prove')
+  }
+  else { logger.error('[-] ZKWASM MOCK EXECUTION FAILED') }
 }
 
 /**
