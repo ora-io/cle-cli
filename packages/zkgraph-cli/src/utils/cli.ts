@@ -1,5 +1,5 @@
 export function proveCLIHasModeOption() {
-  const proveModeOptions = ['-i', '-t', '-p', '--inputgen', '--test', '-prove']
+  const proveModeOptions = ['-i', '-t', '-p', '--inputgen', '--test', '--prove']
   const argv = process.argv
   if (!argv.length)
     return false
