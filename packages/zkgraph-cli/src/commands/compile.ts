@@ -177,7 +177,7 @@ async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAsc
     commands = commands.concat([
       'node_modules/@hyperoracle/zkgraph-lib/common/inner.ts',
       '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
-      `--lib ${mappingPath}`,
+      `--lib ${path.dirname(mappingPath)}`,
     ])
   }
   else {
@@ -209,7 +209,7 @@ async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPat
     commands = commands.concat([
       'node_modules/@hyperoracle/zkgraph-lib/main_local.ts',
       '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
-      `--lib ${mappingPath}`,
+      `--lib ${path.dirname(mappingPath)}`,
     ])
   }
   else {
