@@ -23,6 +23,7 @@ export interface CompileOptions {
 const wasmStartName = '__as_start'
 
 // const ascBin = path.join(`${__dirname}`, '../..', 'node_modules/.bin/asc')
+const abortPath = '~lib/@hyperoracle/zkgraph-lib/common/type/abort'
 
 export async function compile(options: CompileOptions) {
   const {
@@ -175,8 +176,8 @@ async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAsc
   ]
   if (isUseAscLib) {
     commands = commands.concat([
-      'node_modules/@hyperoracle/zkgraph-lib/common/inner.ts',
-      '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
+      'node_modules/@hyperoracle/zkgraph-lib/common/main_state.ts',
+      `--use abort=${abortPath}`,
       `--lib ${path.dirname(mappingPath)}`,
     ])
   }
@@ -207,8 +208,8 @@ async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPat
   ]
   if (isUseAscLib) {
     commands = commands.concat([
-      'node_modules/@hyperoracle/zkgraph-lib/main_local.ts',
-      '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
+      'node_modules/@hyperoracle/zkgraph-lib/main_state.ts',
+      `--use abort=${abortPath}`,
       `--lib ${path.dirname(mappingPath)}`,
     ])
   }
