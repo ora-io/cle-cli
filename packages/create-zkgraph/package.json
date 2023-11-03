@@ -1,7 +1,7 @@
 {
   "name": "create-zkgraph",
   "type": "module",
-  "version": "0.0.1-alpha.20",
+  "version": "0.0.1-alpha.21",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/hyperoracle/zkgraph-cli#readme",
