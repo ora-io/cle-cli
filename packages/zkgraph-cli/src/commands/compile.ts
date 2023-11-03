@@ -5,7 +5,7 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { createOnNonexist, fromHexString, loadZKGraphSources, parseYaml } from '../utils'
+import { codegenImportReplace, createOnNonexist, fromHexString, getTsFiles, loadZKGraphSources, parseYaml } from '../utils'
 import type { ZkGraphYaml } from '../types'
 import { logger } from '../logger'
 import { zkGraphCache } from '../cache'
@@ -68,12 +68,16 @@ async function compileServer(options: CompileOptions) {
 
   // NOTE: This is temporary
   if (!isUseAscLib)
-    zkGraphCache.copyDirToCacheDir(mappingPath)
+    zkGraphCache.copyLibToCacheDir(mappingPath)
+
+  const codegenMappingPath = copyDirAndCodegen(mappingPath)
+  if (!codegenMappingPath)
+    return
 
   const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
   createOnNonexist(innerPrePrePath)
 
-  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts', mappingPath, isUseAscLib, innerPrePrePath))
+  const [compileErr] = await to(ascCompile('node_modules/.zkgraph/common/inner.ts', codegenMappingPath, isUseAscLib, innerPrePrePath))
 
   if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
@@ -123,9 +127,7 @@ async function compileServer(options: CompileOptions) {
   // Log status
   logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
-  // NOTE: This is temporary
-  if (!isUseAscLib)
-    zkGraphCache.clearCacheDir()
+  zkGraphCache.clearCacheDir()
 }
 
 async function compileLocal(options: CompileOptions) {
@@ -140,9 +142,13 @@ async function compileLocal(options: CompileOptions) {
   // const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN_LOCAL)
   // NOTE: This is temporary
   if (!isUseAscLib)
-    zkGraphCache.copyDirToCacheDir(mappingPath)
+    zkGraphCache.copyLibToCacheDir(mappingPath)
 
-  const [compileErr] = await to(ascCompileLocal('node_modules/.zkgraph/main_local.ts', wasmPath, watPath, mappingPath, isUseAscLib))
+  const codegenMappingPath = copyDirAndCodegen(mappingPath)
+  if (!codegenMappingPath)
+    return
+
+  const [compileErr] = await to(ascCompileLocal('node_modules/.zkgraph/main_local.ts', wasmPath, watPath, codegenMappingPath, isUseAscLib))
   if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
     return
@@ -151,9 +157,7 @@ async function compileLocal(options: CompileOptions) {
   logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
 
-  // NOTE: This is temporary
-  if (!isUseAscLib)
-    zkGraphCache.clearCacheDir()
+  zkGraphCache.clearCacheDir()
 }
 
 async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAscLib: boolean, innerPrePrePath: string) {
@@ -173,7 +177,7 @@ async function ascCompile(innerTsFilePath: string, mappingPath: string, isUseAsc
     commands = commands.concat([
       'node_modules/@hyperoracle/zkgraph-lib/common/inner.ts',
       '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
-      `--lib ${mappingPath}`,
+      `--lib ${path.dirname(mappingPath)}`,
     ])
   }
   else {
@@ -205,7 +209,7 @@ async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPat
     commands = commands.concat([
       'node_modules/@hyperoracle/zkgraph-lib/main_local.ts',
       '--use abort=node_modules/@hyperoracle/zkgraph-lib/common/type/abort',
-      `--lib ${mappingPath}`,
+      `--lib ${path.dirname(mappingPath)}`,
     ])
   }
   else {
@@ -231,6 +235,26 @@ async function execAndRmSync(command: string) {
       reject(error)
     }
   })
+}
+function copyDirAndCodegen(mappingPath: string) {
+  const mappingDir = path.dirname(mappingPath)
+
+  if (fs.existsSync(mappingDir)) {
+    zkGraphCache.copyDirToCacheDir(mappingDir)
+    const tsFils = getTsFiles(zkGraphCache.cacheDir)
+    // const libPath = path.join(process.cwd(), 'node_modules/@hyperoracle/zkgraph-lib')
+    for (const tsFile of tsFils) {
+      const rawCode = fs.readFileSync(tsFile, 'utf-8')
+      // const [relativePath] = getRelativePath(tsFile, libPath)
+      const transformCode = codegenImportReplace(rawCode, '~lib/@hyperoracle/zkgraph-lib')
+      fs.writeFileSync(tsFile, transformCode)
+    }
+    const codegenMappingPath = path.join(zkGraphCache.cacheDir, 'mapping.ts')
+    return codegenMappingPath
+  }
+  else {
+    logger.error(`[-] ${mappingDir} not exist.`)
+  }
 }
 
 // function getEntryFilename(env: string) {
