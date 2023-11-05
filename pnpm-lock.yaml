@@ -1203,7 +1203,7 @@ packages:
       js-yaml: 4.1.0
       semver: 7.5.4
       web3-eth-contract: 1.10.3
-      zkWasm-service-helper: git@github.com+DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2)
+      zkWasm-service-helper: github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -7265,9 +7265,9 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  git@github.com+DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2):
-    resolution: {commit: 71455126edd5239326cfce826426de8e70ddfe46, repo: git@github.com:DelphinusLab/zkWasm-service-helper.git, type: git}
-    id: git@github.com+DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46
+  github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2):
+    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/71455126edd5239326cfce826426de8e70ddfe46}
+    id: github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46
     name: zkwasm-service-helper
     version: 1.0.0
     prepare: true
