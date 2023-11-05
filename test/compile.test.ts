@@ -37,11 +37,6 @@ describe('compile', () => {
     expect(inst.inner).not.toBeUndefined()
     expect(inst.asmain).not.toBeUndefined()
     expect(inst.zkmain).not.toBeUndefined()
-
-    if (hasWasm)
-      fs.rmSync(wasmPath)
-    if (hasWat)
-      fs.rmSync(watPath)
   }, 100000)
 
   it('local', async () => {
@@ -70,10 +65,5 @@ describe('compile', () => {
     // expect(inst.local_run).not.toBeUndefined()
     expect(inst.asmain).not.toBeUndefined()
     expect(inst.zkmain).not.toBeUndefined()
-
-    if (hasWasm)
-      fs.rmSync(wasmPath)
-    if (hasWat)
-      fs.rmSync(watPath)
   }, 100000)
 })
