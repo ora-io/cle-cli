@@ -229,5 +229,5 @@ function getEntryFilename(env: string) {
 }
 
 function getAbortTsFilepath(innerTsFilePath: string) {
-  return `${innerTsFilePath.replace(process.cwd(), '').substring(1).replace('.ts', '')}/abort`
+  return `${innerTsFilePath.replace(process.cwd(), '').substring(1).replace('.ts', '')}/abort`.replaceAll('\\', '/')
 }
