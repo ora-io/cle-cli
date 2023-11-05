@@ -19,8 +19,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-lib':
-        specifier: 0.0.9-alpha
-        version: 0.0.9-alpha
+        specifier: 0.0.9-alpha.1
+        version: 0.0.9-alpha.1
       '@murongg/eslint-config':
         specifier: ^0.2.1
         version: 0.2.1(eslint@8.51.0)(typescript@5.2.2)
@@ -155,8 +155,8 @@ importers:
         version: 0.3.11
     devDependencies:
       '@hyperoracle/zkgraph-lib':
-        specifier: 0.0.9-alpha
-        version: 0.0.9-alpha
+        specifier: 0.0.9-alpha.1
+        version: 0.0.9-alpha.1
       '@types/js-yaml':
         specifier: ^4.0.6
         version: 4.0.6
@@ -1203,7 +1203,7 @@ packages:
       js-yaml: 4.1.0
       semver: 7.5.4
       web3-eth-contract: 1.10.2
-      zkWasm-service-helper: github.com/DelphinusLab/zkWasm-service-helper/d7bfbc48a1bf36cc7aa1a3de406ce3a05abcae37(typescript@5.2.2)
+      zkWasm-service-helper: github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -1214,8 +1214,8 @@ packages:
       - zod
     dev: false
 
-  /@hyperoracle/zkgraph-lib@0.0.9-alpha:
-    resolution: {integrity: sha512-gcSVW+3PRUAv5nyNoAsDojjaV1girpnfas4llQCBRoRrdiM5aMK0E24AC4Z3+rGc0MxJom3OD/3twAvy2eblyw==}
+  /@hyperoracle/zkgraph-lib@0.0.9-alpha.1:
+    resolution: {integrity: sha512-JkVjf3E/LnCZNpk/qmqpp0cwSCcGhrF+1D2bmpT1Pg6yJKVfvpEeKgrNeCx6LfxjwOGIM/6kIIOgcmXOefXZww==}
     dependencies:
       assemblyscript: 0.27.12
     dev: true
@@ -7232,9 +7232,9 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  github.com/DelphinusLab/zkWasm-service-helper/d7bfbc48a1bf36cc7aa1a3de406ce3a05abcae37(typescript@5.2.2):
-    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/d7bfbc48a1bf36cc7aa1a3de406ce3a05abcae37}
-    id: github.com/DelphinusLab/zkWasm-service-helper/d7bfbc48a1bf36cc7aa1a3de406ce3a05abcae37
+  github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46(typescript@5.2.2):
+    resolution: {tarball: https://codeload.github.com/DelphinusLab/zkWasm-service-helper/tar.gz/71455126edd5239326cfce826426de8e70ddfe46}
+    id: github.com/DelphinusLab/zkWasm-service-helper/71455126edd5239326cfce826426de8e70ddfe46
     name: zkwasm-service-helper
     version: 1.0.0
     prepare: true
