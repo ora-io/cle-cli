@@ -45,7 +45,7 @@
     "start": "esno src/index.ts"
   },
   "peerDependencies": {
-    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha"
+    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha.1"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
@@ -68,7 +68,7 @@
     "unconfig": "^0.3.11"
   },
   "devDependencies": {
-    "@hyperoracle/zkgraph-lib": "0.0.9-alpha",
+    "@hyperoracle/zkgraph-lib": "0.0.9-alpha.1",
     "@types/js-yaml": "^4.0.6",
     "@types/prompts": "^2.4.6",
     "@types/semver": "^7.5.3"
