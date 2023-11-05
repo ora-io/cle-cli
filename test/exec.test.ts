@@ -1,8 +1,10 @@
 import path from 'node:path'
+import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { exec } from '../packages/zkgraph-cli/src/commands/exec'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
+const washPath = process.cwd()
 const jsonRpcProviderUrl = {
   mainnet: 'https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6',
   sepolia: 'https://rpc.ankr.com/eth_sepolia',
@@ -12,7 +14,11 @@ const jsonRpcProviderUrl = {
 describe('exec', () => {
   it('full', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(commandsFixturesRoot, 'zkgraph_full.wasm')
+    const wasmPath = path.join(washPath, 'temp/zkgraph_full.wasm')
+    if (!fs.existsSync(wasmPath)) {
+      console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
+      return
+    }
 
     const res = await exec({
       yamlPath,
@@ -27,7 +33,11 @@ describe('exec', () => {
 
   it('local', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(commandsFixturesRoot, 'zkgraph_local.wasm')
+    const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
+    if (!fs.existsSync(wasmPath)) {
+      console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
+      return
+    }
 
     const res = await exec({
       yamlPath,
