@@ -30,7 +30,7 @@ export async function compile(options: CompileOptions) {
   const {
     local,
   } = options
-  if (!checkExecExist('asc')) {
+  if (!checkExecExist('asc') || !checkExecExist('npx asc')) {
     logger.error('[-] Please install assemblyscript in your package, you can run: npm install assemblyscript --save-dev')
     return
   }
