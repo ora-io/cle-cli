@@ -44,6 +44,7 @@ export function inner(
   matched_event_offsets_ptr: usize,
   re_state_len: usize,
 ): usize {
+  registerHandle(handleEvents)
   return inner_real(
     raw_receipts_ptr, 
     match_event_cnt, 
