@@ -60,6 +60,7 @@ export async function prove(options: ProveOptions) {
     // Prove generation mode (prove-local will not have this option)
     case options.prove === true:
       logger.info('>> PROVE: PROVE MODE')
+      logger.warn('>> PROVE: REQUIRE FINISH SETUP FIRST')
       break
   }
 
