@@ -12,7 +12,7 @@
 </p>
 <br/>
 
-# zkGraph CLI (WIP)
+# zkGraph CLI
 
 ## Getting Started
 
