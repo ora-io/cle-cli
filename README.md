@@ -6,7 +6,7 @@
 </p>
 <br/>
 <p align="center">
-  <a href="https://npmjs.com/package/@hyperoracle/zkgraph-cli"><img src="https://img.shields.io/npm/v/@hyperoracle/zkgraph-cli/alpha.svg" alt="npm package"></a>
+  <a href="https://npmjs.com/package/@hyperoracle/zkgraph-cli"><img src="https://img.shields.io/npm/v/@hyperoracle/zkgraph-cli/latest.svg" alt="npm package"></a>
   <a href="https://github.com/hyperoracle/zkgraph-cli/actions/workflows/ci.yml"><img src="https://github.com/hyperoracle/zkgraph-cli/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
   <a href="https://www.npmjs.com/package/@hyperoracle/zkgraph-lib"><img alt="npm peer dependency version (scoped)" src="https://img.shields.io/npm/dependency-version/%40hyperoracle%2Fzkgraph-cli/peer/%40hyperoracle%2Fzkgraph-lib"></a>
 </p>
@@ -20,26 +20,26 @@
 
 With NPM:
 ```bash
-npm create zkgraph@alpha
+npm create zkgraph@latest
 ```
 
 With Yarn:
 
 ```bash
-yarn create zkgraph@alpha
+yarn create zkgraph@latest
 ```
 
 With PNPM:
 
 ```bash
-pnpm create zkgraph@alpha
+pnpm create zkgraph@latest
 ```
 
 With CLI
 
 ```bash
 # install zkgraph-cli
-npm install @hyperoracle/zkgraph-cli@alpha -g
+npm install @hyperoracle/zkgraph-cli@latest -g
 # run create command
 zkgraph create
 # or
@@ -52,16 +52,16 @@ To scaffold a **uniswapprice** template, you can directly specify the project na
 
 ```sh
 # npm 6.x
-npm create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
+npm create zkgraph@latest my-zkgraph-uniswapprice --template uniswapprice
 
 # npm 7+, extra double-dash is needed:
-npm create zkgraph@alpha my-zkgraph-uniswapprice -- --template uniswapprice
+npm create zkgraph@latest my-zkgraph-uniswapprice -- --template uniswapprice
 
 # yarn
-yarn create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
+yarn create zkgraph@latest my-zkgraph-uniswapprice --template uniswapprice
 
 # pnpm
-pnpm create zkgraph@alpha my-zkgraph-uniswapprice --template uniswapprice
+pnpm create zkgraph@latest my-zkgraph-uniswapprice --template uniswapprice
 ```
 
 ## CLI
