@@ -10,6 +10,7 @@ import type { ZkGraphYaml } from '../types'
 import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
 import { COMPILE_CODEGEN, COMPILE_CODEGEN_LOCAL, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
+import { checkExecExist } from '../utils/system'
 
 export interface CompileOptions {
   local: boolean
@@ -29,6 +30,10 @@ export async function compile(options: CompileOptions) {
   const {
     local,
   } = options
+  if (!checkExecExist('asc')) {
+    logger.error('[-] Please install assemblyscript in your package, you can run: npm install assemblyscript --save-dev')
+    return
+  }
   if (local)
     await compileLocal(options)
   else
