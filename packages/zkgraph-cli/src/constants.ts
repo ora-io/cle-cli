@@ -51,7 +51,7 @@ export function inner(
     re_state_len
   )
 }
-export function full_run(): void {
+export function runRegisterHandle(): void {
   registerHandle(handleEvents)
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
@@ -60,7 +60,7 @@ export const COMPILE_CODEGEN_LOCAL = `
 export { asmain, zkmain } from "@hyperoracle/zkgraph-lib"
 import { registerHandle } from "@hyperoracle/zkgraph-lib"
 import { handleEvents } from "./mapping"
-export function local_run(): void {
+export function runRegisterHandle(): void {
   registerHandle(handleEvents)
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
