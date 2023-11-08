@@ -5,7 +5,7 @@ import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
 import { getTargetNetwork } from './network'
-import { parseYaml, yamlHealthCheck } from './yaml'
+import { parseYaml /* yamlHealthCheck */ } from './yaml'
 
 export function loadZKGraphDataSources(config: Partial<ZkGraphYaml>) {
   return config.dataSources
@@ -62,7 +62,7 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
  * @returns
  */
 export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
-  yamlHealthCheck(config)
+  // yamlHealthCheck(config)
   const loadFromDataSource = (dataSource: DataSource): [string, string[]] => {
     const source_address = dataSource.source.address
     const edefs = dataSource.mapping.eventHandlers.map(
