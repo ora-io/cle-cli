@@ -28,6 +28,15 @@ export function fromHexString(hexString: string) {
 }
 
 /**
+ * Convert Uint8Array to hex string
+ * @param uint8array
+ * @returns
+ */
+export function toHexString(uint8array: Uint8Array) {
+  return Buffer.from(uint8array).toString('hex')
+}
+
+/**
  * Generate a random key
  * @param length
  * @returns
