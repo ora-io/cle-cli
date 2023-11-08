@@ -34,29 +34,47 @@ export const TAGS = {
 export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
 
 export const COMPILE_CODEGEN = `
-import { inner_real, registerHandle } from "@hyperoracle/zkgraph-lib"
-export { asmain } from "@hyperoracle/zkgraph-lib"
-import { handleEvents } from "./mapping"
+import { registerHandle } from "@hyperoracle/zkgraph-lib"
+import { zkmain_real, asmain_real } from "@hyperoracle/zkgraph-lib"
+import { handleBlocks } from "./mapping"
 
-export function inner(
-  raw_receipts_ptr: usize,
-  match_event_cnt: i32,
-  matched_event_offsets_ptr: usize,
-  re_state_len: usize,
-): usize {
-  registerHandle(handleEvents)
-  return inner_real(
-    raw_receipts_ptr, 
-    match_event_cnt, 
-    matched_event_offsets_ptr,
-    re_state_len
-  )
+export function zkmain(): void {
+  registerHandle(handleBlocks)
+  return zkmain_real()
 }
-export function runRegisterHandle(): void {
-  registerHandle(handleEvents)
+
+export function asmain(): Uint8Array {
+  registerHandle(handleBlocks)
+  return asmain_real()
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
 `
+
+// export const COMPILE_CODEGEN = `
+// import { inner_real, registerHandle } from "@hyperoracle/zkgraph-lib"
+// import { zkmain_real, asmain_real } from "@hyperoracle/zkgraph-lib"
+// import { handleEvents } from "./mapping"
+
+// export function zkmain(): void {
+//   registerHandle(handleEvents)
+//   zkmain_real()
+// }
+
+// export function asmain(
+//   rawreceipts: Uint8Array,
+//   matched_event_offsets: Uint32Array,
+// ): Uint8Array {
+//   registerHandle(handleEvents)
+//   return asmain_real(
+//     rawreceipts,
+//     matched_event_offsets
+//   )
+// }
+// export function runRegisterHandle(): void {
+//   registerHandle(handleEvents)
+// }
+// function abort(a: usize, b: usize, c: u32, d: u32): void {}
+// `
 export const COMPILE_CODEGEN_LOCAL = `
 export { asmain, zkmain } from "@hyperoracle/zkgraph-lib"
 import { registerHandle } from "@hyperoracle/zkgraph-lib"

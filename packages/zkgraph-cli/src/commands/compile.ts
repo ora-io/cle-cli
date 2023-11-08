@@ -5,12 +5,12 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { codegen, createOnNonexist, fromHexString, loadZKGraphSources, parseYaml, randomUniqueKey } from '../utils'
-import type { ZkGraphYaml } from '../types'
+import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
-import { COMPILE_CODEGEN, COMPILE_CODEGEN_LOCAL, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
+import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
 import { checkExecExist } from '../utils/system'
+// import { ZkGraphYaml } from '@hyperoracle/zkgraph-api';
 
 export interface CompileOptions {
   local: boolean
@@ -28,12 +28,18 @@ const wasmStartName = '__as_start'
 
 export async function compile(options: CompileOptions) {
   const {
+    // yamlPath,
     local,
   } = options
   if (!checkExecExist('asc') || !checkExecExist('npx asc')) {
     logger.error('[-] Please install assemblyscript in your package, you can run: npm install assemblyscript --save-dev')
     return
   }
+
+  /**
+   * only compile in compiler when event section exist
+   */
+  // if (ZkGraphYaml.fromYamlPath(yamlPath).dataSources[0].event)
   if (local)
     await compileLocal(options)
   else
@@ -52,29 +58,29 @@ async function compileServer(options: CompileOptions) {
     logger.error('no yaml path provided')
     return
   }
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-  if (yamlErr) {
-    logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-    return
-  }
-  if (!yaml) {
-    logger.error('invalid yaml')
-    return
-  }
+  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+  // const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
+  // if (yamlErr) {
+  //   logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
+  //   return
+  // }
+  // if (!yaml) {
+  //   logger.error('invalid yaml')
+  //   return
+  // }
 
-  const [source_address, source_esigs] = loadZKGraphSources(yaml)
-  logger.info(`[*] Source contract address:${source_address}`)
-  logger.info(`[*] Source events signatures:${source_esigs}` + '\n')
+  // const [source_address, source_esigs] = ZkGraphYaml.fromYamlPath(yamlPath).dataSources[0].event.toArray();
+  // logger.info(`[*] Source contract address:${source_address}`)
+  // logger.info(`[*] Source events signatures:${source_esigs}` + '\n')
 
-  const mappingRoot = path.join(mappingPath, '..')
+  const srcDirPath = path.join(mappingPath, '..')
   const entryFilename = getEntryFilename('full')
-  const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN)
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN)
 
   const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
   createOnNonexist(innerPrePrePath)
 
-  const [compileErr] = await to(ascCompile(path.join(mappingRoot, innerFile), innerPrePrePath))
+  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
 
   if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
@@ -101,6 +107,7 @@ async function compileServer(options: CompileOptions) {
   const [requestErr, response] = await to(axios.request(requestConfig))
 
   if (requestErr) {
+    console.error(requestErr)
     logger.error(`[-] ERROR WHEN COMPILING. ${requestErr.message}`)
     return
   }
@@ -117,6 +124,59 @@ async function compileServer(options: CompileOptions) {
   createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
+  logCompileResult(wasmPath, watPath)
+}
+
+async function compileLocal(options: CompileOptions) {
+  const {
+    wasmPath,
+    watPath,
+    mappingPath,
+  } = options
+
+  const srcDirPath = path.join(mappingPath, '..')
+  const entryFilename = getEntryFilename('local')
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN) // COMPILE_CODEGEN_LOCAL
+
+  createOnNonexist(wasmPath)
+
+  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
+
+  if (compileErr) {
+    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
+    return
+  }
+
+  logCompileResult(wasmPath, watPath)
+}
+
+async function ascCompile(entryFilePath: string, outputWasmPath: string, outputWatPath: string) {
+  const abortPath = getAbortTsFilepath(entryFilePath)
+
+  let commands: string[] = [
+    'npx asc',
+  ]
+  const common = [
+    `-o ${outputWasmPath}`,
+    `-t ${outputWatPath}`,
+    '-O', '--noAssert',
+    '--disable', 'bulk-memory',
+    '--disable', 'mutable-globals',
+    '--exportRuntime',
+    '--exportStart', wasmStartName,
+    '--memoryBase', '70000',
+    '--runtime stub',
+  ]
+  commands = commands.concat([
+    entryFilePath,
+    '--use', `abort=${abortPath}`,
+  ])
+  commands = commands.concat(common)
+
+  return await execAndRmSync(commands.join(' '), entryFilePath)
+}
+
+function logCompileResult(wasmPath: string, watPath: string): void {
   // Log compiled file size by line count
   const compiledFileContent = fs.readFileSync(watPath, 'utf-8')
   const compiledFileLineCount = compiledFileContent.split('\n').length
@@ -126,77 +186,34 @@ async function compileServer(options: CompileOptions) {
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
 }
 
-async function compileLocal(options: CompileOptions) {
-  const {
-    wasmPath,
-    watPath,
-    mappingPath,
-  } = options
-  const mappingRoot = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename('local')
-  const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN_LOCAL)
-
-  const [compileErr] = await to(ascCompileLocal(path.join(mappingRoot, innerFile), wasmPath, watPath))
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return
-  }
-
-  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
-  logger.info('[+] COMPILATION SUCCESS!' + '\n')
-}
-
-async function ascCompile(innerTsFilePath: string, innerPrePrePath: string) {
-  const abortPath = getAbortTsFilepath(innerTsFilePath)
-
-  let commands: string[] = [
-    'npx asc',
-  ]
-  const common = [
-    `-o ${innerPrePrePath}`,
-    '--disable', 'bulk-memory',
-    '--disable', 'mutable-globals',
-    '--exportRuntime',
-    '--exportStart', wasmStartName,
-    '--memoryBase', '70000',
-    '--runtime stub',
-  ]
-  commands = commands.concat([
-    innerTsFilePath,
-    '--use', `abort=${abortPath}`,
-  ])
-  commands = commands.concat(common)
-
-  return await execAndRmSync(commands.join(' '), innerTsFilePath)
-}
-
-async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string) {
-  const abortPath = getAbortTsFilepath(innerTsFilePath)
-  let commands: string[] = [
-    'npx asc',
-  ]
-  const common = [
-    '-t', watPath,
-    '-O', '--noAssert',
-    '-o', wasmPath,
-    '--runtime', 'stub',
-    '--disable', 'bulk-memory',
-    '--exportRuntime',
-    '--exportStart', wasmStartName,
-    '--memoryBase', '70000',
-  ]
-  commands = commands.concat([
-    innerTsFilePath,
-    '--use', `abort=${abortPath}`,
-  ])
-  commands = commands.concat(common)
-  return execAndRmSync(commands.join(' '), innerTsFilePath)
-}
+// async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string) {
+//   const abortPath = getAbortTsFilepath(innerTsFilePath)
+//   let commands: string[] = [
+//     'npx asc',
+//   ]
+//   const common = [
+//     '-t', watPath,
+//     '-O', '--noAssert',
+//     '-o', wasmPath,
+//     '--runtime', 'stub',
+//     '--disable', 'bulk-memory',
+//     '--exportRuntime',
+//     '--exportStart', wasmStartName,
+//     '--memoryBase', '70000',
+//   ]
+//   commands = commands.concat([
+//     innerTsFilePath,
+//     '--use', `abort=${abortPath}`,
+//   ])
+//   commands = commands.concat(common)
+//   return execAndRmSync(commands.join(' '), innerTsFilePath)
+// }
 
 async function execAndRmSync(command: string, filepath: string) {
   return new Promise<void>((resolve, reject) => {
     try {
       execSync(command)
+      // norman: rmSync should seperate from execSync
       fs.rmSync(filepath)
       resolve()
     }

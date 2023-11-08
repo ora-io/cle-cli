@@ -1,9 +1,9 @@
 import fs from 'node:fs'
-import to from 'await-to-js'
-import { providers } from 'ethers'
+// import to from 'await-to-js'
+// import { providers } from 'ethers'
 // @ts-expect-error non-types
-import { executeOnRawReceipts, getRawReceipts } from '@hyperoracle/zkgraph-api'
-import { loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
+import { /* executeOnRawReceipts, getRawReceipts, */ execute } from '@hyperoracle/zkgraph-api'
+import { /* fromHexString, */ loadJsonRpcProviderUrl, loadYaml, toHexString/* , validateProvider */ } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
@@ -24,24 +24,34 @@ export async function exec(options: ExecOptions) {
   }
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
-  const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
-  const [validateErr] = await to(validateProvider(provider))
-  if (validateErr) {
-    logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
-    return
-  }
+  // const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
+  // const [validateErr] = await to(validateProvider(provider))
+  // if (validateErr) {
+  //   logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
+  //   return
+  // }
 
-  const rawReceiptList = await getRawReceipts(provider, Number(blockId), false)
+  // const rawReceiptList = await getRawReceipts(provider, Number(blockId), false)
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUnit8Array = new Uint8Array(wasm)
 
-  const state = await executeOnRawReceipts(
+  // const state = await executeOnRawReceipts(
+  //   wasmUnit8Array,
+  //   yamlContent,
+  //   rawReceiptList,
+  //   local,
+  //   true,
+  // )
+  const state = await execute(
     wasmUnit8Array,
     yamlContent,
-    rawReceiptList,
+    JsonRpcProviderUrl,
+    blockId,
     local,
     true,
   )
+
+  logger.info(`[+] ZKGRAPH STATE OUTPUT: ${toHexString(state)}\n`)
   return state
 }
