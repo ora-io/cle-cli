@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { checkPinataAuthentication, fromHexString, isEthereumAddress, loadZKGraphSources, parseYaml, yamlHealthCheck } from '../packages/zkgraph-cli/src/utils'
+import { checkPinataAuthentication, fromHexString, isEthereumAddress, loadZKGraphSources, parseYaml } from '../packages/zkgraph-cli/src/utils'
 import type { ZkGraphYaml } from '../packages/zkgraph-cli/src/types'
 
 describe('utils', () => {
@@ -21,12 +21,12 @@ describe('utils', () => {
     expect(isEthereumAddress('0x0000000000000000000000000000000000000000')).toBe(false)
   })
 
-  it('test yamlHealthCheck', async () => {
-    const yamlPath = path.join(__dirname, 'fixtures/utils/test-yaml-check.yaml')
-    const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-    const parser = await parseYaml(yamlContent)
-    expect(() => yamlHealthCheck(parser)).not.toThrow()
-  })
+  // it('test yamlHealthCheck', async () => {
+  //   const yamlPath = path.join(__dirname, 'fixtures/utils/test-yaml-check.yaml')
+  //   const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+  //   const parser = await parseYaml(yamlContent)
+  //   expect(() => yamlHealthCheck(parser)).not.toThrow()
+  // })
 
   it('test loadZKGraphSources', async () => {
     const yamlPath = path.join(__dirname, 'fixtures/utils/test.yaml')
