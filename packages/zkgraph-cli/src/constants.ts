@@ -38,12 +38,16 @@ import { registerHandle } from "@hyperoracle/zkgraph-lib"
 import { zkmain_real, asmain_real } from "@hyperoracle/zkgraph-lib"
 import { handleBlocks } from "./mapping"
 
+declare function __call_as_start(): void;
+
 export function zkmain(): void {
+  __call_as_start();
   registerHandle(handleBlocks)
   return zkmain_real()
 }
 
 export function asmain(): Uint8Array {
+  __call_as_start();
   registerHandle(handleBlocks)
   return asmain_real()
 }
