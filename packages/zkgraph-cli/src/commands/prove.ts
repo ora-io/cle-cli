@@ -54,7 +54,7 @@ export async function prove(options: ProveOptions) {
     // Test mode
     case options.test === true:
       logger.info('>> PROVE: PRETEST MODE')
-      logger.warn('>> PROVE: TEST MODE IS DON\'T OUTPUT PROOF FILE')
+      logger.warn('>> PROVE: TEST MODE WILL NOT OUTPUT PROOF FILE')
       break
 
     // Prove generation mode (prove-local will not have this option)
