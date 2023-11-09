@@ -1,0 +1,21 @@
+specVersion: 0.0.2
+apiVersion: 0.0.2
+name: eg_storage
+description: "Demo zkgraph for using storage. "
+repository: https://github.com/hyperoracle/zkgraph
+dataSources:
+  - kind: ethereum
+    network: sepolia
+    storage:
+      - address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+        slots: 
+          - 8
+          - 9
+mapping:
+  language: wasm/assemblyscript
+  file: ./mapping.ts
+  handler: handleBlocks
+dataDestinations:
+  - kind: ethereum
+    network: sepolia
+    address: "{Your Destination Contract Address Here}"
