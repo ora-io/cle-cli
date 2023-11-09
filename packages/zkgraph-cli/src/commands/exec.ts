@@ -2,7 +2,7 @@ import fs from 'node:fs'
 // import to from 'await-to-js'
 // import { providers } from 'ethers'
 // @ts-expect-error non-types
-import { /* executeOnRawReceipts, getRawReceipts, */ execute } from '@hyperoracle/zkgraph-api'
+import { EthereumDataSourcePlugin, execute } from '@hyperoracle/zkgraph-api'
 import { /* fromHexString, */ loadJsonRpcProviderUrl, loadYaml, toHexString/* , validateProvider */ } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
@@ -43,11 +43,15 @@ export async function exec(options: ExecOptions) {
   //   local,
   //   true,
   // )
+
+  const execParams = EthereumDataSourcePlugin.toExecParams(
+    JsonRpcProviderUrl,
+    blockId,
+  )
   const state = await execute(
     wasmUnit8Array,
     yamlContent,
-    JsonRpcProviderUrl,
-    blockId,
+    execParams,
     local,
     true,
   )

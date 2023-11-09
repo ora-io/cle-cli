@@ -3,7 +3,8 @@ import { ethers, providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 // @ts-expect-error non-types
-import { getBlockByNumber, getRawReceipts, proveInputGenOnRawReceipts, proveMock, waitProve } from '@hyperoracle/zkgraph-api'
+import { EthereumDataSourcePlugin, hasDebugOnlyFunc, proveInputGen } from '@hyperoracle/zkgraph-api'
+import { proveMock, waitProve } from '@hyperoracle/zkgraph-api'
 import { convertToMd5, loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
@@ -54,7 +55,7 @@ export async function prove(options: ProveOptions) {
     // Test mode
     case options.test === true:
       logger.info('>> PROVE: PRETEST MODE')
-      logger.warn('>> PROVE: TEST MODE IS DON\'T OUTPUT PROOF FILE')
+      logger.warn('>> PROVE: TEST MODE DOESN\'T OUTPUT PROOF FILE')
       break
 
     // Prove generation mode (prove-local will not have this option)
@@ -72,6 +73,7 @@ export async function prove(options: ProveOptions) {
   }
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
+  // TODO: do we still need this?
   const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
   const [validateErr] = await to(validateProvider(provider))
   if (validateErr) {
@@ -79,46 +81,47 @@ export async function prove(options: ProveOptions) {
     return
   }
 
-  const [rawReceiptListErr, rawReceiptList] = await to(getRawReceipts(provider, blockId, false))
-  if (rawReceiptListErr) {
-    logger.error(`[-] GET RECEIPT ERROR. ${rawReceiptListErr.message}`)
-    return
-  }
+  // const [rawReceiptListErr, rawReceiptList] = await to(getRawReceipts(provider, blockId, false))
+  // if (rawReceiptListErr) {
+  //   logger.error(`[-] GET RECEIPT ERROR. ${rawReceiptListErr.message}`)
+  //   return
+  // }
 
-  const [simpleblockErr, simpleblock] = await to(provider.getBlock(blockId))
-  if (simpleblockErr) {
-    logger.error('[-] ERROR: Failed to getBlock()')
-    return
-  }
+  // const [simpleblockErr, simpleblock] = await to(provider.getBlock(blockId))
+  // if (simpleblockErr) {
+  //   logger.error('[-] ERROR: Failed to getBlock()')
+  //   return
+  // }
 
-  const [blockErr, block] = await to(getBlockByNumber(provider, simpleblock?.number))
-  if (blockErr) {
-    logger.error('[-] ERROR: Failed to getBlockByNumber()')
-    return
-  }
+  // const [blockErr, block] = await to(getBlockByNumber(provider, simpleblock?.number))
+  // if (blockErr) {
+  //   logger.error('[-] ERROR: Failed to getBlockByNumber()')
+  //   return
+  // }
 
-  const blockNumber = Number((block as any).number)
-  const blockHash = (block as any).hash
-  const receiptsRoot = (block as any).receiptsRoot
+  // const blockNumber = Number((block as any).number)
+  // const blockHash = (block as any).hash
+  // const receiptsRoot = (block as any).receiptsRoot
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUnit8Array = new Uint8Array(wasm)
   const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
 
-  const [privateInputStr, publicInputStr] = await proveInputGenOnRawReceipts(
-    yamlContent,
-    rawReceiptList,
-    blockNumber,
-    blockHash,
-    receiptsRoot,
+  const proveParams = EthereumDataSourcePlugin.toProveParams(
+    JsonRpcProviderUrl,
+    blockId,
     expectedState,
+  )
+
+  const [privateInputStr, publicInputStr] = await proveInputGen(
+    yamlContent,
+    proveParams,
     local,
     true,
   )
 
   if (inputgen) {
     // Input generation mode
-    logger.info(`[+] ZKGRAPH STATE OUTPUT:${expectedState}`)
     logger.info('[+] PRIVATE INPUT FOR ZKWASM:' + `\n${privateInputStr}`)
     logger.info('[+] PUBLIC INPUT FOR ZKWASM:' + `\n${publicInputStr}`)
   }
@@ -146,7 +149,10 @@ async function testMode(wasmUnit8Array: Uint8Array, privateInputStr: string, pub
 
   if (mockSuccess) {
     logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
-    logger.info('[+] REAL PROOF PLEASE RUN: zkgraph prove <block id> <expected state> --prove')
+    if (hasDebugOnlyFunc)
+      logger.warn('[+] PLEASE REMOVE DEBUG FUNCTION (e.g. console.log) BEFORE PROVE MODE')
+    else
+      logger.warn('[+] READY FOR PROVE MODE: zkgraph prove <block id> <expected state> --prove')
   }
   else { logger.error('[-] ZKWASM MOCK EXECUTION FAILED') }
 }
