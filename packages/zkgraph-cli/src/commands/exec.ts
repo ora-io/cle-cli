@@ -2,8 +2,8 @@ import fs from 'node:fs'
 // import to from 'await-to-js'
 // import { providers } from 'ethers'
 // @ts-expect-error non-types
-import { EthereumDataSourcePlugin, execute } from '@hyperoracle/zkgraph-api'
-import { /* fromHexString, */ loadJsonRpcProviderUrl, loadYaml, toHexString/* , validateProvider */ } from '../utils'
+import * as zkgapi from '@hyperoracle/zkgraph-api'
+import { /* fromHexString, */ loadJsonRpcProviderUrl, toHexString/* , validateProvider */ } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
@@ -16,12 +16,14 @@ export interface ExecOptions {
 }
 export async function exec(options: ExecOptions) {
   const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local } = options
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const yaml = await loadYaml(yamlContent)
-  if (!yaml) {
-    logger.error('invalid yaml')
-    return
-  }
+  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+  // const yaml = await loadYaml(yamlContent)
+  // if (!yaml) {
+  //   logger.error('invalid yaml')
+  //   return
+  // }
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   // const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
@@ -34,23 +36,28 @@ export async function exec(options: ExecOptions) {
   // const rawReceiptList = await getRawReceipts(provider, Number(blockId), false)
 
   const wasm = fs.readFileSync(wasmPath)
-  const wasmUnit8Array = new Uint8Array(wasm)
+  const wasmUint8Array = new Uint8Array(wasm)
 
   // const state = await executeOnRawReceipts(
-  //   wasmUnit8Array,
+  //   wasmUint8Array,
   //   yamlContent,
   //   rawReceiptList,
   //   local,
   //   true,
   // )
 
-  const execParams = EthereumDataSourcePlugin.toExecParams(
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
+
+  const execParams = dsp.toExecParams(
     JsonRpcProviderUrl,
     blockId,
   )
-  const state = await execute(
-    wasmUnit8Array,
-    yamlContent,
+  const zkgraphExecutable = {
+    wasmUint8Array,
+    zkgraphYaml: yaml,
+  }
+  const state = await zkgapi.execute(
+    zkgraphExecutable,
     execParams,
     local,
     true,

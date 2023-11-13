@@ -3,8 +3,8 @@ import { ethers, providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 // @ts-expect-error non-types
-import { EthereumDataSourcePlugin, hasDebugOnlyFunc, proveInputGen, proveMock, waitProve } from '@hyperoracle/zkgraph-api'
-import { convertToMd5, loadJsonRpcProviderUrl, loadYaml, validateProvider } from '../utils'
+import * as zkgapi from '@hyperoracle/zkgraph-api'
+import { convertToMd5, loadJsonRpcProviderUrl, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -64,12 +64,15 @@ export async function prove(options: ProveOptions) {
       break
   }
 
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const yaml = await loadYaml(yamlContent)
-  if (!yaml) {
-    logger.error('invalid yaml')
-    return
-  }
+  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+  // const yaml = await loadYaml(yamlContent)
+  // if (!yaml) {
+  //   logger.error('invalid yaml')
+  //   return
+  // }
+
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   // TODO: do we still need this?
@@ -103,17 +106,24 @@ export async function prove(options: ProveOptions) {
   // const receiptsRoot = (block as any).receiptsRoot
 
   const wasm = fs.readFileSync(wasmPath)
-  const wasmUnit8Array = new Uint8Array(wasm)
-  const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
+  const wasmUint8Array = new Uint8Array(wasm)
+  const md5 = convertToMd5(wasmUint8Array).toUpperCase()
 
-  const proveParams = EthereumDataSourcePlugin.toProveParams(
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
+
+  const proveParams = dsp.toProveParams(
     JsonRpcProviderUrl,
     blockId,
     expectedState,
   )
 
-  const [privateInputStr, publicInputStr] = await proveInputGen(
-    yamlContent,
+  const zkgraphExecutable = {
+    wasmUint8Array,
+    zkgraphYaml: yaml,
+  }
+
+  const [privateInputStr, publicInputStr] = await zkgapi.proveInputGen(
+    zkgraphExecutable,
     proveParams,
     local,
     true,
@@ -126,7 +136,7 @@ export async function prove(options: ProveOptions) {
   }
   else if (test) {
     // Test mode
-    await testMode(wasmUnit8Array, privateInputStr, publicInputStr)
+    await testMode(wasmUint8Array, privateInputStr, publicInputStr)
   }
   else if (prove) {
     // Prove mode
@@ -135,20 +145,25 @@ export async function prove(options: ProveOptions) {
 }
 /**
  * test mode
- * @param wasmUnit8Array
+ * @param wasmUint8Array
  * @param privateInputStr
  * @param publicInputStr
  */
-async function testMode(wasmUnit8Array: Uint8Array, privateInputStr: string, publicInputStr: string) {
-  const mockSuccess = await proveMock(
-    wasmUnit8Array,
+async function testMode(wasmUint8Array: Uint8Array, privateInputStr: string, publicInputStr: string) {
+  const zkgraphExecutable = {
+    wasmUint8Array,
+    zkgraphYaml: null,
+  }
+
+  const mockSuccess = await zkgapi.proveMock(
+    zkgraphExecutable,
     privateInputStr,
     publicInputStr,
   )
 
   if (mockSuccess) {
     logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
-    if (hasDebugOnlyFunc)
+    if (zkgapi.hasDebugOnlyFunc)
       logger.warn('[+] PLEASE REMOVE DEBUG FUNCTION (e.g. console.log) BEFORE PROVE MODE')
     else
       logger.warn('[+] READY FOR PROVE MODE: zkgraph prove <block id> <expected state> --prove')
@@ -210,7 +225,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
 
   logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTED')
-  const result = await waitProve(zkWasmProviderUrl, taskId, true)
+  const result = await zkgapi.waitProve(zkWasmProviderUrl, taskId, true)
 
   if (
     result.instances === null
