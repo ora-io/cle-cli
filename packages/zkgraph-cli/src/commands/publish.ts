@@ -1,8 +1,8 @@
-import fs from 'node:fs'
+// import fs from 'node:fs'
 // @ts-expect-error non-types
-import { publish as publishApi } from '@hyperoracle/zkgraph-api'
+import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, loadYaml, logDivider } from '../utils'
+import { loadJsonRpcProviderUrl, logDivider } from '../utils'
 import type { UserConfig } from '../../dist/index.cjs'
 
 export interface PublishOptions {
@@ -23,16 +23,19 @@ export async function publish(options: PublishOptions) {
   }
   const newBountyRewardPerTrigger = bountyRewardPerTrigger * 10 ** 9
 
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const yaml = await loadYaml(yamlContent)
-  if (!yaml) {
-    logger.error('invalid yaml')
-    return
-  }
+  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+  // const yaml = await loadYaml(yamlContent)
+  // if (!yaml) {
+  //   logger.error('invalid yaml')
+  //   return
+  // }
 
-  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, false)
-  const publishTxHash = await publishApi(
-    yamlContent,
+  const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+
+  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, false)
+
+  const publishTxHash = await zkgapi.publish(
+    { wasmUint8Array: null, zkgraphYaml },
     JsonRpcProviderUrl,
     contractAddress,
     ipfsHash,
