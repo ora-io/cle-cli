@@ -32,11 +32,11 @@ export async function instantiate(module: any, imports: any = {}) {
   return exports
 }
 
-export const instantiateWasm = async (wasmUnit8Array: Uint8Array) => {
+export const instantiateWasm = async (wasmUint8Array: Uint8Array) => {
   return instantiate(
     await (async () => {
       return globalThis.WebAssembly.compile(
-        wasmUnit8Array.buffer,
+        wasmUint8Array.buffer,
       )
     })(),
     {},
