@@ -1,10 +1,10 @@
 import fs from 'node:fs'
 import prompts from 'prompts'
 // @ts-expect-error non-types
-import { waitDeploy } from '@hyperoracle/zkgraph-api'
+import { ZkGraphYaml, waitDeploy } from '@hyperoracle/zkgraph-api'
 import { ethers } from 'ethers'
 import { logger } from '../logger'
-import { convertToMd5, getTargetNetwork, loadYaml, loadZKGraphDataDestinations, logDivider } from '../utils'
+import { convertToMd5, getTargetNetwork, logDivider } from '../utils'
 import { TdConfig } from '../constants'
 import { getDispatcherContract, queryTaskId } from '../utils/td'
 
@@ -24,15 +24,17 @@ export async function deploy(options: DeployOptions) {
   let targetNetwork: ReturnType<typeof getTargetNetwork> | undefined
 
   if (!network) {
-    const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+    // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
 
-    const yaml = await loadYaml(yamlContent)
-    if (!yaml) {
-      logger.error('invalid yaml')
-      return
-    }
+    // const yaml = await loadYaml(yamlContent)
+    // if (!yaml) {
+    //   logger.error('invalid yaml')
+    //   return
+    // }
 
-    const inputtedNetworkName = loadZKGraphDataDestinations(yaml)?.[0].network
+    const zkgraphYaml = ZkGraphYaml.fromYamlPath(yamlPath)
+
+    const inputtedNetworkName = zkgraphYaml.dataDestinations?.[0].network
     if (!inputtedNetworkName) {
       logger.error('[-] NETWORK NAME IS NOT DEFINED IN YAML.')
       return
@@ -44,8 +46,8 @@ export async function deploy(options: DeployOptions) {
   }
 
   const wasm = fs.readFileSync(wasmPath)
-  const wasmUnit8Array = new Uint8Array(wasm)
-  const md5 = convertToMd5(wasmUnit8Array).toUpperCase()
+  const wasmUint8Array = new Uint8Array(wasm)
+  const md5 = convertToMd5(wasmUint8Array).toUpperCase()
 
   const response = await prompts({
     type: 'confirm',
