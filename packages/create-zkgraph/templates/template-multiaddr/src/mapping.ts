@@ -1,6 +1,6 @@
 //@ts-ignore
 import { require } from "@hyperoracle/zkgraph-lib";
-import { Bytes, Event } from "@hyperoracle/zkgraph-lib";
+import { Bytes, Event, Block } from "@hyperoracle/zkgraph-lib";
 
 var addr_Sync = Bytes.fromHexString(
   "0xa60ecf32309539dd84f27a9563754dca818b815e",
