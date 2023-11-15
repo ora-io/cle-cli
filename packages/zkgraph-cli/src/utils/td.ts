@@ -4,7 +4,9 @@ import axios from 'axios'
 import axiosRetry from 'axios-retry'
 
 import { ethers } from 'ethers'
-import { TdABI, TdConfig } from '../constants'
+// @ts-expect-error non-types
+import { TaskDispatch } from '@hyperoracle/zkgraph-api'
+import { TdConfig } from '../constants'
 
 axiosRetry(axios, {
   retries: 3,
@@ -13,25 +15,13 @@ axiosRetry(axios, {
   },
 })
 
-export function getDispatcherContract(userPrivateKey: string) {
+export function getDispatcher(userPrivateKey: string) {
   const provider = new ethers.providers.JsonRpcProvider(TdConfig.providerUrl)
   const signer = new ethers.Wallet(userPrivateKey, provider)
+  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
+  const dispatcher = new TaskDispatch(TdConfig.queryrApi, TdConfig.contract, feeInWei, provider, signer)
 
-  const dispatcherContract = new ethers.Contract(
-    TdConfig.contract,
-    TdABI,
-    provider,
-  ).connect(signer)
-
-  return dispatcherContract
-}
-
-export async function queryTaskId(txhash: string) {
-  const response = await axios.get(
-    `${TdConfig.queryrApi}/task?txhash=${txhash}`,
-  )
-  const taskId = response.data.task.id
-  return taskId
+  return dispatcher
 }
 
 export async function uploadWasmToTd(wasmPath: string) {

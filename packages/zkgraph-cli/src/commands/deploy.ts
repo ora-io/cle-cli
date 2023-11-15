@@ -2,11 +2,10 @@ import fs from 'node:fs'
 import prompts from 'prompts'
 // @ts-expect-error non-types
 import { ZkGraphYaml, waitDeploy } from '@hyperoracle/zkgraph-api'
-import { ethers } from 'ethers'
 import { logger } from '../logger'
 import { convertToMd5, getTargetNetwork, logDivider } from '../utils'
 import { TdConfig } from '../constants'
-import { getDispatcherContract, queryTaskId } from '../utils/td'
+import { getDispatcher } from '../utils/td'
 
 export interface DeployOptions {
   wasmPath: string
@@ -65,12 +64,8 @@ export async function deploy(options: DeployOptions) {
     return
   }
 
-  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
-  const dispatcherContract = getDispatcherContract(userPrivateKey)
-  const tx = await dispatcherContract.deploy(md5, targetNetwork?.value, {
-    value: feeInWei,
-  })
-
+  const dispatcher = getDispatcher(userPrivateKey)
+  const tx = await dispatcher.deploy(md5, targetNetwork?.value)
   const txhash = tx.hash
   logger.info(
     `[+] Deploy Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
@@ -80,8 +75,8 @@ export async function deploy(options: DeployOptions) {
 
   logger.info('[+] Transaction Confirmed. Creating Deploy Task')
 
-  const taskId = await queryTaskId(txhash)
-
+  const data = await dispatcher.queryTask(txhash)
+  const taskId = data.task.id
   if (!taskId) {
     logger.error('[+] DEPLOY TASK FAILED. TASK ID IS NOT FOUND! \n')
     return

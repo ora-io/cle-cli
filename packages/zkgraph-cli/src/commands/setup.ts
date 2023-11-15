@@ -1,10 +1,9 @@
-import { ethers } from 'ethers'
 import prompts from 'prompts'
 // @ts-expect-error non-types
 import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
-import { getDispatcherContract, queryTaskId, uploadWasmToTd } from '../utils/td'
+import { getDispatcher, uploadWasmToTd } from '../utils/td'
 
 export interface SetupOptions {
   wasmPath: string
@@ -47,21 +46,17 @@ export async function setup(options: SetupOptions) {
     return
   }
 
-  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
-  const dispatcherContract = getDispatcherContract(userPrivateKey)
-  const tx = await dispatcherContract.setup(md5, circuitSize, {
-    value: feeInWei,
-  })
-
+  const dispatcher = getDispatcher(userPrivateKey)
+  const tx = await dispatcher.setup(md5, circuitSize)
   const txhash = tx.hash
   logger.info(
     `[+] Setup Request Transaction Sent: ${txhash}, Waiting for Confirmation`,
   )
-
   await tx.wait()
 
   logger.info('[+] Transaction Confirmed. Creating Setup Task')
-  const taskId = await queryTaskId(txhash)
+  const data = await dispatcher.queryTask(txhash)
+  const taskId = data.task.id
   if (!taskId) {
     logger.error('[+] SETUP TASK FAILED. \n')
     return
