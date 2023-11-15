@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { ethers, providers } from 'ethers'
+import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 // @ts-expect-error non-types
@@ -9,7 +9,7 @@ import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
 import { TAGS, TdConfig } from '../constants'
-import { getDispatcherContract, queryTaskId } from '../utils/td'
+import { getDispatcher } from '../utils/td'
 
 export interface ProveOptions {
   blockId: number
@@ -177,16 +177,8 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
     logger.error('Operation cancelled')
     return
   }
-  const feeInWei = ethers.utils.parseEther(TdConfig.fee)
-  const dispatcherContract = getDispatcherContract(userPrivateKey)
-  const tx = await dispatcherContract.prove(
-    md5,
-    privateInputStr,
-    publicInputStr,
-    {
-      value: feeInWei,
-    },
-  )
+  const dispatcher = getDispatcher(userPrivateKey)
+  const tx = await dispatcher.prove(md5, privateInputStr, publicInputStr)
 
   const txhash = tx.hash
   logger.info(
@@ -197,7 +189,8 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   logger.info('[+] Transaction Confirmed. Creating Prove Task')
 
-  const taskId = await queryTaskId(txhash)
+  const data = await dispatcher.queryTask(txhash)
+  const taskId = data.task.id
   if (!taskId) {
     logger.error('[+] PROVE TASK FAILED. \n')
     return
