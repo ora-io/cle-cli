@@ -5,11 +5,14 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
 import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
 import { checkExecExist } from '../utils/system'
+// import {dspHub} from '@hyperoracle/zkgraph-api'
+
 // import { ZkGraphYaml } from '@hyperoracle/zkgraph-api';
 
 export interface CompileOptions {
@@ -19,7 +22,7 @@ export interface CompileOptions {
   wasmPath: string
   watPath: string
   mappingPath: string
-  isUseAscLib?: boolean
+  // isUseAscLib?: boolean
 }
 
 const wasmStartName = '__as_start'
@@ -29,6 +32,8 @@ const wasmStartName = '__as_start'
 export async function compile(options: CompileOptions) {
   const {
     // yamlPath,
+    wasmPath,
+    watPath,
     local,
   } = options
   if (!checkExecExist('asc') || !checkExecExist('npx asc')) {
@@ -40,10 +45,53 @@ export async function compile(options: CompileOptions) {
    * only compile in compiler when event section exist
    */
   // if (ZkGraphYaml.fromYamlPath(yamlPath).dataSources[0].event)
+
   if (local)
     await compileLocal(options)
   else
     await compileServer(options)
+
+  logCompileResult(wasmPath, watPath)
+}
+
+async function compileLocal(options: CompileOptions) {
+  const {
+    yamlPath,
+    wasmPath,
+    watPath,
+    mappingPath,
+    local,
+  } = options
+  if (!yamlPath) {
+    logger.error('no yaml path provided')
+    return
+  }
+
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+
+  // general compile based on dsp. so local should be a boolean var rather than 'true'
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
+
+  // for CODE_GEN code, define imported lib function name
+  const [funcName_zkmain, funcName_asmain] = dsp.getLibFuncNames()
+
+  // for entry file name only, not important.
+  const dspKey = zkgapi.dspHub.toHubKeyByYaml(yaml, { isLocal: local })
+
+  const srcDirPath = path.join(mappingPath, '..')
+  const entryFilename = getEntryFilename(dspKey)
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(funcName_zkmain, funcName_asmain))
+
+  // const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
+  createOnNonexist(wasmPath)
+
+  // const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
+  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
+
+  if (compileErr)
+    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
+
+  // logCompileResult(wasmPath, watPath)
 }
 
 async function compileServer(options: CompileOptions) {
@@ -52,12 +100,22 @@ async function compileServer(options: CompileOptions) {
     compilerServerEndpoint,
     wasmPath,
     watPath,
-    mappingPath,
+    // mappingPath,
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
     return
   }
+
+  const tmpWasmPath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
+  const originWasmPath = options.wasmPath
+  // set to tmp wasm path when local compile
+  options.wasmPath = tmpWasmPath
+
+  compileLocal(options)
+  // set back origin value
+  options.wasmPath = originWasmPath
+
   // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
   // const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
   // if (yamlErr) {
@@ -73,24 +131,10 @@ async function compileServer(options: CompileOptions) {
   // logger.info(`[*] Source contract address:${source_address}`)
   // logger.info(`[*] Source events signatures:${source_esigs}` + '\n')
 
-  const srcDirPath = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename('full')
-  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN)
-
-  const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
-  createOnNonexist(innerPrePrePath)
-
-  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
-
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return
-  }
-
   // Set up form data
   const data = new FormData()
   // data.append("asFile", createReadStream(mappingPath));
-  data.append('wasmFile', fs.createReadStream(innerPrePrePath))
+  data.append('wasmFile', fs.createReadStream(tmpWasmPath))
   data.append('yamlFile', fs.createReadStream(yamlPath))
 
   // Set up request config
@@ -124,30 +168,7 @@ async function compileServer(options: CompileOptions) {
   createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
-  logCompileResult(wasmPath, watPath)
-}
-
-async function compileLocal(options: CompileOptions) {
-  const {
-    wasmPath,
-    watPath,
-    mappingPath,
-  } = options
-
-  const srcDirPath = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename('local')
-  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN) // COMPILE_CODEGEN_LOCAL
-
-  createOnNonexist(wasmPath)
-
-  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
-
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return
-  }
-
-  logCompileResult(wasmPath, watPath)
+  // logCompileResult(wasmPath, watPath)
 }
 
 async function ascCompile(entryFilePath: string, outputWasmPath: string, outputWatPath: string) {

@@ -33,9 +33,9 @@ export const TAGS = {
 
 export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
 
-export const COMPILE_CODEGEN = `
+export const COMPILE_CODEGEN = (funcName_zkmain: string, funcName_asmain: string) => `
 import { registerHandle } from "@hyperoracle/zkgraph-lib"
-import { zkmain_eth, asmain_eth } from "@hyperoracle/zkgraph-lib"
+import { ${funcName_zkmain}, ${funcName_asmain} } from "@hyperoracle/zkgraph-lib"
 import { handleBlocks } from "./mapping"
 
 declare function __call_as_start(): void;
@@ -43,13 +43,13 @@ declare function __call_as_start(): void;
 export function zkmain(): void {
   __call_as_start();
   registerHandle(handleBlocks)
-  return zkmain_eth()
+  return ${funcName_zkmain}()
 }
 
 export function asmain(): Uint8Array {
   __call_as_start();
   registerHandle(handleBlocks)
-  return asmain_eth()
+  return ${funcName_asmain}()
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
 `
