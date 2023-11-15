@@ -19,7 +19,6 @@ describe('test CLI', () => {
     'compile',
     'exec',
     'prove',
-    'deploy',
     'setup',
     'upload',
     'verify',

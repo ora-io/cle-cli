@@ -4,7 +4,6 @@ import { compile } from './commands/compile'
 import { exec } from './commands/exec'
 import { setup } from './commands/setup'
 import { prove as proveHandler } from './commands/prove'
-import { deploy } from './commands/deploy'
 import { upload } from './commands/upload'
 import { verify } from './commands/verify'
 import { publish } from './commands/publish'
@@ -112,24 +111,6 @@ export async function run() {
       })
 
     proveCLI.usage('prove <block id> <expected state> -i|-t|-p')
-
-    cli
-      .command('deploy', 'Deploy Verification Contract for Full Image')
-      .option('--local', 'Deploy Verification Contract for Local Image')
-      .option('-n, --network-name <name>', 'Name of deployed network for verification contract (sepolia/goerli)')
-      .example('zkgraph deploy -n sepolia')
-      .action((options) => {
-        const { networkName = '', local = false } = options
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
-        deploy({
-          local,
-          network: networkName,
-          wasmPath,
-          yamlPath: config.YamlPath,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
-          userPrivateKey: config.UserPrivateKey,
-        })
-      })
 
     cli
       .command('upload', 'Upload zkGraph (Code and Full Image)')
