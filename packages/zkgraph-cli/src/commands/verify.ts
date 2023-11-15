@@ -1,5 +1,6 @@
 // import fs from 'node:fs'
 // @ts-expect-error non-types
+import type { Error } from '@hyperoracle/zkgraph-api'
 import { ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { logDivider } from '../utils'
@@ -19,8 +20,9 @@ export async function verify(options: VerifyOptions) {
     { wasmUint8Array: null, zkgraphYaml },
     taskId,
     zkWasmProviderUrl,
-    true,
-  )
+  ).catch((error: Error.ProofNotFound) => {
+    logger.error(`>> PROOF IS NOT READY. ${error.message}`)
+  })
   logDivider()
 
   if (verifyResult)
