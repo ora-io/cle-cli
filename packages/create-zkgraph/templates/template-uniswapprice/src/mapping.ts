@@ -1,6 +1,6 @@
 //@ts-ignore
 import { require } from "@hyperoracle/zkgraph-lib";
-import { Bytes, Event, BigInt } from "@hyperoracle/zkgraph-lib";
+import { Bytes, Block, Event, BigInt } from "@hyperoracle/zkgraph-lib";
 
 var esig_sync = Bytes.fromHexString(
   "0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1",
@@ -34,8 +34,10 @@ function calcPrice(syncEvent: Event): BigInt {
   return price0;
 }
 
-export function handleEvents(events: Event[]): Bytes {
+export function handleBlocks(blocks: Block[]): Bytes {
   let lastSyncEvent: Event | null = null;
+
+  let events = blocks[0].events;
 
   for (let i = events.length - 1; i >= 0; i--) {
     if (events[i].esig == esig_sync) {
@@ -58,6 +60,7 @@ export function handleEvents(events: Event[]): Bytes {
     let triggerCondition = price0.ge(
       BigInt.fromI32(threshold_eth_price * 10 ** price_decimals),
     );
+    // ATTENTION: REMOVE THIS IF YOU WANT TO SEE THE OUTPUT
     require(triggerCondition);
 
     // Set payload to the current price0 when triggering destination contract.

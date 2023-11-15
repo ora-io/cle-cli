@@ -20,11 +20,11 @@ export interface UserConfig {
   UserPrivateKey?: string
 
   /**
-   * @default "https://zkwasm-explorer.delphinuslab.com:8090"
+   * @default "https://rpc.zkwasmhub.com:8090"
    */
   ZkwasmProviderUrl?: string
   /**
-   * @default "http://compiler.hyperoracle.io/compile"
+   * @default "http://compiler.dev.hyperoracle.io/compile"
    */
   CompilerServerEndpoint?: string
   /**
@@ -34,7 +34,7 @@ export interface UserConfig {
   PinataJWT?: string
 
   /**
-   * @default "[root]/build/zkgraph_full.wasm"
+   * @default "[root]/build/zkgraph.wasm"
    */
   WasmBinPath?: string
   /**

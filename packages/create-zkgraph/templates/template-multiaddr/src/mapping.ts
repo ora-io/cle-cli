@@ -1,6 +1,6 @@
 //@ts-ignore
 import { require } from "@hyperoracle/zkgraph-lib";
-import { Bytes, Event, BigInt } from "@hyperoracle/zkgraph-lib";
+import { Bytes, Event, Block } from "@hyperoracle/zkgraph-lib";
 
 var addr_Sync = Bytes.fromHexString(
   "0xa60ecf32309539dd84f27a9563754dca818b815e",
@@ -16,7 +16,9 @@ var esig_SubmissionReceived = Bytes.fromHexString(
   "0x92e98423f8adac6e64d0608e519fd1cefb861498385c6dee70d58fc926ddc68c",
 );
 
-export function handleEvents(events: Event[]): Bytes {
+export function handleBlocks(blocks: Block[]): Bytes {
+  let events: Event[] = blocks[0].events;
+
   let countMatched = 0;
   for (let i = events.length - 1; i >= 0; i--) {
     if (events[i].address == addr_Sync && events[i].esig == esig_Sync) {

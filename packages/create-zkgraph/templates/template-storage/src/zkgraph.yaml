@@ -1,15 +1,16 @@
 specVersion: 0.0.2
 apiVersion: 0.0.2
-name: eg_hello
-description: "This demo zkGraph always set a ascii string as the output state. "
+name: eg_storage
+description: "This demo zkGraph shows 2 ways to access a slot value."
 repository: https://github.com/hyperoracle/zkgraph
 dataSources:
   - kind: ethereum
     network: sepolia
-    event:
-      - address: '0xFA5Db19087920F5d0e71d0373F099bd0C03589DA'
-        events: 
-          - "Sync(uint112,uint112)"
+    storage:
+      - address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+        slots: 
+          - 8
+          - 9
 
 mapping:
   language: wasm/assemblyscript

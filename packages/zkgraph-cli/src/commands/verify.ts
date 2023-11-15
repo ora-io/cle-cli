@@ -1,6 +1,7 @@
-import fs from 'node:fs'
+// import fs from 'node:fs'
 // @ts-expect-error non-types
-import { verify as verifyApi } from '@hyperoracle/zkgraph-api'
+import type { Error } from '@hyperoracle/zkgraph-api'
+import { ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { logDivider } from '../utils'
 
@@ -12,14 +13,16 @@ export interface VerifyOptions {
 export async function verify(options: VerifyOptions) {
   logger.info('>> VERIFY PROOF ONCHAIN')
   const { yamlPath, taskId, zkWasmProviderUrl } = options
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
+
+  const zkgraphYaml = ZkGraphYaml.fromYamlPath(yamlPath)
 
   const verifyResult = await verifyApi(
-    yamlContent,
+    { wasmUint8Array: null, zkgraphYaml },
     taskId,
     zkWasmProviderUrl,
-    true,
-  )
+  ).catch((error: Error.ProofNotFound) => {
+    logger.error(`>> PROOF IS NOT READY. ${error.message}`)
+  })
   logDivider()
 
   if (verifyResult)

@@ -1,19 +1,20 @@
-import to from 'await-to-js'
-import { ethers } from 'ethers'
-import type { DataSource, ZkGraphYaml } from '../types'
+// import to from 'await-to-js'
+// import { ethers } from 'ethers'
+// import type { DataSource, ZkGraphYaml } from '../types'
+import type { ZkGraphYaml } from '@hyperoracle/zkgraph-api'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
 import { getTargetNetwork } from './network'
-import { parseYaml, yamlHealthCheck } from './yaml'
+// import { parseYaml /* yamlHealthCheck */ } from './yaml'
 
-export function loadZKGraphDataSources(config: Partial<ZkGraphYaml>) {
-  return config.dataSources
-}
+// export function loadZKGraphDataSources(config: Partial<ZkGraphYaml>) {
+//   return config.dataSources
+// }
 
-export function loadZKGraphDataDestinations(config: Partial<ZkGraphYaml>) {
-  return config.dataDestinations
-}
+// export function loadZKGraphDataDestinations(config: Partial<ZkGraphYaml>) {
+//   return config.dataDestinations
+// }
 
 /*
  * @param {string} yamlPath of zkgraph.yaml
@@ -24,11 +25,11 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
   let network: string | undefined
   // For exec and prove, we need to load the data source network
   if (isDataSource)
-    network = loadZKGraphDataSources(yaml)?.[0].network
+    network = yaml.dataSources?.[0].network
 
   // For publish, we need to load the data destination network
   else
-    network = loadZKGraphDataDestinations(yaml)?.[0].network
+    network = yaml.dataDestinations?.[0].network
 
   if (!network) {
     logger.warn(
@@ -56,40 +57,41 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
   return JsonRpcProviderUrl
 }
 
-/**
- * Load ZKGraph sources
- * @param config
- * @returns
- */
-export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
-  yamlHealthCheck(config)
-  const loadFromDataSource = (dataSource: DataSource): [string, string[]] => {
-    const source_address = dataSource.source.address
-    const edefs = dataSource.mapping.eventHandlers.map(
-      eh => eh.event,
-    )
-    const source_esigs = edefs.map(ed =>
-      ethers.utils.keccak256(ethers.utils.toUtf8Bytes(ed)),
-    )
-    return [source_address, source_esigs]
-  }
+// /**
+//  * Load ZKGraph sources
+//  * @param config
+//  * @returns
+//  */
+// export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
+//   // yamlHealthCheck(config)
+//   const loadFromDataSource = (dataSource: DataSource): [string, string[]] => {
+//     const source_address = dataSource.source.address
+//     const edefs = dataSource.mapping.eventHandlers.map(
+//       eh => eh.event,
+//     )
+//     const source_esigs = edefs.map(ed =>
+//       ethers.utils.keccak256(ethers.utils.toUtf8Bytes(ed)),
+//     )
+//     return [source_address, source_esigs]
+//   }
 
-  const sourceAddressList: string[] = []
-  const sourceEsigsList: string[][] = []
-  config.dataSources?.forEach((ds) => {
-    const [sa, se] = loadFromDataSource(ds)
-    sourceAddressList.push(sa)
-    sourceEsigsList.push(se)
-  })
-  return [sourceAddressList, sourceEsigsList]
-}
+//   const sourceAddressList: string[] = []
+//   const sourceEsigsList: string[][] = []
+//   config.dataSources?.forEach((ds) => {
+//     const [sa, se] = loadFromDataSource(ds)
+//     sourceAddressList.push(sa)
+//     sourceEsigsList.push(se)
+//   })
+//   return [sourceAddressList, sourceEsigsList]
+// }
 
-export async function loadYaml(yamlContent: string) {
-  const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-  if (yamlErr) {
-    logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-    return yaml
-  }
+// TODO: rm this
+// export async function loadYaml(yamlContent: string) {
+//   const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
+//   if (yamlErr) {
+//     logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
+//     return yaml
+//   }
 
-  return yaml
-}
+//   return yaml
+// }

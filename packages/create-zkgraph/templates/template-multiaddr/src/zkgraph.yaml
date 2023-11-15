@@ -1,36 +1,26 @@
-specVersion: 0.0.1
-name: multi_addr
-description: "zkGraph now supports multi data source address."
+specVersion: 0.0.2
+apiVersion: 0.0.2
+name: eg_multi_addr
+description: "This demo zkGraph shows multi data source address/esig support."
 repository: https://github.com/hyperoracle/zkgraph
 dataSources:
-  - kind: ethereum/contract
+  - kind: ethereum
     network: sepolia
-    source:
-      address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.1
-      language: wasm/assemblyscript
-      file: ./mapping.ts
-      eventHandlers:
-        - event: "Sync(uint112,uint112)"
-          handler: handleEvents
-        - event: "Sync1(uint112,uint112)"
-          handler: handleEvents
-  - kind: ethereum/contract
-    network: sepolia
-    source:
-      address: '0x5c7a6cf20cbd3eef32e19b9cad4eca17c432a794'
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.1
-      language: wasm/assemblyscript
-      file: ./mapping.ts
-      eventHandlers:
-        - event: "SubmissionReceived(int256,uint32,address)"
-          handler: handleEvents
+    event:
+      - address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+        events: 
+          - "Sync(uint112,uint112)"
+          - "0xa818b815ea60ecf3230563754dc9539dd84f27a98b815ea60ecf32309539dd84"
+      - address: '0x5c7a6cf20cbd3eef32e19b9cad4eca17c432a794'
+        events: 
+          - "SubmissionReceived(int256,uint32,address)"
+
+mapping:
+  language: wasm/assemblyscript
+  file: ./mapping.ts
+  handler: handleBlocks
+
 dataDestinations:
-  - kind: ethereum/contract
+  - kind: ethereum
     network: sepolia
-    destination:
-      address: "0x0000000000000000000000000000000000000001"
+    address: "{Your Destination Contract Address Here}"
