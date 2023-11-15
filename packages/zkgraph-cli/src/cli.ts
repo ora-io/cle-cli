@@ -144,7 +144,7 @@ export async function run() {
           pinataEndpoint: config.PinataEndpoint,
           pinataJWT: config.PinataJWT,
           mappingPath: config.MappingPath,
-          userPrivateKey: config.UserPrivateKey,
+          // userPrivateKey: config.UserPrivateKey,
         })
       })
 
