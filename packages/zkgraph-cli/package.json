@@ -1,6 +1,6 @@
 {
   "name": "@hyperoracle/zkgraph-cli",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.1",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/hyperoracle/zkgraph-cli#readme",
@@ -45,11 +45,11 @@
     "start": "esno src/index.ts"
   },
   "peerDependencies": {
-    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha.2"
+    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha.4"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/zkgraph-api": "0.1.9-alpha.2",
+    "@hyperoracle/zkgraph-api": "0.1.9-alpha.3",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
@@ -68,7 +68,7 @@
     "unconfig": "^0.3.11"
   },
   "devDependencies": {
-    "@hyperoracle/zkgraph-lib": "0.0.9-alpha.3",
+    "@hyperoracle/zkgraph-lib": "^0.0.9-alpha.4",
     "@types/js-yaml": "^4.0.6",
     "@types/prompts": "^2.4.6",
     "@types/semver": "^7.5.3"
