@@ -9,8 +9,8 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
 
   UserPrivateKey: '',
 
-  ZkwasmProviderUrl: 'https://zkwasm-explorer.delphinuslab.com:8090',
-  CompilerServerEndpoint: 'http://compiler.hyperoracle.io/compile',
+  ZkwasmProviderUrl: 'https://rpc.zkwasmhub.com:8090',
+  CompilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
 
