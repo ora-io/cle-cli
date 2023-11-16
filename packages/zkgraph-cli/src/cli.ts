@@ -137,6 +137,7 @@ export async function run() {
           taskId,
           yamlPath: config.YamlPath,
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
         })
       })
 

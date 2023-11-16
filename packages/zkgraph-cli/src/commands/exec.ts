@@ -22,9 +22,9 @@ export async function exec(options: ExecOptions) {
   //   logger.error('invalid yaml')
   //   return
   // }
-  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
-  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
+  const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
 
   // const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
   // const [validateErr] = await to(validateProvider(provider))
@@ -46,15 +46,15 @@ export async function exec(options: ExecOptions) {
   //   true,
   // )
 
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
+  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
 
   const execParams = dsp.toExecParams(
-    JsonRpcProviderUrl,
+    jsonRpcUrl,
     blockId,
   )
   const zkgraphExecutable = {
     wasmUint8Array,
-    zkgraphYaml: yaml,
+    zkgraphYaml,
   }
   const state = await zkgapi.execute(
     zkgraphExecutable,
