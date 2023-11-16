@@ -19,4 +19,4 @@ mapping:
 dataDestinations:
   - kind: ethereum
     network: sepolia
-    address: "{Your Destination Contract Address Here}"
+    address: "0x0000000000000000000000000000000000000001"
