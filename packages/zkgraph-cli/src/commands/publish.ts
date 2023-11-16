@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 // import fs from 'node:fs'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
@@ -33,14 +34,16 @@ export async function publish(options: PublishOptions) {
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, false)
+  const provider = new ethers.providers.JsonRpcProvider(JsonRpcProviderUrl)
+  const signer = new ethers.Wallet(userPrivateKey, provider)
 
   const publishTxHash = await zkgapi.publish(
     { wasmUint8Array: null, zkgraphYaml },
-    JsonRpcProviderUrl,
+    provider,
     contractAddress,
     ipfsHash,
     newBountyRewardPerTrigger,
-    userPrivateKey,
+    signer,
     true,
   )
 
