@@ -27,13 +27,13 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
   if (isDataSource)
     network = yaml.dataSources?.[0].network
 
-  // For publish, we need to load the data destination network
+  // For publish & verify, we need to load the data destination network
   else
     network = yaml.dataDestinations?.[0].network
 
   if (!network) {
     logger.warn(
-      `[-] JSON RPC PROVIDER URL FOR NETWORK "${network}" IS NOT DEFINED IN YAML.`,
+      `[-] NETWORK OF "${isDataSource ? 'DATASOURCE' : 'DATADESTINATION'}" IS NOT DEFINED IN YAML.`,
     )
     return undefined
   }
