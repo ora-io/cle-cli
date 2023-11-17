@@ -41,17 +41,10 @@ export async function compile(options: CompileOptions) {
     return
   }
 
-  /**
-   * only compile in compiler when event section exist
-   */
-  // if (ZkGraphYaml.fromYamlPath(yamlPath).dataSources[0].event)
+  const succ = local ? await compileLocal(options) : await compileServer(options)
 
-  if (local)
-    await compileLocal(options)
-  else
-    await compileServer(options)
-
-  logCompileResult(wasmPath, watPath)
+  if (succ)
+    logCompileResult(wasmPath, watPath)
 }
 
 async function compileLocal(options: CompileOptions) {
@@ -64,7 +57,7 @@ async function compileLocal(options: CompileOptions) {
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
-    return
+    return false
   }
 
   const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
@@ -73,14 +66,17 @@ async function compileLocal(options: CompileOptions) {
   const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
 
   // for CODE_GEN code, define imported lib function name
-  const [funcName_zkmain, funcName_asmain] = dsp.getLibFuncNames()
+  const libDSPName = dsp.getLibDSPName()
+
+  const mappingFileName = yaml.mapping.file
+  const handleFuncName = yaml.mapping.handler
 
   // for entry file name only, not important.
   const dspKey = zkgapi.dspHub.toHubKeyByYaml(yaml, { isLocal: local })
 
   const srcDirPath = path.join(mappingPath, '..')
   const entryFilename = getEntryFilename(dspKey)
-  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(funcName_zkmain, funcName_asmain))
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(libDSPName, mappingFileName, handleFuncName))
 
   // const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
   createOnNonexist(wasmPath)
@@ -88,8 +84,11 @@ async function compileLocal(options: CompileOptions) {
   // const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
   const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
 
-  if (compileErr)
+  if (compileErr) {
     logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
+    return false
+  }
+  return true
 
   // logCompileResult(wasmPath, watPath)
 }
@@ -104,7 +103,7 @@ async function compileServer(options: CompileOptions) {
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
-    return
+    return false
   }
 
   const tmpWasmPath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
@@ -112,7 +111,9 @@ async function compileServer(options: CompileOptions) {
   // set to tmp wasm path when local compile
   options.wasmPath = tmpWasmPath
 
-  compileLocal(options)
+  const succ = await compileLocal(options)
+  if (!succ)
+    return false
   // set back origin value
   options.wasmPath = originWasmPath
 
@@ -153,11 +154,11 @@ async function compileServer(options: CompileOptions) {
   if (requestErr) {
     console.error(requestErr)
     logger.error(`[-] ERROR WHEN COMPILING. ${requestErr.message}`)
-    return
+    return false
   }
   if (!response) {
     logger.error('[-] ERROR WHEN COMPILING. invalid response')
-    return
+    return false
   }
   const wasmModuleHex = response.data.wasmModuleHex
   const wasmWat = response.data.wasmWat
@@ -168,6 +169,7 @@ async function compileServer(options: CompileOptions) {
   createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
+  return true
   // logCompileResult(wasmPath, watPath)
 }
 
