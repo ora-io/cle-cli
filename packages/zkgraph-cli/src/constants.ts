@@ -33,9 +33,9 @@ export const TAGS = {
 
 export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
 
-export const COMPILE_CODEGEN = (libDSPName: string, handleFuncName: string) => `
+export const COMPILE_CODEGEN = (libDSPName: string, mappingFileName: string, handleFuncName: string) => `
 import { zkmain_lib, asmain_lib, registerHandle } from "@hyperoracle/zkgraph-lib/dsp/${libDSPName}"
-import { ${handleFuncName} } from "./mapping"
+import { ${handleFuncName} } from "./${mappingFileName}"
 
 declare function __call_as_start(): void;
 

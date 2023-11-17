@@ -69,6 +69,7 @@ async function compileLocal(options: CompileOptions) {
   const libDSPName = dsp.getLibDSPName()
 
   // TODO: use yaml
+  const mappingFileName = 'mapping.ts'
   const handleFuncName = 'handleBlocks'
 
   // for entry file name only, not important.
@@ -76,7 +77,7 @@ async function compileLocal(options: CompileOptions) {
 
   const srcDirPath = path.join(mappingPath, '..')
   const entryFilename = getEntryFilename(dspKey)
-  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(libDSPName, handleFuncName))
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(libDSPName, mappingFileName, handleFuncName))
 
   // const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
   createOnNonexist(wasmPath)
