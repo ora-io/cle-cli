@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-// import to from 'await-to-js'
+import to from 'await-to-js'
 // import { providers } from 'ethers'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
@@ -22,6 +22,7 @@ export async function exec(options: ExecOptions) {
   //   logger.error('invalid yaml')
   //   return
   // }
+  logger.info(`[*] Run zkgraph on block ${blockId}`)
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
@@ -56,12 +57,17 @@ export async function exec(options: ExecOptions) {
     wasmUint8Array,
     zkgraphYaml,
   }
-  const state = await zkgapi.execute(
+  const [execErr, state] = await to<any>(zkgapi.execute(
     zkgraphExecutable,
     execParams,
     local,
     true,
-  )
+  ))
+
+  if (execErr) {
+    logger.error(`[-] EXECUTE ERROR. ${execErr.message}`)
+    return
+  }
 
   logger.info(`[+] ZKGRAPH STATE OUTPUT: ${toHexString(state)}\n`)
   return state
