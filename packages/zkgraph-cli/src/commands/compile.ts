@@ -68,9 +68,8 @@ async function compileLocal(options: CompileOptions) {
   // for CODE_GEN code, define imported lib function name
   const libDSPName = dsp.getLibDSPName()
 
-  // TODO: use yaml
-  const mappingFileName = 'mapping.ts'
-  const handleFuncName = 'handleBlocks'
+  const mappingFileName = yaml.mapping.file
+  const handleFuncName = yaml.mapping.handler
 
   // for entry file name only, not important.
   const dspKey = zkgapi.dspHub.toHubKeyByYaml(yaml, { isLocal: local })
