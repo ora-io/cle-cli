@@ -1,6 +1,7 @@
 // import to from 'await-to-js'
 // import { ethers } from 'ethers'
 // import type { DataSource, ZkGraphYaml } from '../types'
+// @ts-expect-error non-types
 import type { ZkGraphYaml } from '@hyperoracle/zkgraph-api'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'

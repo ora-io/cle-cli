@@ -1,7 +1,7 @@
 // import fs from 'node:fs'
 // @ts-expect-error non-types
-import { Error } from '@hyperoracle/zkgraph-api'
-import { ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
+import { Error, ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
+import to from 'await-to-js'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
 import type { UserConfig } from '../config'
@@ -25,18 +25,22 @@ export async function verify(options: VerifyOptions) {
   // TODO: I reused this func to save code, but the naming is a bit misleading, fix it later.
   const verifierAddress = loadJsonRpcProviderUrl(zkgraphYaml, AggregatorVerifierAddress, false)
 
-  const verifyResult = await verifyApi(
+  const [verifyErr, verifyResult] = await to(verifyApi(
     taskId,
     zkWasmProviderUrl,
     verifierAddress,
     jsonRpcUrl,
-  ).catch((error: Error) => {
-    if (error instanceof Error.ProveTaskNotReady)
-      logger.error(`>> PROOF IS NOT READY. ${error.message}`)
+  ))
+  if (verifyErr) {
+    if (verifyErr instanceof Error.ProveTaskNotReady)
+      logger.error(`>> PROOF IS NOT READY. ${verifyErr?.message}`)
 
     else
-      throw error
-  })
+      logger.error(`>> VERIFY ERROR. ${verifyErr?.message}`)
+
+    return
+  }
+
   logDivider()
 
   if (verifyResult)

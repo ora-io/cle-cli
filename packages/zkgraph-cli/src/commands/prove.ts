@@ -155,11 +155,16 @@ async function testMode(wasmUint8Array: Uint8Array, privateInputStr: string, pub
     zkgraphYaml: null,
   }
 
-  const mockSuccess = await zkgapi.proveMock(
+  const [mockErr, mockSuccess] = await to(zkgapi.proveMock(
     zkgraphExecutable,
     privateInputStr,
     publicInputStr,
-  )
+  ))
+
+  if (mockErr) {
+    logger.error(`[-] ZKWASM MOCK EXECUTION ERROR: ${mockErr.message}`)
+    return
+  }
 
   if (mockSuccess) {
     logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
@@ -218,7 +223,11 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
 
   logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTED')
-  const result = await zkgapi.waitProve(zkWasmProviderUrl, taskId, true)
+  const [waitProveErr, result] = await to<any>(zkgapi.waitProve(zkWasmProviderUrl, taskId, true))
+  if (waitProveErr) {
+    logger.error(`[-] PROVE ERROR: ${waitProveErr.message}`)
+    return
+  }
 
   if (
     result.instances === null

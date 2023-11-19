@@ -5,6 +5,7 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
+// @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
