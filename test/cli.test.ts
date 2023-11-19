@@ -23,7 +23,7 @@ describe('test CLI', () => {
     'upload',
     'verify',
     'publish',
-  ])('test run compile', (command: string) => {
+  ])('test run %s', (command: string) => {
     const runCompile = execCommand(`${runCLI} ${command} -h`)
     expect(runCompile).toContain(`zkgraph/${version}`)
     expect(runCompile).toContain('Usage')
