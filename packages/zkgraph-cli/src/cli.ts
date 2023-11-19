@@ -39,10 +39,10 @@ export async function run() {
       })
 
     cli
-      .command('exec <block id>', 'Execute Full Image')
+      .command('exec <block id> [offchain data]', 'Execute Full Image')
       .option('--local', 'Execute Local Image')
       .example('zkgraph exec 0000000')
-      .action((blockId, options) => {
+      .action((blockId, offchainData, options) => {
         const { local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
 
@@ -52,6 +52,7 @@ export async function run() {
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          offchainData,
         })
       })
 

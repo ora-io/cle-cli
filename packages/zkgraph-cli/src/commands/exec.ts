@@ -13,9 +13,12 @@ export interface ExecOptions {
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
+  offchainData: string
 }
+// TODO: prepare all params, dsp select params.
 export async function exec(options: ExecOptions) {
-  const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local } = options
+  const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local, offchainData } = options
+  // const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local } = options
   // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
   // const yaml = await loadYaml(yamlContent)
   // if (!yaml) {
@@ -50,8 +53,11 @@ export async function exec(options: ExecOptions) {
   const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
 
   const execParams = dsp.toExecParams(
-    jsonRpcUrl,
-    blockId,
+    {
+      jsonRpcUrl,
+      blockId,
+      offchainData,
+    },
   )
   const zkgraphExecutable = {
     wasmUint8Array,
