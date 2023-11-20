@@ -4,7 +4,7 @@ import to from 'await-to-js'
 import prompts from 'prompts'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { convertToMd5, loadJsonRpcProviderUrl, validateProvider } from '../utils'
+import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -12,8 +12,6 @@ import { TAGS, TdConfig } from '../constants'
 import { getDispatcher } from '../utils/td'
 
 export interface ProveOptions {
-  blockId: number
-  expectedStateStr: string
   inputgen: boolean
   test: boolean
   prove: boolean
@@ -24,15 +22,14 @@ export interface ProveOptions {
   zkWasmProviderUrl: string
   userPrivateKey: string
   outputProofFilePath: string
-  offchainData: string
+  params?: string[]
 }
 
 // type ProveMode = 'inputgen' | 'test' | 'prove'
 
 export async function prove(options: ProveOptions) {
   const {
-    blockId,
-    expectedStateStr,
+    params = [],
     inputgen,
     test,
     prove,
@@ -43,8 +40,15 @@ export async function prove(options: ProveOptions) {
     zkWasmProviderUrl,
     userPrivateKey,
     outputProofFilePath,
-    offchainData,
   } = options
+
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
+  if (!dsp) {
+    logger.error('[-] ERROR: Failed to get DSP')
+    return
+  }
+  const realParams = generateDspHubParams(dsp, params, 'prove')
 
   // Log script name
   switch (inputgen || test || prove) {
@@ -72,8 +76,6 @@ export async function prove(options: ProveOptions) {
   //   logger.error('invalid yaml')
   //   return
   // }
-
-  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
@@ -111,14 +113,10 @@ export async function prove(options: ProveOptions) {
   const wasmUint8Array = new Uint8Array(wasm)
   const md5 = convertToMd5(wasmUint8Array).toUpperCase()
 
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
-
   const proveParams = dsp.toProveParams(
     {
       jsonRpcUrl,
-      blockId,
-      offchainData,
-      expectedStateStr,
+      ...realParams,
     },
   )
 

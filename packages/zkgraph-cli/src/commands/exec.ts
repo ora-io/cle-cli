@@ -3,21 +3,20 @@ import to from 'await-to-js'
 // import { providers } from 'ethers'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { /* fromHexString, */ loadJsonRpcProviderUrl, toHexString/* , validateProvider */ } from '../utils'
+import { /* fromHexString, */ generateDspHubParams, loadJsonRpcProviderUrl, toHexString/* , validateProvider */ } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
 export interface ExecOptions {
   local: boolean
-  blockId: number
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
-  offchainData: string
+  params: string[]
 }
 // TODO: prepare all params, dsp select params.
 export async function exec(options: ExecOptions) {
-  const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local, offchainData } = options
+  const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params } = options
   // const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local } = options
   // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
   // const yaml = await loadYaml(yamlContent)
@@ -27,6 +26,12 @@ export async function exec(options: ExecOptions) {
   // }
   logger.info(`[*] Run zkgraph on block ${blockId}`)
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
+  if (!dsp) {
+    logger.error('[-] ERROR: Failed to get DSP')
+    return
+  }
+  const realParams = generateDspHubParams(dsp, params, 'prove')
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
 
@@ -50,13 +55,10 @@ export async function exec(options: ExecOptions) {
   //   true,
   // )
 
-  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
-
   const execParams = dsp.toExecParams(
     {
       jsonRpcUrl,
-      blockId,
-      offchainData,
+      ...realParams,
     },
   )
   const zkgraphExecutable = {

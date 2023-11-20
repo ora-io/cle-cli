@@ -10,14 +10,16 @@ import { publish } from './commands/publish'
 import { getConfig } from './config'
 import { createLogger, logger, setLogger } from './logger'
 import { create } from './commands/create'
-import { proveCLIHasModeOption } from './utils'
+import { generateCommandUsage, proveCLIHasModeOption } from './utils'
 
 export async function run() {
   try {
     const cli = cac('zkgraph')
+
     const config = await getConfig()
     setLogger(createLogger(config.logger?.level || 'info'))
 
+    const { proveUsage, execUsage } = generateCommandUsage()
     cli
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
       .option('--local', 'Compile for Local Image')
@@ -39,22 +41,25 @@ export async function run() {
       })
 
     cli
-      .command('exec <block id> [offchain data]', 'Execute Full Image')
+      .command('exec [...params]', 'Execute Full Image')
       .option('--local', 'Execute Local Image')
       .example('zkgraph exec 0000000')
-      .action((blockId, offchainData, options) => {
+      .action((params, options) => {
         const { local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
 
         exec({
           local,
-          blockId: Number(blockId),
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
-          offchainData,
+          params,
         })
       })
+      .usage(`[...params]
+
+Usage cases:
+    ${execUsage}`)
 
     cli
       .command('setup', 'Set Up Full Image')
@@ -74,7 +79,7 @@ export async function run() {
       })
 
     const proveCLI = cli
-      .command('prove <block id> <expected state> [offchain data]', 'Prove Full Image')
+      .command('prove [...params]', 'Prove Full Image')
       .option('--local', 'Prove Local Image')
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
@@ -82,7 +87,7 @@ export async function run() {
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -t')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -i')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -p')
-      .action((blockId, expectedStateStr, offchainData, options) => {
+      .action((params, options) => {
         // eslint-disable-next-line prefer-const
         let { inputgen = false, test = false, prove = false, local = false } = options
         const hasMode = proveCLIHasModeOption()
@@ -95,9 +100,9 @@ export async function run() {
           return
         }
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+
         proveHandler({
-          blockId: Number(blockId),
-          expectedStateStr,
+          params,
           inputgen,
           test,
           prove,
@@ -108,11 +113,12 @@ export async function run() {
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
           userPrivateKey: config.UserPrivateKey,
           outputProofFilePath: config.OutputProofFilePath,
-          offchainData,
         })
       })
+      .usage(`[...params]
 
-    proveCLI.usage('prove <block id> <expected state> -i|-t|-p')
+Usage cases:
+    ${proveUsage}`)
 
     cli
       .command('upload', 'Upload zkGraph (Code and Full Image)')
