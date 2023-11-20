@@ -16,7 +16,7 @@ const zkWasmProviderUrl = 'https://zkwasm-explorer.delphinuslab.com:8090'
 const userPrivateKey = '0x0'
 const outputProofFilePath = path.join(commandsFixturesRoot, 'proof.txt')
 const blockId = 2279547
-const expectedState = 'a60ecf32309539dd84f27a9563754dca818b815e'
+const expectedStateStr = 'a60ecf32309539dd84f27a9563754dca818b815e'
 
 describe('prove', () => {
   it('full inputgen mode', async () => {
@@ -32,7 +32,7 @@ describe('prove', () => {
       test: false,
       prove: false,
       blockId,
-      expectedState,
+      expectedStateStr,
       local: false,
       wasmPath,
       yamlPath,
@@ -56,7 +56,7 @@ describe('prove', () => {
       test: false,
       prove: false,
       blockId,
-      expectedState,
+      expectedStateStr,
       local: true,
       wasmPath,
       yamlPath,
@@ -80,7 +80,7 @@ describe('prove', () => {
       test: true,
       prove: false,
       blockId,
-      expectedState,
+      expectedStateStr,
       local: true,
       wasmPath,
       yamlPath,

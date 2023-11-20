@@ -13,7 +13,7 @@ import { getDispatcher } from '../utils/td'
 
 export interface ProveOptions {
   blockId: number
-  expectedState: string
+  expectedStateStr: string
   inputgen: boolean
   test: boolean
   prove: boolean
@@ -24,6 +24,7 @@ export interface ProveOptions {
   zkWasmProviderUrl: string
   userPrivateKey: string
   outputProofFilePath: string
+  offchainData: string
 }
 
 // type ProveMode = 'inputgen' | 'test' | 'prove'
@@ -31,7 +32,7 @@ export interface ProveOptions {
 export async function prove(options: ProveOptions) {
   const {
     blockId,
-    expectedState,
+    expectedStateStr,
     inputgen,
     test,
     prove,
@@ -42,6 +43,7 @@ export async function prove(options: ProveOptions) {
     zkWasmProviderUrl,
     userPrivateKey,
     outputProofFilePath,
+    offchainData,
   } = options
 
   // Log script name
@@ -73,10 +75,10 @@ export async function prove(options: ProveOptions) {
 
   const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
-  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
+  const jsonRpcUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   // TODO: do we still need this?
-  const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
+  const provider = new providers.JsonRpcProvider(jsonRpcUrl)
   const [validateErr] = await to(validateProvider(provider))
   if (validateErr) {
     logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
@@ -112,9 +114,12 @@ export async function prove(options: ProveOptions) {
   const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
 
   const proveParams = dsp.toProveParams(
-    JsonRpcProviderUrl,
-    blockId,
-    expectedState,
+    {
+      jsonRpcUrl,
+      blockId,
+      offchainData,
+      expectedStateStr,
+    },
   )
 
   const zkgraphExecutable = {

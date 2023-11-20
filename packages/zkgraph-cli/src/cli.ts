@@ -74,7 +74,7 @@ export async function run() {
       })
 
     const proveCLI = cli
-      .command('prove <block id> <expected state>', 'Prove Full Image')
+      .command('prove <block id> <expected state> [offchain data]', 'Prove Full Image')
       .option('--local', 'Prove Local Image')
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
@@ -82,7 +82,7 @@ export async function run() {
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -t')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -i')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -p')
-      .action((blockId, expectedState, options) => {
+      .action((blockId, expectedStateStr, offchainData, options) => {
         // eslint-disable-next-line prefer-const
         let { inputgen = false, test = false, prove = false, local = false } = options
         const hasMode = proveCLIHasModeOption()
@@ -97,7 +97,7 @@ export async function run() {
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
         proveHandler({
           blockId: Number(blockId),
-          expectedState,
+          expectedStateStr,
           inputgen,
           test,
           prove,
@@ -108,6 +108,7 @@ export async function run() {
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
           userPrivateKey: config.UserPrivateKey,
           outputProofFilePath: config.OutputProofFilePath,
+          offchainData,
         })
       })
 
