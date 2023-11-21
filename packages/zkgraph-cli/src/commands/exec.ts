@@ -11,11 +11,11 @@ export interface ExecOptions {
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
-  params: string[]
+  params?: any[]
 }
 // TODO: prepare all params, dsp select params.
 export async function exec(options: ExecOptions) {
-  const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params } = options
+  const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
   const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })

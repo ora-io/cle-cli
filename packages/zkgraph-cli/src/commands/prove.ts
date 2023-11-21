@@ -22,7 +22,7 @@ export interface ProveOptions {
   zkWasmProviderUrl: string
   userPrivateKey: string
   outputProofFilePath: string
-  params?: string[]
+  params?: any[]
 }
 
 export async function prove(options: ProveOptions) {
