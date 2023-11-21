@@ -18,7 +18,7 @@ export async function exec(options: ExecOptions) {
   const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
-  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
+  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: local })
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return

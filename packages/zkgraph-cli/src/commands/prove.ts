@@ -41,7 +41,7 @@ export async function prove(options: ProveOptions) {
   } = options
 
   const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return

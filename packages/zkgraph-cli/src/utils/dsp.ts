@@ -3,17 +3,17 @@ import { dspHub } from '@hyperoracle/zkgraph-api'
 import { DspStaticParamsMap } from '../constants'
 
 export function getDspHubParams() {
-  const hubs = dspHub.hub as Map<string, {
+  const hub = dspHub.hub as Map<string, {
     execParams: string[]
     proveParams: string[]
   }>
 
-  return generateDspHubParamsMap(hubs)
+  return generateDspHubParamsMap(hub)
 }
 
 export const DoNotIncludeParams = ['jsonRpcUrl']
 
-export function generateDspHubParamsMap(hubs: Map<string, {
+export function generateDspHubParamsMap(hub: Map<string, {
   execParams: string[]
   proveParams: string[]
 }>) {
@@ -25,14 +25,14 @@ export function generateDspHubParamsMap(hubs: Map<string, {
     }
   > = {}
 
-  for (const key of hubs.keys()) {
-    if (key.includes('local'))
+  for (const dspName of hub.keys()) {
+    if (dspName.includes(':local'))
       continue
-    const hub = hubs.get(key)
+    const dsp = hub.get(dspName)
 
-    Reflect.set(dspParamsMap, key.replace(':full', ''), {
-      execParams: hub?.execParams.filter(item => !DoNotIncludeParams.includes(item)),
-      proveParams: hub?.proveParams.filter(item => !DoNotIncludeParams.includes(item)),
+    Reflect.set(dspParamsMap, dspName.replace(':full', ''), {
+      execParams: dsp?.execParams.filter(item => !DoNotIncludeParams.includes(item)),
+      proveParams: dsp?.proveParams.filter(item => !DoNotIncludeParams.includes(item)),
     })
   }
 
