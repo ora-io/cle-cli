@@ -11,6 +11,7 @@ import { getConfig } from './config'
 import { createLogger, logger, setLogger } from './logger'
 import { create } from './commands/create'
 import { generateCommandUsage, proveCLIHasModeOption } from './utils'
+import { deposit } from './commands/deposit'
 
 export async function run() {
   try {
@@ -167,6 +168,19 @@ Usage cases:
       .example('zkgraph init -t default')
       .action((directory, options) => {
         create(directory, options.template)
+      })
+
+    cli
+      .command('deposit <deployed contract address> <deposit amount>', 'Publish and register zkGraph onchain.')
+      .example('zkgraph deposit 0x00000000000000000000000000000000 0.1')
+      .action((deployedContractAddress, depositAmount) => {
+        deposit({
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          deployedContractAddress,
+          depositAmount,
+          userPrivateKey: config.UserPrivateKey,
+          yamlPath: config.YamlPath,
+        })
       })
 
     cli.help()
