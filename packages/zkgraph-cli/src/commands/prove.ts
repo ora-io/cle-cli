@@ -4,7 +4,7 @@ import to from 'await-to-js'
 import prompts from 'prompts'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { convertToMd5, loadJsonRpcProviderUrl, validateProvider } from '../utils'
+import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -12,8 +12,6 @@ import { TAGS, TdConfig } from '../constants'
 import { getDispatcher } from '../utils/td'
 
 export interface ProveOptions {
-  blockId: number
-  expectedState: string
   inputgen: boolean
   test: boolean
   prove: boolean
@@ -24,14 +22,12 @@ export interface ProveOptions {
   zkWasmProviderUrl: string
   userPrivateKey: string
   outputProofFilePath: string
+  params?: any[]
 }
-
-// type ProveMode = 'inputgen' | 'test' | 'prove'
 
 export async function prove(options: ProveOptions) {
   const {
-    blockId,
-    expectedState,
+    params = [],
     inputgen,
     test,
     prove,
@@ -43,6 +39,14 @@ export async function prove(options: ProveOptions) {
     userPrivateKey,
     outputProofFilePath,
   } = options
+
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
+  if (!dsp) {
+    logger.error('[-] ERROR: Failed to get DSP')
+    return
+  }
+  const realParams = generateDspHubParams(dsp, params, 'prove')
 
   // Log script name
   switch (inputgen || test || prove) {
@@ -64,57 +68,25 @@ export async function prove(options: ProveOptions) {
       break
   }
 
-  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  // const yaml = await loadYaml(yamlContent)
-  // if (!yaml) {
-  //   logger.error('invalid yaml')
-  //   return
-  // }
-
-  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
-
-  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
+  const jsonRpcUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   // TODO: do we still need this?
-  const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
+  const provider = new providers.JsonRpcProvider(jsonRpcUrl)
   const [validateErr] = await to(validateProvider(provider))
   if (validateErr) {
     logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
     return
   }
 
-  // const [rawReceiptListErr, rawReceiptList] = await to(getRawReceipts(provider, blockId, false))
-  // if (rawReceiptListErr) {
-  //   logger.error(`[-] GET RECEIPT ERROR. ${rawReceiptListErr.message}`)
-  //   return
-  // }
-
-  // const [simpleblockErr, simpleblock] = await to(provider.getBlock(blockId))
-  // if (simpleblockErr) {
-  //   logger.error('[-] ERROR: Failed to getBlock()')
-  //   return
-  // }
-
-  // const [blockErr, block] = await to(getBlockByNumber(provider, simpleblock?.number))
-  // if (blockErr) {
-  //   logger.error('[-] ERROR: Failed to getBlockByNumber()')
-  //   return
-  // }
-
-  // const blockNumber = Number((block as any).number)
-  // const blockHash = (block as any).hash
-  // const receiptsRoot = (block as any).receiptsRoot
-
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
   const md5 = convertToMd5(wasmUint8Array).toUpperCase()
 
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: false })
-
   const proveParams = dsp.toProveParams(
-    JsonRpcProviderUrl,
-    blockId,
-    expectedState,
+    {
+      jsonRpcUrl,
+      ...realParams,
+    },
   )
 
   const zkgraphExecutable = {

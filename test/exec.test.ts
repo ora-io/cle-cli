@@ -24,7 +24,7 @@ describe('exec', () => {
       yamlPath,
       local: false,
       wasmPath,
-      blockId: 2279547,
+      params: [2279547],
       jsonRpcProviderUrl,
     })
     expect(res).not.toBeUndefined()
@@ -43,7 +43,7 @@ describe('exec', () => {
       yamlPath,
       local: true,
       wasmPath,
-      blockId: 2279547,
+      params: [2279547],
       jsonRpcProviderUrl,
     })
     expect(res).not.toBeUndefined()

@@ -1,57 +1,42 @@
 import fs from 'node:fs'
 import to from 'await-to-js'
-// import { providers } from 'ethers'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { /* fromHexString, */ loadJsonRpcProviderUrl, toHexString/* , validateProvider */ } from '../utils'
+import { generateDspHubParams, loadJsonRpcProviderUrl, toHexString } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
 export interface ExecOptions {
   local: boolean
-  blockId: number
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
+  params?: any[]
 }
+// TODO: prepare all params, dsp select params.
 export async function exec(options: ExecOptions) {
-  const { yamlPath, jsonRpcProviderUrl, wasmPath, blockId, local } = options
-  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  // const yaml = await loadYaml(yamlContent)
-  // if (!yaml) {
-  //   logger.error('invalid yaml')
-  //   return
-  // }
-  logger.info(`[*] Run zkgraph on block ${blockId}`)
+  const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
+
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: local })
+  if (!dsp) {
+    logger.error('[-] ERROR: Failed to get DSP')
+    return
+  }
+  const realParams = generateDspHubParams(dsp, params, 'prove')
+  if (realParams?.blockId)
+    logger.info(`[*] Run zkgraph on block ${realParams?.blockId}`)
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
-
-  // const provider = new providers.JsonRpcProvider(JsonRpcProviderUrl)
-  // const [validateErr] = await to(validateProvider(provider))
-  // if (validateErr) {
-  //   logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
-  //   return
-  // }
-
-  // const rawReceiptList = await getRawReceipts(provider, Number(blockId), false)
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
 
-  // const state = await executeOnRawReceipts(
-  //   wasmUint8Array,
-  //   yamlContent,
-  //   rawReceiptList,
-  //   local,
-  //   true,
-  // )
-
-  const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: false })
-
   const execParams = dsp.toExecParams(
-    jsonRpcUrl,
-    blockId,
+    {
+      jsonRpcUrl,
+      ...realParams,
+    },
   )
   const zkgraphExecutable = {
     wasmUint8Array,

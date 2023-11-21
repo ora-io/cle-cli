@@ -1,3 +1,6 @@
+import { DspStaticParamsMap } from '../constants'
+import { getDspHubParams } from './dsp'
+
 export function proveCLIHasModeOption() {
   const proveModeOptions = ['-i', '-t', '-p', '--inputgen', '--test', '--prove']
   const argv = process.argv
@@ -12,4 +15,21 @@ export function proveCLIHasModeOption() {
     }
   }
   return false
+}
+
+export function generateCommandUsage() {
+  const dspParams = getDspHubParams()
+
+  function generateUsage(command: 'prove' | 'exec') {
+    const staticParams = DspStaticParamsMap[command]
+    return Object.keys(dspParams).map((paramsName, index) => {
+      const params = ((dspParams[paramsName] as any)[staticParams] as string[])?.map(param => `<${param}>`).join(' ')
+      return `${index > 0 ? '  ' : ''}${`$ zkgraph ${command} ${params}`.trimStart().trimEnd()}`
+    }).join('\n')
+  }
+
+  return {
+    proveUsage: generateUsage('prove'),
+    execUsage: generateUsage('exec'),
+  }
 }
