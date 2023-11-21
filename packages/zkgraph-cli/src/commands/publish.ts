@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-// import fs from 'node:fs'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import to from 'await-to-js'
@@ -24,13 +23,6 @@ export async function publish(options: PublishOptions) {
     logDivider()
   }
   const newBountyRewardPerTrigger = bountyRewardPerTrigger * 10 ** 9
-
-  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  // const yaml = await loadYaml(yamlContent)
-  // if (!yaml) {
-  //   logger.error('invalid yaml')
-  //   return
-  // }
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 

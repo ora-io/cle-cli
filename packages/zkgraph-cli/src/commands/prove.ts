@@ -25,8 +25,6 @@ export interface ProveOptions {
   params?: string[]
 }
 
-// type ProveMode = 'inputgen' | 'test' | 'prove'
-
 export async function prove(options: ProveOptions) {
   const {
     params = [],
@@ -70,13 +68,6 @@ export async function prove(options: ProveOptions) {
       break
   }
 
-  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  // const yaml = await loadYaml(yamlContent)
-  // if (!yaml) {
-  //   logger.error('invalid yaml')
-  //   return
-  // }
-
   const jsonRpcUrl = loadJsonRpcProviderUrl(yaml, jsonRpcProviderUrl, true)
 
   // TODO: do we still need this?
@@ -86,28 +77,6 @@ export async function prove(options: ProveOptions) {
     logger.error(`[-] PROVIDER VALIDATION ERROR. ${validateErr.message}`)
     return
   }
-
-  // const [rawReceiptListErr, rawReceiptList] = await to(getRawReceipts(provider, blockId, false))
-  // if (rawReceiptListErr) {
-  //   logger.error(`[-] GET RECEIPT ERROR. ${rawReceiptListErr.message}`)
-  //   return
-  // }
-
-  // const [simpleblockErr, simpleblock] = await to(provider.getBlock(blockId))
-  // if (simpleblockErr) {
-  //   logger.error('[-] ERROR: Failed to getBlock()')
-  //   return
-  // }
-
-  // const [blockErr, block] = await to(getBlockByNumber(provider, simpleblock?.number))
-  // if (blockErr) {
-  //   logger.error('[-] ERROR: Failed to getBlockByNumber()')
-  //   return
-  // }
-
-  // const blockNumber = Number((block as any).number)
-  // const blockHash = (block as any).hash
-  // const receiptsRoot = (block as any).receiptsRoot
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)

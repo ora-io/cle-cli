@@ -46,7 +46,7 @@ export function generateDspHubParams(dsp: any, params: string[], command: 'prove
     console.log(`missing required args for command \`${command} ${dspProveParams.map(p => `<${p}>`).join(' ')}\``)
     return
   }
-  const realParams = {}
+  const realParams: Record<string, any> = {}
   dspProveParams.forEach((param, index) => {
     Reflect.set(realParams, param, params[index])
   })

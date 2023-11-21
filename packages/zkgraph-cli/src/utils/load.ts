@@ -1,21 +1,9 @@
-// import to from 'await-to-js'
-// import { ethers } from 'ethers'
-// import type { DataSource, ZkGraphYaml } from '../types'
 // @ts-expect-error non-types
 import type { ZkGraphYaml } from '@hyperoracle/zkgraph-api'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
 import { getTargetNetwork } from './network'
-// import { parseYaml /* yamlHealthCheck */ } from './yaml'
-
-// export function loadZKGraphDataSources(config: Partial<ZkGraphYaml>) {
-//   return config.dataSources
-// }
-
-// export function loadZKGraphDataDestinations(config: Partial<ZkGraphYaml>) {
-//   return config.dataDestinations
-// }
 
 /*
  * @param {string} yamlPath of zkgraph.yaml
@@ -57,42 +45,3 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
 
   return JsonRpcProviderUrl
 }
-
-// /**
-//  * Load ZKGraph sources
-//  * @param config
-//  * @returns
-//  */
-// export function loadZKGraphSources(config: Partial<ZkGraphYaml>) {
-//   // yamlHealthCheck(config)
-//   const loadFromDataSource = (dataSource: DataSource): [string, string[]] => {
-//     const source_address = dataSource.source.address
-//     const edefs = dataSource.mapping.eventHandlers.map(
-//       eh => eh.event,
-//     )
-//     const source_esigs = edefs.map(ed =>
-//       ethers.utils.keccak256(ethers.utils.toUtf8Bytes(ed)),
-//     )
-//     return [source_address, source_esigs]
-//   }
-
-//   const sourceAddressList: string[] = []
-//   const sourceEsigsList: string[][] = []
-//   config.dataSources?.forEach((ds) => {
-//     const [sa, se] = loadFromDataSource(ds)
-//     sourceAddressList.push(sa)
-//     sourceEsigsList.push(se)
-//   })
-//   return [sourceAddressList, sourceEsigsList]
-// }
-
-// TODO: rm this
-// export async function loadYaml(yamlContent: string) {
-//   const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-//   if (yamlErr) {
-//     logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-//     return yaml
-//   }
-
-//   return yaml
-// }

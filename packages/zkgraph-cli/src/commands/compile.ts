@@ -12,9 +12,6 @@ import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
 import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
 import { checkExecExist } from '../utils/system'
-// import {dspHub} from '@hyperoracle/zkgraph-api'
-
-// import { ZkGraphYaml } from '@hyperoracle/zkgraph-api';
 
 export interface CompileOptions {
   local: boolean
@@ -23,16 +20,12 @@ export interface CompileOptions {
   wasmPath: string
   watPath: string
   mappingPath: string
-  // isUseAscLib?: boolean
 }
 
 const wasmStartName = '__as_start'
 
-// const ascBin = path.join(`${__dirname}`, '../..', 'node_modules/.bin/asc')
-
 export async function compile(options: CompileOptions) {
   const {
-    // yamlPath,
     wasmPath,
     watPath,
     local,
@@ -118,21 +111,6 @@ async function compileServer(options: CompileOptions) {
   // set back origin value
   options.wasmPath = originWasmPath
 
-  // const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  // const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-  // if (yamlErr) {
-  //   logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-  //   return
-  // }
-  // if (!yaml) {
-  //   logger.error('invalid yaml')
-  //   return
-  // }
-
-  // const [source_address, source_esigs] = ZkGraphYaml.fromYamlPath(yamlPath).dataSources[0].event.toArray();
-  // logger.info(`[*] Source contract address:${source_address}`)
-  // logger.info(`[*] Source events signatures:${source_esigs}` + '\n')
-
   // Set up form data
   const data = new FormData()
   // data.append("asFile", createReadStream(mappingPath));
@@ -210,29 +188,6 @@ function logCompileResult(wasmPath: string, watPath: string): void {
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
 }
 
-// async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string) {
-//   const abortPath = getAbortTsFilepath(innerTsFilePath)
-//   let commands: string[] = [
-//     'npx asc',
-//   ]
-//   const common = [
-//     '-t', watPath,
-//     '-O', '--noAssert',
-//     '-o', wasmPath,
-//     '--runtime', 'stub',
-//     '--disable', 'bulk-memory',
-//     '--exportRuntime',
-//     '--exportStart', wasmStartName,
-//     '--memoryBase', '70000',
-//   ]
-//   commands = commands.concat([
-//     innerTsFilePath,
-//     '--use', `abort=${abortPath}`,
-//   ])
-//   commands = commands.concat(common)
-//   return execAndRmSync(commands.join(' '), innerTsFilePath)
-// }
-
 async function execAndRmSync(command: string, filepath: string) {
   return new Promise<void>((resolve, reject) => {
     try {
@@ -246,26 +201,6 @@ async function execAndRmSync(command: string, filepath: string) {
     }
   })
 }
-// function copyDirAndCodegen(mappingPath: string) {
-//   const mappingDir = path.dirname(mappingPath)
-
-//   if (fs.existsSync(mappingDir)) {
-//     zkGraphCache.copyDirToCacheDir(mappingDir)
-//     const tsFils = getTsFiles(zkGraphCache.cacheDir)
-//     // const libPath = path.join(process.cwd(), 'node_modules/@hyperoracle/zkgraph-lib')
-//     for (const tsFile of tsFils) {
-//       const rawCode = fs.readFileSync(tsFile, 'utf-8')
-//       // const [relativePath] = getRelativePath(tsFile, libPath)
-//       const transformCode = codegenImportReplace(rawCode, '~lib/@hyperoracle/zkgraph-lib')
-//       fs.writeFileSync(tsFile, transformCode)
-//     }
-//     const codegenMappingPath = path.join(zkGraphCache.cacheDir, 'mapping.ts')
-//     return codegenMappingPath
-//   }
-//   else {
-//     logger.error(`[-] ${mappingDir} not exist.`)
-//   }
-// }
 
 function getEntryFilename(env: string) {
   return parseTemplateTag(COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE, {

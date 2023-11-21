@@ -1,20 +1,5 @@
 import { Md5 } from 'ts-md5'
 
-// /** Deprecated, moved to API
-//  * Check if the address is ethereum address
-//  * @param address
-//  * @returns
-//  */
-// export function isEthereumAddress(address: string) {
-//   try {
-//     const parsedAddress = ethers.utils.getAddress(address)
-//     return parsedAddress !== '0x0000000000000000000000000000000000000000'
-//   }
-//   catch (error) {
-//     return false
-//   }
-// }
-
 /**
  * Convert hex string to Uint8Array
  * @param hexString
