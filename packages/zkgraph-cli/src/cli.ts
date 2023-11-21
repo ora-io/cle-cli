@@ -171,7 +171,7 @@ Usage cases:
       })
 
     cli
-      .command('deposit <deployed contract address> <deployed amount>', 'Publish and register zkGraph onchain.')
+      .command('deposit <deployed contract address> <deposit amount>', 'Publish and register zkGraph onchain.')
       .example('zkgraph deposit 0x00000000000000000000000000000000 0.1')
       .action((deployedContractAddress, depositAmount) => {
         deposit({

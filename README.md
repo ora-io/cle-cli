@@ -102,7 +102,7 @@ zkgraph exec <block id> [root]
 
 #### Arguments
 
-| Arguments      | Description                                     |
+| Arguments    | Description                                     |
 | ------------ | ----------------------------------------------- |
 | `<block id>` | Block number (or block hash) as runtime context |
 
@@ -142,7 +142,7 @@ zkgraph prove <block id> <expected state> [root]
 
 #### Arguments
 
-| Arguments            | Description                                     |
+| Arguments          | Description                                     |
 | ------------------ | ----------------------------------------------- |
 | `<block id>`       | Block number (or block hash) as runtime context |
 | `<expected state>` | State output of the zkGraph execution           |
@@ -186,7 +186,7 @@ zkgraph verify <prove task id>
 
 #### Arguments
 
-| Arguments           | Description           |
+| Arguments         | Description           |
 | ----------------- | --------------------- |
 | `<prove task id>` | Task id of prove task |
 
@@ -204,11 +204,27 @@ zkgraph publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigg
 
 #### Arguments
 
-| Arguments                       | Description                                                |
+| Arguments                     | Description                                                |
 | ----------------------------- | ---------------------------------------------------------- |
 | `<deployed contract address>` | Contract address of deployed verification contract address |
 | `<ipfs hash>`                 | IPFS hash of uploaded zkGraph                              |
 | `<bounty reward per trigger>` | Bounty reward per trigger in ETH                           |
+
+### Deposit
+
+Publish and register zkGraph Onchain.
+
+#### Usage
+```bash
+zkgraph deposit <deployed contract address> <deposit amount>
+```
+
+#### Arguments
+
+| Arguments                     | Description                                                |
+| ----------------------------- | ---------------------------------------------------------- |
+| `<deployed contract address>` | Contract address of deployed verification contract address |
+| `<deposit amount>`            | Deposit amount in ETH                                      |
 
 ## Config
 
