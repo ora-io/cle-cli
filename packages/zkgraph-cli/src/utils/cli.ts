@@ -24,8 +24,7 @@ export function generateCommandUsage() {
     const staticParams = DspStaticParamsMap[command]
     return Object.keys(dspParams).map((paramsName, index) => {
       const params = ((dspParams[paramsName] as any)[staticParams] as string[])?.map(param => `<${param}>`).join(' ')
-      return `${index > 0 ? '    ' : ''}Usage ${paramsName}: 
-        ${`$ zkgraph ${command} ${params}`.trimStart().trimEnd()}`
+      return `${index > 0 ? '  ' : ''}${`$ zkgraph ${command} ${params}`.trimStart().trimEnd()}`
     }).join('\n')
   }
 

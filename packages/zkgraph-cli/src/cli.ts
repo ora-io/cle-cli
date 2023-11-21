@@ -59,7 +59,7 @@ export async function run() {
       .usage(`[...params]
 
 Usage cases:
-    ${execUsage}`)
+  ${execUsage}`)
 
     cli
       .command('setup', 'Set Up Full Image')
@@ -118,7 +118,7 @@ Usage cases:
       .usage(`[...params]
 
 Usage cases:
-    ${proveUsage}`)
+  ${proveUsage}`)
 
     cli
       .command('upload', 'Upload zkGraph (Code and Full Image)')
