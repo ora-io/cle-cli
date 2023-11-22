@@ -46,7 +46,12 @@ export async function prove(options: ProveOptions) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
   }
-  const realParams = generateDspHubParams(dsp, params, 'prove')
+  const [generateErr, realParams] = await to(generateDspHubParams(dsp, params, 'prove'))
+  if (generateErr) {
+    // eslint-disable-next-line no-console
+    console.log(generateErr.message)
+    return
+  }
 
   // Log script name
   switch (inputgen || test || prove) {

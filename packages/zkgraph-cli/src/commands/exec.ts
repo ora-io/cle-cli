@@ -23,7 +23,12 @@ export async function exec(options: ExecOptions) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
   }
-  const realParams = generateDspHubParams(dsp, params, 'prove')
+  const [generateErr, realParams] = await to(generateDspHubParams(dsp, params, 'exec'))
+  if (generateErr) {
+    // eslint-disable-next-line no-console
+    console.log(generateErr.message)
+    return
+  }
   if (realParams?.blockId)
     logger.info(`[*] Run zkgraph on block ${realParams?.blockId}`)
 

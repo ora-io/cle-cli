@@ -39,16 +39,14 @@ export function generateDspHubParamsMap(hub: Map<string, {
   return dspParamsMap
 }
 
-export function generateDspHubParams(dsp: any, params: string[], command: 'prove' | 'exec') {
+export async function generateDspHubParams(dsp: any, params: string[], command: 'prove' | 'exec') {
   const dspProveParams = (dsp[DspStaticParamsMap[command]] as string[]).filter(param => !DoNotIncludeParams.includes(param))
-  if (params.length !== dspProveParams.length) {
-    // eslint-disable-next-line no-console
-    console.log(`missing required args for command \`${command} ${dspProveParams.map(p => `<${p}>`).join(' ')}\``)
-    return
-  }
+  if (params.length < dspProveParams.length)
+    throw new Error(`Missing required args for command \`${command} ${dspProveParams.map(p => `<${p}>`).join(' ')}\``)
+
   const realParams: Record<string, any> = {}
   dspProveParams.forEach((param, index) => {
     Reflect.set(realParams, param, params[index])
   })
-  return realParams
+  return Promise.resolve(realParams)
 }
