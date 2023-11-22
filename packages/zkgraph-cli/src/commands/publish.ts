@@ -1,7 +1,6 @@
 import { ethers } from 'ethers'
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import to from 'await-to-js'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
 import type { UserConfig } from '../../dist/index.cjs'
@@ -30,7 +29,7 @@ export async function publish(options: PublishOptions) {
   const provider = new ethers.providers.JsonRpcProvider(JsonRpcProviderUrl)
   const signer = new ethers.Wallet(userPrivateKey, provider)
 
-  const [publishErr, publishTxHash] = await to(zkgapi.publish(
+  const publishTxHash = zkgapi.publish(
     { wasmUint8Array: null, zkgraphYaml },
     provider,
     contractAddress,
@@ -38,11 +37,7 @@ export async function publish(options: PublishOptions) {
     newBountyRewardPerTrigger,
     signer,
     true,
-  ))
-  if (publishErr) {
-    logger.error(`[-] PUBLISH ERROR. ${publishErr.message}`)
-    return
-  }
+  )
 
   if (publishTxHash === '')
     logger.error('[-] PUBLISH FAILED.')

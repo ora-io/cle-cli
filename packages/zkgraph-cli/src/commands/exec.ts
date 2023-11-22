@@ -47,17 +47,13 @@ export async function exec(options: ExecOptions) {
     wasmUint8Array,
     zkgraphYaml,
   }
-  const [execErr, state] = await to<any>(zkgapi.execute(
+
+  const state = await zkgapi.execute(
     zkgraphExecutable,
     execParams,
     local,
     true,
-  ))
-
-  if (execErr) {
-    logger.error(`[-] EXECUTE ERROR. ${execErr.message}`)
-    return
-  }
+  )
 
   logger.info(`[+] ZKGRAPH STATE OUTPUT: ${toHexString(state)}\n`)
   return state

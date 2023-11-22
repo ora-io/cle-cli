@@ -1,7 +1,6 @@
 import prompts from 'prompts'
 // @ts-expect-error non-types
 import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
-import to from 'await-to-js'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
 import { getDispatcher, uploadWasmToTd } from '../utils/td'
@@ -64,10 +63,6 @@ export async function setup(options: SetupOptions) {
   }
   logger.info(`[+] SETUP TASK STARTED. TASK ID: ${taskId}`)
 
-  const [waitSetupErr, result] = await to(waitSetup(zkWasmProviderUrl, taskId, true))
-  if (waitSetupErr) {
-    logger.error(`[-] SETUP ERROR: ${waitSetupErr.message}`)
-    return
-  }
+  const result = await waitSetup(zkWasmProviderUrl, taskId, true)
   return result
 }
