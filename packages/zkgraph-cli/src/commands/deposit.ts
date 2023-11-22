@@ -1,6 +1,5 @@
 // @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import to from 'await-to-js'
 import type { UserConfig } from '../config'
 import { loadJsonRpcProviderUrl } from '../utils'
 import { logger } from '../logger'
@@ -18,17 +17,13 @@ export async function deposit(options: DepositOptions) {
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
-  const [depositErr, transactionHash] = await to(zkgapi.deposit(
+  const transactionHash = zkgapi.deposit(
     jsonRpcUrl,
     deployedContractAddress,
     depositAmount,
     userPrivateKey,
     true,
-  ))
-  if (depositErr) {
-    logger.error(`[-] DEPOSIT ERROR. ${depositErr.message}`)
-    return
-  }
+  )
 
   if (transactionHash)
     logger.info(`[*] DEPOSIT SUCCESS. TRANSACTION HASH: ${transactionHash}`)

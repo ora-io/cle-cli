@@ -1,7 +1,6 @@
 // @ts-expect-error non-types
 import { upload as uploadApi } from '@hyperoracle/zkgraph-api'
 // import { computeAddress } from 'ethers/lib/utils.js'
-import to from 'await-to-js'
 import { logger } from '../logger'
 import { checkPinataAuthentication } from '../utils'
 
@@ -28,7 +27,7 @@ export async function upload(options: UploadOptions) {
   // TODO: can we rm user addr from ipfs dir name?
   // const userAddress = computeAddress(userPrivateKey).toLowerCase()
 
-  const [uploadErr, { isUploadSuccess, response, errorMessage }] = await to<any>(uploadApi(
+  const { isUploadSuccess, response, errorMessage } = await uploadApi(
     mappingPath,
     wasmPath,
     yamlPath,
@@ -36,11 +35,7 @@ export async function upload(options: UploadOptions) {
     pinataEndpoint,
     pinataJWT,
     true,
-  ))
-  if (uploadErr) {
-    logger.error(`[-] UPLOAD ERROR. ${uploadErr.message}`)
-    return
-  }
+  )
   if (isUploadSuccess) {
     logger.info('[+] IPFS UPLOAD SUCCESS!')
     logger.info(`[+] IPFS HASH: ${response.data.IpfsHash}`)
