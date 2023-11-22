@@ -19,8 +19,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-lib':
-        specifier: ^0.0.9-alpha.4
-        version: 0.0.9-alpha.4
+        specifier: ^0.0.9-alpha.5
+        version: 0.0.9-alpha.5
       '@murongg/eslint-config':
         specifier: ^0.2.1
         version: 0.2.1(eslint@8.54.0)(typescript@5.2.2)
@@ -103,8 +103,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-api':
-        specifier: 0.1.9-alpha.3
-        version: 0.1.9-alpha.3
+        specifier: 0.1.9-alpha.6
+        version: 0.1.9-alpha.6
       api:
         specifier: ^6.1.1
         version: 6.1.1(openapi-types@12.1.3)
@@ -152,8 +152,8 @@ importers:
         version: 0.3.11
     devDependencies:
       '@hyperoracle/zkgraph-lib':
-        specifier: ^0.0.9-alpha.4
-        version: 0.0.9-alpha.4
+        specifier: ^0.0.9-alpha.5
+        version: 0.0.9-alpha.5
       '@types/js-yaml':
         specifier: ^4.0.6
         version: 4.0.9
@@ -1192,10 +1192,12 @@ packages:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
     dev: true
 
-  /@hyperoracle/zkgraph-api@0.1.9-alpha.3:
-    resolution: {integrity: sha512-PnA+Exxi+jtNSmYDt0nTYvamWxv+3vlNV4lnQUCFamuPcSskSKx9bF0T2smWmmJeYK84k/XTiPfdd+s8kPkVbQ==}
+  /@hyperoracle/zkgraph-api@0.1.9-alpha.6:
+    resolution: {integrity: sha512-Enj2jp6b0LVh7qIsjsawXySmD65uVRbf33n8cMbxpQfNPLc2V5lCHLvI2qKp1Y+y+CWBn2bwzYPGVVEgLdI/nA==}
     dependencies:
       '@hyperoracle/zkwasm-service-helper': 1.0.1
+      axios: 1.6.2
+      axios-retry: 3.9.1
       bn.js: 5.2.1
       ethers: 5.7.2
       js-yaml: 4.1.0
@@ -1209,8 +1211,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@hyperoracle/zkgraph-lib@0.0.9-alpha.4:
-    resolution: {integrity: sha512-tz0u5Pb8tBYz6IqrTN5wLMUNeL6Sa2c6xM8ceulCEFYGQIrC6d215dnIQALB+XmQkbXnQ6bcZakaIufzO1Z36g==}
+  /@hyperoracle/zkgraph-lib@0.0.9-alpha.5:
+    resolution: {integrity: sha512-p6jrTJikOTuTY1yo9D15VpCVGVs4SgLUl+RfwFUbPu5lFkJJlXmVt3KwVpej196zGbRCCYZeq1BXEzL6LlADrg==}
     dependencies:
       assemblyscript: 0.27.19
     dev: true
