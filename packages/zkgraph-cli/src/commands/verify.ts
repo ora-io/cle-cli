@@ -1,5 +1,4 @@
 // import fs from 'node:fs'
-// @ts-expect-error non-types
 import { Error, ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
@@ -17,6 +16,10 @@ export async function verify(options: VerifyOptions) {
   const { yamlPath, taskId, zkWasmProviderUrl, jsonRpcProviderUrl } = options
 
   const zkgraphYaml = ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!zkgraphYaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return
+  }
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, false)
 
@@ -27,8 +30,8 @@ export async function verify(options: VerifyOptions) {
   const verifyResult = await verifyApi(
     taskId,
     zkWasmProviderUrl,
-    verifierAddress,
-    jsonRpcUrl,
+    verifierAddress || '',
+    jsonRpcUrl || '',
   ).catch((error: Error) => {
     if (error instanceof Error.ProveTaskNotReady)
       logger.error(`>> PROOF IS NOT READY. ${error.message}`)

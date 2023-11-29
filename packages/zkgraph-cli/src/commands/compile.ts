@@ -5,7 +5,6 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
-// @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
@@ -55,6 +54,10 @@ async function compileLocal(options: CompileOptions) {
   }
 
   const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!yaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return false
+  }
 
   // general compile based on dsp. so local should be a boolean var rather than 'true'
   const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })

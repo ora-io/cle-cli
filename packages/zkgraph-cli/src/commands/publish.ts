@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-// @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
@@ -24,12 +23,16 @@ export async function publish(options: PublishOptions) {
   const newBountyRewardPerTrigger = bountyRewardPerTrigger * 10 ** 9
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!zkgraphYaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return
+  }
 
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, false)
   const provider = new ethers.providers.JsonRpcProvider(JsonRpcProviderUrl)
   const signer = new ethers.Wallet(userPrivateKey, provider)
 
-  const publishTxHash = zkgapi.publish(
+  const publishTxHash = await zkgapi.publish(
     { wasmUint8Array: null, zkgraphYaml },
     provider,
     contractAddress,

@@ -1,6 +1,5 @@
 import fs from 'node:fs'
 import to from 'await-to-js'
-// @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { generateDspHubParams, loadJsonRpcProviderUrl, toHexString } from '../utils'
 import { logger } from '../logger'
@@ -18,6 +17,10 @@ export async function exec(options: ExecOptions) {
   const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!zkgraphYaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return
+  }
   const dsp = zkgapi.dspHub.getDSPByYaml(zkgraphYaml, { isLocal: local })
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
