@@ -84,9 +84,11 @@ zkgraph compile [root]
 
 #### Options
 
-| Options   | Description             |
-| --------- | ----------------------- |
-| `--local` | Compile for Local Image |
+| Options                 | Description             |
+| ----------------------- | ----------------------- |
+| `--local`               | Compile for Local Image |
+| `--yaml-path <path>`    | Path to yaml file       |
+| `--mapping-path <path>` | Path to mapping file    |
 
 ### Execute
 
@@ -96,15 +98,22 @@ Please save the `ZKGRAPH_STATE_OUTPUT` string for following prove steps.
 
 #### Usage
 ```bash
-zkgraph exec <block id> [root]
+zkgraph exec [...params] [root]
+```
+
+#### Usage cases
+```bash
+zkgraph exec <blockId> [root]
+zkgraph exec <blockId> <offchainData> [root]
 ```
 
 
 #### Arguments
 
-| Arguments    | Description                                     |
-| ------------ | ----------------------------------------------- |
-| `<block id>` | Block number (or block hash) as runtime context |
+| Arguments        | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| `<block id>`     | Block number (or block hash) as runtime context |
+| `<offchainData>` | offchain data                                   |
 
 
 #### Options
@@ -137,7 +146,13 @@ Prove Full Image
 
 #### Usage
 ```bash
-zkgraph prove <block id> <expected state> [root]
+zkgraph prove [...params] [root]
+```
+
+#### Usage cases
+```bash
+zkgraph prove <blockId> <expectedStateStr> [root]
+zkgraph prove <blockId> <offchainData> <expectedStateStr> [root]
 ```
 
 #### Arguments
@@ -146,6 +161,7 @@ zkgraph prove <block id> <expected state> [root]
 | ------------------ | ----------------------------------------------- |
 | `<block id>`       | Block number (or block hash) as runtime context |
 | `<expected state>` | State output of the zkGraph execution           |
+| `<offchainData>`   | offchain data                                   |
 
 
 #### Options

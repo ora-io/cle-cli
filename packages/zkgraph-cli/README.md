@@ -20,9 +20,11 @@ zkgraph compile [root]
 
 #### Options
 
-| Options   | Description             |
-| --------- | ----------------------- |
-| `--local` | Compile for Local Image |
+| Options                 | Description             |
+| ----------------------- | ----------------------- |
+| `--local`               | Compile for Local Image |
+| `--yaml-path <path>`    | Path to yaml file       |
+| `--mapping-path <path>` | Path to mapping file    |
 
 ### Execute
 
@@ -32,15 +34,22 @@ Please save the `ZKGRAPH_STATE_OUTPUT` string for following prove steps.
 
 #### Usage
 ```bash
-zkgraph exec <block id> [root]
+zkgraph exec [...params] [root]
+```
+
+#### Usage cases
+```bash
+zkgraph exec <blockId> [root]
+zkgraph exec <blockId> <offchainData> [root]
 ```
 
 
 #### Arguments
 
-| Arguments      | Description                                     |
-| ------------ | ----------------------------------------------- |
-| `<block id>` | Block number (or block hash) as runtime context |
+| Arguments        | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| `<block id>`     | Block number (or block hash) as runtime context |
+| `<offchainData>` | offchain data                                   |
 
 
 #### Options
@@ -73,15 +82,22 @@ Prove Full Image
 
 #### Usage
 ```bash
-zkgraph prove <block id> <expected state> [root]
+zkgraph prove [...params] [root]
+```
+
+#### Usage cases
+```bash
+zkgraph prove <blockId> <expectedStateStr> [root]
+zkgraph prove <blockId> <offchainData> <expectedStateStr> [root]
 ```
 
 #### Arguments
 
-| Arguments            | Description                                     |
+| Arguments          | Description                                     |
 | ------------------ | ----------------------------------------------- |
 | `<block id>`       | Block number (or block hash) as runtime context |
 | `<expected state>` | State output of the zkGraph execution           |
+| `<offchainData>`   | offchain data                                   |
 
 
 #### Options
@@ -122,7 +138,7 @@ zkgraph verify <prove task id>
 
 #### Arguments
 
-| Arguments           | Description           |
+| Arguments         | Description           |
 | ----------------- | --------------------- |
 | `<prove task id>` | Task id of prove task |
 
@@ -140,7 +156,7 @@ zkgraph publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigg
 
 #### Arguments
 
-| Arguments                       | Description                                                |
+| Arguments                     | Description                                                |
 | ----------------------------- | ---------------------------------------------------------- |
 | `<deployed contract address>` | Contract address of deployed verification contract address |
 | `<ipfs hash>`                 | IPFS hash of uploaded zkGraph                              |
@@ -245,9 +261,14 @@ Please note that (during testnet phrase) your address balance (in zkwasm server)
 #### WasmBinPath
 
 - **Type:** `string`
-- **Default**: `build/zkgraph_full.wasm`
+- **Default**: `[root]/build/zkgraph_full.wasm`
+
+zkGraph CLI Build-In a tag name is `root`.  
+The `root` is user project root path.  
+Of course, you can also place this tag at any position within the string.  
+`LocalWasmBinPath` is the same.
 
 #### LocalWasmBinPath
 
 - **Type:** `string`
-- **Default**: `build/zkgraph_local.wasm`
+- **Default**: `[root]/build/zkgraph_local.wasm`
