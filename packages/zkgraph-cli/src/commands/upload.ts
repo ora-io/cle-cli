@@ -1,4 +1,3 @@
-// @ts-expect-error non-types
 import { upload as uploadApi } from '@hyperoracle/zkgraph-api'
 // import { computeAddress } from 'ethers/lib/utils.js'
 import { logger } from '../logger'
@@ -34,7 +33,7 @@ export async function upload(options: UploadOptions) {
     // userAddress,
     pinataEndpoint,
     pinataJWT,
-    true,
+    // true,
   )
   if (isUploadSuccess) {
     logger.info('[+] IPFS UPLOAD SUCCESS!')

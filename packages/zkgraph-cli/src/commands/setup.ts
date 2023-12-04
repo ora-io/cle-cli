@@ -1,5 +1,4 @@
 import prompts from 'prompts'
-// @ts-expect-error non-types
 import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
@@ -25,7 +24,7 @@ export async function setup(options: SetupOptions) {
   logger.info(`[*] IMAGE MD5: ${md5}`)
 
   const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
-  if (deatails[0].data.result[0] !== null) {
+  if (deatails[0]?.data.result[0] !== null) {
     logger.error('[*] IMAGE ALREADY EXISTS')
     return
   }

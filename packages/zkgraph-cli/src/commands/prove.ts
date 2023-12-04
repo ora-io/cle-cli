@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
-// @ts-expect-error non-types
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, validateProvider } from '../utils'
 import { logger } from '../logger'
@@ -41,6 +40,10 @@ export async function prove(options: ProveOptions) {
   } = options
 
   const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!yaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return
+  }
   const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
@@ -96,7 +99,7 @@ export async function prove(options: ProveOptions) {
 
   const zkgraphExecutable = {
     wasmUint8Array,
-    zkgraphYaml: yaml,
+    zkgraphYaml: yaml as zkgapi.ZkGraphYaml,
   }
 
   const [privateInputStr, publicInputStr] = await zkgapi.proveInputGen(
@@ -215,7 +218,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   // write proof to file as txt
   const outputProofFile = parseTemplateTag(outputProofFilePath, {
     ...TAGS,
-    taskId: result.taskId,
+    taskId: result.taskId || '',
   })
 
   logger.info(`[+] Proof written to ${outputProofFile}.\n`)

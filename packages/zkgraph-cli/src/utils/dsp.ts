@@ -1,4 +1,3 @@
-// @ts-expect-error non-types
 import { dspHub } from '@hyperoracle/zkgraph-api'
 import { DspStaticParamsMap } from '../constants'
 
