@@ -1,4 +1,5 @@
 import * as zkgapi from '@hyperoracle/zkgraph-api'
+import { ethers } from 'ethers'
 import type { UserConfig } from '../config'
 import { loadJsonRpcProviderUrl } from '../utils'
 import { logger } from '../logger'
@@ -24,11 +25,13 @@ export async function deposit(options: DepositOptions) {
     logger.error('[-] ERROR: Failed to get jsonRpcUrl')
     return
   }
+  const provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl)
+  const signer = new ethers.Wallet(userPrivateKey, provider)
   const transactionHash = zkgapi.deposit(
-    jsonRpcUrl,
+    provider,
+    signer,
     deployedContractAddress,
     depositAmount,
-    userPrivateKey,
     true,
   )
 

@@ -151,14 +151,14 @@ Usage cases:
       })
 
     cli
-      .command('publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
+      .command('publish <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
       .example('zkgraph publish 0x00000000000000000000000000000000 0x00000000000000000000000000000000 100')
-      .usage(`publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>
+      .usage(`publish <ipfs_hash> <bounty_reward_per_trigger>
 
     ipfs_hash: by finishing upload get it
       `)
-      .action((contractAddress, ipfsHash, bountyRewardPerTrigger) => {
-        publish({ contractAddress, ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, userPrivateKey: config.UserPrivateKey })
+      .action((ipfsHash, bountyRewardPerTrigger) => {
+        publish({ ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, zkwasmProviderUrl: config.ZkwasmProviderUrl, userPrivateKey: config.UserPrivateKey })
       })
 
     cli

@@ -5,16 +5,16 @@ import { loadJsonRpcProviderUrl, logDivider } from '../utils'
 import type { UserConfig } from '../../dist/index.cjs'
 
 export interface PublishOptions {
-  contractAddress: string
   ipfsHash: string
   bountyRewardPerTrigger: number
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
+  zkwasmProviderUrl: string
   userPrivateKey: string
 }
 
 export async function publish(options: PublishOptions) {
-  const { contractAddress, ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger, yamlPath } = options
+  const { ipfsHash, jsonRpcProviderUrl, zkwasmProviderUrl, userPrivateKey, bountyRewardPerTrigger, yamlPath } = options
   logger.info('>> PUBLISH ZKGRAPH')
   if (isNaN(bountyRewardPerTrigger)) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
@@ -34,8 +34,8 @@ export async function publish(options: PublishOptions) {
 
   const publishTxHash = await zkgapi.publish(
     { wasmUint8Array: null, zkgraphYaml },
+    zkwasmProviderUrl,
     provider,
-    contractAddress,
     ipfsHash,
     newBountyRewardPerTrigger,
     signer,

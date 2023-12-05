@@ -82,12 +82,6 @@ export const TdConfig = {
   providerUrl: 'https://ethereum-sepolia.publicnode.com',
 }
 
-export const AggregatorVerifierAddress = {
-  mainnet: 'not support yet',
-  sepolia: '0x714C66711F6552D4F388Ec79D4A33FE20173cC34',
-  goerli: '0x5e6ca2dd26eA8F9A17aEc6e35a8dcD7C5B12FcDF',
-}
-
 export const DspStaticParamsMap = {
   prove: 'proveParams',
   exec: 'execParams',
