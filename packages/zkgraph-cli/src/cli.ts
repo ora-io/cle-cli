@@ -158,7 +158,7 @@ Usage cases:
     ipfs_hash: by finishing upload get it
       `)
       .action((ipfsHash, bountyRewardPerTrigger) => {
-        publish({ ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, zkwasmProviderUrl: config.ZkwasmProviderUrl, userPrivateKey: config.UserPrivateKey })
+        publish({ ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, zkwasmProviderUrl: config.ZkwasmProviderUrl, userPrivateKey: config.UserPrivateKey, wasmPath: config.WasmBinPath })
       })
 
     cli

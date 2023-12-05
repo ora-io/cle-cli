@@ -195,7 +195,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   logger.info('[+] Transaction Confirmed. Creating Prove Task')
 
   const data = await dispatcher.queryTask(txhash)
-  const taskId = data.task.id
+  const taskId = data.task?.id
   if (!taskId) {
     logger.error('[+] PROVE TASK FAILED. \n')
     return

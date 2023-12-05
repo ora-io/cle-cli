@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import { ethers } from 'ethers'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
@@ -11,10 +12,11 @@ export interface PublishOptions {
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
   zkwasmProviderUrl: string
   userPrivateKey: string
+  wasmPath: string
 }
 
 export async function publish(options: PublishOptions) {
-  const { ipfsHash, jsonRpcProviderUrl, zkwasmProviderUrl, userPrivateKey, bountyRewardPerTrigger, yamlPath } = options
+  const { ipfsHash, jsonRpcProviderUrl, zkwasmProviderUrl, userPrivateKey, bountyRewardPerTrigger, yamlPath, wasmPath } = options
   logger.info('>> PUBLISH ZKGRAPH')
   if (isNaN(bountyRewardPerTrigger)) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
@@ -31,9 +33,11 @@ export async function publish(options: PublishOptions) {
   const JsonRpcProviderUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, false)
   const provider = new ethers.providers.JsonRpcProvider(JsonRpcProviderUrl)
   const signer = new ethers.Wallet(userPrivateKey, provider)
+  const wasm = fs.readFileSync(wasmPath)
+  const wasmUint8Array = new Uint8Array(wasm)
 
   const publishTxHash = await zkgapi.publish(
-    { wasmUint8Array: null, zkgraphYaml },
+    { wasmUint8Array, zkgraphYaml },
     zkwasmProviderUrl,
     provider,
     ipfsHash,
