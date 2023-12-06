@@ -194,8 +194,17 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   logger.info('[+] Transaction Confirmed. Creating Prove Task')
 
-  const data = await dispatcher.queryTask(txhash)
-  const taskId = data.task?.id
+  const [queryTaskErr, data] = await to(dispatcher.queryTask(txhash))
+  if (queryTaskErr) {
+    if (queryTaskErr instanceof zkgapi.Error.TDNoTaskFound) {
+      logger.error('[-] PLEASE REQUIRE FINISH SETUP FIRST.')
+      return
+    }
+    else {
+      throw queryTaskErr
+    }
+  }
+  const taskId = data?.task?.id
   if (!taskId) {
     logger.error('[+] PROVE TASK FAILED. \n')
     return
