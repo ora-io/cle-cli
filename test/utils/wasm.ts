@@ -28,7 +28,7 @@ export async function instantiate(module: any, imports: any = {}) {
     }),
   }
   // @ts-expect-error unknown
-  const { exports } = await WebAssembly.instantiate(module, adaptedImports)
+  const { exports } = await globalThis.WebAssembly.instantiate(module, adaptedImports)
   return exports
 }
 
