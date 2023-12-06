@@ -1,6 +1,6 @@
 {
   "name": "@hyperoracle/zkgraph-cli",
-  "version": "0.0.2-alpha.4",
+  "version": "0.0.2-alpha.5",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/hyperoracle/zkgraph-cli#readme",
@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/zkgraph-api": "0.1.9-alpha.8",
+    "@hyperoracle/zkgraph-api": "0.1.9-alpha.9",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
