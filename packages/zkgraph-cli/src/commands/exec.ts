@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import to from 'await-to-js'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
+import ethres from 'ethers'
 import { generateDspHubParams, loadJsonRpcProviderUrl, toHexString } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
@@ -36,13 +37,14 @@ export async function exec(options: ExecOptions) {
     logger.info(`[*] Run zkgraph on block ${realParams?.blockId}`)
 
   const jsonRpcUrl = loadJsonRpcProviderUrl(zkgraphYaml, jsonRpcProviderUrl, true)
+  const provider = new ethres.providers.JsonRpcProvider(jsonRpcUrl)
 
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
 
   const execParams = dsp.toExecParams(
     {
-      jsonRpcUrl,
+      provider,
       ...realParams,
     },
   )

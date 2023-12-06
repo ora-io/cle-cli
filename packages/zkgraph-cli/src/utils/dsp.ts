@@ -10,7 +10,7 @@ export function getDspHubParams() {
   return generateDspHubParamsMap(hub)
 }
 
-export const DoNotIncludeParams = ['jsonRpcUrl']
+export const DoNotIncludeParams = ['jsonRpcUrl', 'provider']
 
 export function generateDspHubParamsMap(hub: Map<string, {
   execParams: string[]

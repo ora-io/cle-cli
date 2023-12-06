@@ -1,9 +1,9 @@
 // import fs from 'node:fs'
-import { Error, ZkGraphYaml, verify as verifyApi } from '@hyperoracle/zkgraph-api'
+import { Error, ZkGraphYaml, getVerifyProofParamsByTaskID, verify as verifyApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
 import type { UserConfig } from '../config'
-import { AggregatorVerifierAddress } from '../constants'
+// import { AggregatorVerifierAddress } from '../constants'
 
 export interface VerifyOptions {
   taskId: string
@@ -25,12 +25,15 @@ export async function verify(options: VerifyOptions) {
 
   // Get deployed verification contract address.
   // TODO: I reused this func to save code, but the naming is a bit misleading, fix it later.
-  const verifierAddress = loadJsonRpcProviderUrl(zkgraphYaml, AggregatorVerifierAddress, false)
+  // const verifierAddress = loadJsonRpcProviderUrl(zkgraphYaml, AggregatorVerifierAddress, false)
+  const proofParams = await getVerifyProofParamsByTaskID(taskId, zkWasmProviderUrl)
 
   const verifyResult = await verifyApi(
-    taskId,
-    zkWasmProviderUrl,
-    verifierAddress || '',
+    {
+      zkgraphYaml,
+      wasmUint8Array: null,
+    },
+    proofParams,
     jsonRpcUrl || '',
   ).catch((error: Error) => {
     if (error instanceof Error.ProveTaskNotReady)
