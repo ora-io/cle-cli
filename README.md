@@ -35,17 +35,6 @@ With PNPM:
 pnpm create zkgraph@latest
 ```
 
-With CLI
-
-```bash
-# install zkgraph-cli
-npm install @hyperoracle/zkgraph-cli@latest -g
-# run create command
-zkgraph create
-# or
-zkgraph init
-```
-
 Then follow the prompts!
 
 To scaffold a **uniswapprice** template, you can directly specify the project name and the desired template using additional command line options. For instance, you can run the following command:

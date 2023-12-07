@@ -151,7 +151,7 @@ async function testMode(wasmUint8Array: Uint8Array, privateInputStr: string, pub
     if (zkgapi.hasDebugOnlyFunc)
       logger.warn('[+] PLEASE REMOVE DEBUG FUNCTION (e.g. console.log) BEFORE PROVE MODE')
     else
-      logger.warn('[+] READY FOR PROVE MODE: zkgraph prove <block id> <expected state> --prove')
+      logger.warn('[+] READY FOR PROVE MODE: npx zkgraph prove <block id> <expected state> --prove')
   }
   else { logger.error('[-] ZKWASM MOCK EXECUTION FAILED') }
 }

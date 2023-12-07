@@ -12,9 +12,9 @@ To upload and publish your zkGraph, you should `Upload` (upload code to IPFS), a
 
 ## Commonly used commands
 
-- **compile**: `zkgraph compile`
-- **exec**: `zkgraph exec <block id>`
-- **prove**: `zkgraph prove <block id> <expected state> -i|-t|-p`  
+- **compile**: `npx zkgraph compile`
+- **exec**: `npx zkgraph exec <block id>`
+- **prove**: ` npx zkgraph prove <block id> <expected state> -i|-t|-p`  
 - ……
 
 Read more: https://github.com/hyperoracle/zkgraph-cli#cli
