@@ -4,21 +4,23 @@ import { compile } from './commands/compile'
 import { exec } from './commands/exec'
 import { setup } from './commands/setup'
 import { prove as proveHandler } from './commands/prove'
-import { deploy } from './commands/deploy'
 import { upload } from './commands/upload'
 import { verify } from './commands/verify'
 import { publish } from './commands/publish'
 import { getConfig } from './config'
 import { createLogger, logger, setLogger } from './logger'
 import { create } from './commands/create'
-import { proveCLIHasModeOption } from './utils'
+import { generateCommandUsage, proveCLIHasModeOption } from './utils'
+import { deposit } from './commands/deposit'
 
 export async function run() {
   try {
     const cli = cac('zkgraph')
+
     const config = await getConfig()
     setLogger(createLogger(config.logger?.level || 'info'))
 
+    const { proveUsage, execUsage } = generateCommandUsage()
     cli
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
       .option('--local', 'Compile for Local Image')
@@ -40,21 +42,25 @@ export async function run() {
       })
 
     cli
-      .command('exec <block id>', 'Execute Full Image')
+      .command('exec [...params]', 'Execute Full Image')
       .option('--local', 'Execute Local Image')
       .example('zkgraph exec 0000000')
-      .action((blockId, options) => {
+      .action((params, options) => {
         const { local = false } = options
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
 
         exec({
           local,
-          blockId: Number(blockId),
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          params,
         })
       })
+      .usage(`[...params]
+
+Usage cases:
+  ${execUsage}`)
 
     cli
       .command('setup', 'Set Up Full Image')
@@ -74,7 +80,7 @@ export async function run() {
       })
 
     const proveCLI = cli
-      .command('prove <block id> <expected state>', 'Prove Full Image')
+      .command('prove [...params]', 'Prove Full Image')
       .option('--local', 'Prove Local Image')
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
@@ -82,7 +88,7 @@ export async function run() {
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -t')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -i')
       .example('zkgraph prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -p')
-      .action((blockId, expectedState, options) => {
+      .action((params, options) => {
         // eslint-disable-next-line prefer-const
         let { inputgen = false, test = false, prove = false, local = false } = options
         const hasMode = proveCLIHasModeOption()
@@ -95,9 +101,9 @@ export async function run() {
           return
         }
         const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+
         proveHandler({
-          blockId: Number(blockId),
-          expectedState,
+          params,
           inputgen,
           test,
           prove,
@@ -110,26 +116,10 @@ export async function run() {
           outputProofFilePath: config.OutputProofFilePath,
         })
       })
+      .usage(`[...params]
 
-    proveCLI.usage('prove <block id> <expected state> -i|-t|-p')
-
-    cli
-      .command('deploy', 'Deploy Verification Contract for Full Image')
-      .option('--local', 'Deploy Verification Contract for Local Image')
-      .option('-n, --network-name <name>', 'Name of deployed network for verification contract (sepolia/goerli)')
-      .example('zkgraph deploy -n sepolia')
-      .action((options) => {
-        const { networkName = '', local = false } = options
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
-        deploy({
-          local,
-          network: networkName,
-          wasmPath,
-          yamlPath: config.YamlPath,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
-          userPrivateKey: config.UserPrivateKey,
-        })
-      })
+Usage cases:
+  ${proveUsage}`)
 
     cli
       .command('upload', 'Upload zkGraph (Code and Full Image)')
@@ -144,7 +134,7 @@ export async function run() {
           pinataEndpoint: config.PinataEndpoint,
           pinataJWT: config.PinataJWT,
           mappingPath: config.MappingPath,
-          userPrivateKey: config.UserPrivateKey,
+          // userPrivateKey: config.UserPrivateKey,
         })
       })
 
@@ -156,18 +146,27 @@ export async function run() {
           taskId,
           yamlPath: config.YamlPath,
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
         })
       })
 
     cli
-      .command('publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
+      .command('publish <ipfs_hash> <bounty_reward_per_trigger>', 'Publish and Register zkGraph Onchain')
       .example('zkgraph publish 0x00000000000000000000000000000000 0x00000000000000000000000000000000 100')
-      .usage(`publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>
+      .usage(`publish <ipfs_hash> <bounty_reward_per_trigger>
 
     ipfs_hash: by finishing upload get it
       `)
-      .action((contractAddress, ipfsHash, bountyRewardPerTrigger) => {
-        publish({ contractAddress, ipfsHash, bountyRewardPerTrigger, yamlPath: config.YamlPath, jsonRpcProviderUrl: config.JsonRpcProviderUrl, userPrivateKey: config.UserPrivateKey })
+      .action((ipfsHash, bountyRewardPerTrigger) => {
+        publish({
+          ipfsHash,
+          bountyRewardPerTrigger,
+          yamlPath: config.YamlPath,
+          wasmPath: config.WasmBinPath,
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          userPrivateKey: config.UserPrivateKey,
+          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+        })
       })
 
     cli
@@ -177,6 +176,19 @@ export async function run() {
       .example('zkgraph init -t default')
       .action((directory, options) => {
         create(directory, options.template)
+      })
+
+    cli
+      .command('deposit <deployed contract address> <deposit amount>', 'Publish and register zkGraph onchain.')
+      .example('zkgraph deposit 0x00000000000000000000000000000000 0.1')
+      .action((deployedContractAddress, depositAmount) => {
+        deposit({
+          jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          deployedContractAddress,
+          depositAmount,
+          userPrivateKey: config.UserPrivateKey,
+          yamlPath: config.YamlPath,
+        })
       })
 
     cli.help()

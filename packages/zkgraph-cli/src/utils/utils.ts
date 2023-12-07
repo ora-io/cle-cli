@@ -1,20 +1,4 @@
-import { ethers } from 'ethers'
 import { Md5 } from 'ts-md5'
-
-/**
- * Check if the address is ethereum address
- * @param address
- * @returns
- */
-export function isEthereumAddress(address: string) {
-  try {
-    const parsedAddress = ethers.utils.getAddress(address)
-    return parsedAddress !== '0x0000000000000000000000000000000000000000'
-  }
-  catch (error) {
-    return false
-  }
-}
 
 /**
  * Convert hex string to Uint8Array
@@ -25,6 +9,15 @@ export function fromHexString(hexString: string) {
   hexString = hexString.startsWith('0x') ? hexString.slice(2) : hexString
   hexString = hexString.length % 2 ? `0${hexString}` : hexString
   return Uint8Array.from(Buffer.from(hexString, 'hex'))
+}
+
+/**
+ * Convert Uint8Array to hex string
+ * @param uint8array
+ * @returns
+ */
+export function toHexString(uint8array: Uint8Array) {
+  return Buffer.from(uint8array).toString('hex')
 }
 
 /**

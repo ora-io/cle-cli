@@ -5,11 +5,11 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
-import { codegen, createOnNonexist, fromHexString, loadZKGraphSources, parseYaml, randomUniqueKey } from '../utils'
-import type { ZkGraphYaml } from '../types'
+import * as zkgapi from '@hyperoracle/zkgraph-api'
+import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
-import { COMPILE_CODEGEN, COMPILE_CODEGEN_LOCAL, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
+import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
 import { checkExecExist } from '../utils/system'
 
 export interface CompileOptions {
@@ -19,25 +19,75 @@ export interface CompileOptions {
   wasmPath: string
   watPath: string
   mappingPath: string
-  isUseAscLib?: boolean
 }
 
 const wasmStartName = '__as_start'
 
-// const ascBin = path.join(`${__dirname}`, '../..', 'node_modules/.bin/asc')
-
 export async function compile(options: CompileOptions) {
   const {
+    wasmPath,
+    watPath,
     local,
   } = options
   if (!checkExecExist('asc') || !checkExecExist('npx asc')) {
     logger.error('[-] Please install assemblyscript in your package, you can run: npm install assemblyscript --save-dev')
     return
   }
-  if (local)
-    await compileLocal(options)
-  else
-    await compileServer(options)
+
+  const succ = local ? await compileLocal(options) : await compileServer(options)
+
+  if (succ)
+    logCompileResult(wasmPath, watPath)
+}
+
+async function compileLocal(options: CompileOptions) {
+  const {
+    yamlPath,
+    wasmPath,
+    watPath,
+    mappingPath,
+    local,
+  } = options
+  if (!yamlPath) {
+    logger.error('no yaml path provided')
+    return false
+  }
+
+  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  if (!yaml) {
+    logger.error('[-] ERROR: Failed to get yaml')
+    return false
+  }
+
+  // general compile based on dsp. so local should be a boolean var rather than 'true'
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
+
+  // for CODE_GEN code, define imported lib function name
+  const libDSPName = dsp.getLibDSPName()
+
+  const mappingFileName = yaml.mapping.file
+  const handleFuncName = yaml.mapping.handler
+
+  // for entry file name only, not important.
+  const dspKey = zkgapi.dspHub.toHubKeyByYaml(yaml, { isLocal: local })
+
+  const srcDirPath = path.join(mappingPath, '..')
+  const entryFilename = getEntryFilename(dspKey)
+  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(libDSPName, mappingFileName, handleFuncName))
+
+  // const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
+  createOnNonexist(wasmPath)
+
+  // const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
+  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
+
+  if (compileErr) {
+    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
+    return false
+  }
+  return true
+
+  // logCompileResult(wasmPath, watPath)
 }
 
 async function compileServer(options: CompileOptions) {
@@ -46,45 +96,28 @@ async function compileServer(options: CompileOptions) {
     compilerServerEndpoint,
     wasmPath,
     watPath,
-    mappingPath,
+    // mappingPath,
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
-    return
-  }
-  const yamlContent = fs.readFileSync(yamlPath, 'utf-8')
-  const [yamlErr, yaml] = await to(parseYaml<Partial<ZkGraphYaml>>(yamlContent))
-  if (yamlErr) {
-    logger.error(`[-] LOAD YAML ERROR. ${yamlErr.message}`)
-    return
-  }
-  if (!yaml) {
-    logger.error('invalid yaml')
-    return
+    return false
   }
 
-  const [source_address, source_esigs] = loadZKGraphSources(yaml)
-  logger.info(`[*] Source contract address:${source_address}`)
-  logger.info(`[*] Source events signatures:${source_esigs}` + '\n')
+  const tmpWasmPath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
+  const originWasmPath = options.wasmPath
+  // set to tmp wasm path when local compile
+  options.wasmPath = tmpWasmPath
 
-  const mappingRoot = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename('full')
-  const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN)
-
-  const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
-  createOnNonexist(innerPrePrePath)
-
-  const [compileErr] = await to(ascCompile(path.join(mappingRoot, innerFile), innerPrePrePath))
-
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return
-  }
+  const succ = await compileLocal(options)
+  if (!succ)
+    return false
+  // set back origin value
+  options.wasmPath = originWasmPath
 
   // Set up form data
   const data = new FormData()
   // data.append("asFile", createReadStream(mappingPath));
-  data.append('wasmFile', fs.createReadStream(innerPrePrePath))
+  data.append('wasmFile', fs.createReadStream(tmpWasmPath))
   data.append('yamlFile', fs.createReadStream(yamlPath))
 
   // Set up request config
@@ -101,12 +134,13 @@ async function compileServer(options: CompileOptions) {
   const [requestErr, response] = await to(axios.request(requestConfig))
 
   if (requestErr) {
+    console.error(requestErr)
     logger.error(`[-] ERROR WHEN COMPILING. ${requestErr.message}`)
-    return
+    return false
   }
   if (!response) {
     logger.error('[-] ERROR WHEN COMPILING. invalid response')
-    return
+    return false
   }
   const wasmModuleHex = response.data.wasmModuleHex
   const wasmWat = response.data.wasmWat
@@ -117,43 +151,20 @@ async function compileServer(options: CompileOptions) {
   createOnNonexist(watPath)
   fs.writeFileSync(watPath, wasmWat)
 
-  // Log compiled file size by line count
-  const compiledFileContent = fs.readFileSync(watPath, 'utf-8')
-  const compiledFileLineCount = compiledFileContent.split('\n').length
-  logger.info(`[*] ${compiledFileLineCount}${compiledFileLineCount > 1 ? 'lines' : 'line'}in ${watPath}`)
-  // Log status
-  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
-  logger.info('[+] COMPILATION SUCCESS!' + '\n')
+  return true
+  // logCompileResult(wasmPath, watPath)
 }
 
-async function compileLocal(options: CompileOptions) {
-  const {
-    wasmPath,
-    watPath,
-    mappingPath,
-  } = options
-  const mappingRoot = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename('local')
-  const innerFile = await codegen(mappingRoot, entryFilename, COMPILE_CODEGEN_LOCAL)
-
-  const [compileErr] = await to(ascCompileLocal(path.join(mappingRoot, innerFile), wasmPath, watPath))
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return
-  }
-
-  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
-  logger.info('[+] COMPILATION SUCCESS!' + '\n')
-}
-
-async function ascCompile(innerTsFilePath: string, innerPrePrePath: string) {
-  const abortPath = getAbortTsFilepath(innerTsFilePath)
+async function ascCompile(entryFilePath: string, outputWasmPath: string, outputWatPath: string) {
+  const abortPath = getAbortTsFilepath(entryFilePath)
 
   let commands: string[] = [
     'npx asc',
   ]
   const common = [
-    `-o ${innerPrePrePath}`,
+    `-o ${outputWasmPath}`,
+    `-t ${outputWatPath}`,
+    '-O', '--noAssert',
     '--disable', 'bulk-memory',
     '--disable', 'mutable-globals',
     '--exportRuntime',
@@ -162,41 +173,29 @@ async function ascCompile(innerTsFilePath: string, innerPrePrePath: string) {
     '--runtime stub',
   ]
   commands = commands.concat([
-    innerTsFilePath,
+    entryFilePath,
     '--use', `abort=${abortPath}`,
   ])
   commands = commands.concat(common)
 
-  return await execAndRmSync(commands.join(' '), innerTsFilePath)
+  return await execAndRmSync(commands.join(' '), entryFilePath)
 }
 
-async function ascCompileLocal(innerTsFilePath: string, wasmPath: string, watPath: string) {
-  const abortPath = getAbortTsFilepath(innerTsFilePath)
-  let commands: string[] = [
-    'npx asc',
-  ]
-  const common = [
-    '-t', watPath,
-    '-O', '--noAssert',
-    '-o', wasmPath,
-    '--runtime', 'stub',
-    '--disable', 'bulk-memory',
-    '--exportRuntime',
-    '--exportStart', wasmStartName,
-    '--memoryBase', '70000',
-  ]
-  commands = commands.concat([
-    innerTsFilePath,
-    '--use', `abort=${abortPath}`,
-  ])
-  commands = commands.concat(common)
-  return execAndRmSync(commands.join(' '), innerTsFilePath)
+function logCompileResult(wasmPath: string, watPath: string): void {
+  // Log compiled file size by line count
+  const compiledFileContent = fs.readFileSync(watPath, 'utf-8')
+  const compiledFileLineCount = compiledFileContent.split('\n').length
+  logger.info(`[*]${compiledFileLineCount}${compiledFileLineCount > 1 ? ' lines' : ' line'} in ${watPath}`)
+  // Log status
+  logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
+  logger.info('[+] COMPILATION SUCCESS!' + '\n')
 }
 
 async function execAndRmSync(command: string, filepath: string) {
   return new Promise<void>((resolve, reject) => {
     try {
       execSync(command)
+      // norman: rmSync should seperate from execSync
       fs.rmSync(filepath)
       resolve()
     }
@@ -205,26 +204,6 @@ async function execAndRmSync(command: string, filepath: string) {
     }
   })
 }
-// function copyDirAndCodegen(mappingPath: string) {
-//   const mappingDir = path.dirname(mappingPath)
-
-//   if (fs.existsSync(mappingDir)) {
-//     zkGraphCache.copyDirToCacheDir(mappingDir)
-//     const tsFils = getTsFiles(zkGraphCache.cacheDir)
-//     // const libPath = path.join(process.cwd(), 'node_modules/@hyperoracle/zkgraph-lib')
-//     for (const tsFile of tsFils) {
-//       const rawCode = fs.readFileSync(tsFile, 'utf-8')
-//       // const [relativePath] = getRelativePath(tsFile, libPath)
-//       const transformCode = codegenImportReplace(rawCode, '~lib/@hyperoracle/zkgraph-lib')
-//       fs.writeFileSync(tsFile, transformCode)
-//     }
-//     const codegenMappingPath = path.join(zkGraphCache.cacheDir, 'mapping.ts')
-//     return codegenMappingPath
-//   }
-//   else {
-//     logger.error(`[-] ${mappingDir} not exist.`)
-//   }
-// }
 
 function getEntryFilename(env: string) {
   return parseTemplateTag(COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE, {

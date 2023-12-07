@@ -82,7 +82,7 @@ exports[`config > merge config 1`] = `
   "PinataJWT": "PinataJWT",
   "UserPrivateKey": "UserPrivateKey",
   "WasmBinPath": "WasmBinPath",
-  "ZkwasmProviderUrl": "https://zkwasm-explorer.delphinuslab.com:8090",
+  "ZkwasmProviderUrl": "https://rpc.zkwasmhub.com:8090",
   "logger": {
     "level": "info",
   },

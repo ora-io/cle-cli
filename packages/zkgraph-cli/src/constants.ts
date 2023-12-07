@@ -9,7 +9,7 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
 
   UserPrivateKey: '',
 
-  ZkwasmProviderUrl: 'https://zkwasm-explorer.delphinuslab.com:8090',
+  ZkwasmProviderUrl: 'https://rpc.zkwasmhub.com:8090',
   CompilerServerEndpoint: 'http://compiler.hyperoracle.io/compile',
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
@@ -33,36 +33,22 @@ export const TAGS = {
 
 export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
 
-export const COMPILE_CODEGEN = `
-import { inner_real, registerHandle } from "@hyperoracle/zkgraph-lib"
-export { asmain } from "@hyperoracle/zkgraph-lib"
-import { handleEvents } from "./mapping"
+export const COMPILE_CODEGEN = (libDSPName: string, mappingFileName: string, handleFuncName: string) => `
+import { zkmain_lib, asmain_lib, registerHandle } from "@hyperoracle/zkgraph-lib/dsp/${libDSPName}"
+import { ${handleFuncName} } from "./${mappingFileName}"
 
-export function inner(
-  raw_receipts_ptr: usize,
-  match_event_cnt: i32,
-  matched_event_offsets_ptr: usize,
-  re_state_len: usize,
-): usize {
-  registerHandle(handleEvents)
-  return inner_real(
-    raw_receipts_ptr, 
-    match_event_cnt, 
-    matched_event_offsets_ptr,
-    re_state_len
-  )
+declare function __call_as_start(): void;
+
+export function zkmain(): void {
+  __call_as_start();
+  registerHandle(${handleFuncName})
+  return zkmain_lib()
 }
-export function runRegisterHandle(): void {
-  registerHandle(handleEvents)
-}
-function abort(a: usize, b: usize, c: u32, d: u32): void {}
-`
-export const COMPILE_CODEGEN_LOCAL = `
-export { asmain, zkmain } from "@hyperoracle/zkgraph-lib"
-import { registerHandle } from "@hyperoracle/zkgraph-lib"
-import { handleEvents } from "./mapping"
-export function runRegisterHandle(): void {
-  registerHandle(handleEvents)
+
+export function asmain(): Uint8Array {
+  __call_as_start();
+  registerHandle(${handleFuncName})
+  return asmain_lib()
 }
 function abort(a: usize, b: usize, c: u32, d: u32): void {}
 `
@@ -92,6 +78,17 @@ export const NETWORKS = [
 export const TdConfig = {
   fee: '0.005',
   contract: '0x25AA9Ec3CA462f5AEA7fbd83A207E29Df4691380',
-  queryrApi: 'https://zkwasm.hyperoracle.io/td/',
+  queryrApi: 'https://zkwasm.hyperoracle.io/td',
   providerUrl: 'https://ethereum-sepolia.publicnode.com',
+}
+
+export const AggregatorVerifierAddress = {
+  mainnet: 'not support yet',
+  sepolia: '0x714C66711F6552D4F388Ec79D4A33FE20173cC34',
+  goerli: '0x5e6ca2dd26eA8F9A17aEc6e35a8dcD7C5B12FcDF',
+}
+
+export const DspStaticParamsMap = {
+  prove: 'proveParams',
+  exec: 'execParams',
 }

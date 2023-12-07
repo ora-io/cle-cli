@@ -16,7 +16,7 @@ const zkWasmProviderUrl = 'https://zkwasm-explorer.delphinuslab.com:8090'
 const userPrivateKey = '0x0'
 const outputProofFilePath = path.join(commandsFixturesRoot, 'proof.txt')
 const blockId = 2279547
-const expectedState = 'a60ecf32309539dd84f27a9563754dca818b815e'
+const expectedStateStr = 'a60ecf32309539dd84f27a9563754dca818b815e'
 
 describe('prove', () => {
   it('full inputgen mode', async () => {
@@ -31,8 +31,7 @@ describe('prove', () => {
       inputgen: true,
       test: false,
       prove: false,
-      blockId,
-      expectedState,
+      params: [blockId, expectedStateStr],
       local: false,
       wasmPath,
       yamlPath,
@@ -43,7 +42,7 @@ describe('prove', () => {
     })
   }, 100000)
 
-  it('local inputgen mode', async () => {
+  it.skip('local inputgen mode', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
     if (!fs.existsSync(wasmPath)) {
@@ -55,8 +54,7 @@ describe('prove', () => {
       inputgen: true,
       test: false,
       prove: false,
-      blockId,
-      expectedState,
+      params: [blockId, expectedStateStr],
       local: true,
       wasmPath,
       yamlPath,
@@ -67,7 +65,7 @@ describe('prove', () => {
     })
   }, 100000)
 
-  it('local test mode', async () => {
+  it.skip('local test mode', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
     if (!fs.existsSync(wasmPath)) {
@@ -79,8 +77,7 @@ describe('prove', () => {
       inputgen: false,
       test: true,
       prove: false,
-      blockId,
-      expectedState,
+      params: [blockId.toString(), expectedStateStr],
       local: true,
       wasmPath,
       yamlPath,

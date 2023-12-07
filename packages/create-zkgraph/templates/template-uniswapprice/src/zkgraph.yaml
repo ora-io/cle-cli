@@ -1,22 +1,22 @@
-specVersion: 0.0.1
-name: ex_autoprice
-description: "Demo graph for zkAutomation. Calculate ETH/USDC price as the trigger payload whenever price > theshold."
+specVersion: 0.0.2
+apiVersion: 0.0.2
+name: eg_autoprice
+description: "This demo zkGraph shows Uniswap price-based zkAutomation case. Calculate ETH/USDC price, set it as the trigger payload whenever price > theshold."
 repository: https://github.com/hyperoracle/zkgraph
 dataSources:
-  - kind: ethereum/contract
+  - kind: ethereum
     network: sepolia
-    source:
-      address: "0xFA5Db19087920F5d0e71d0373F099bd0C03589DA"
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.1
-      language: wasm/assemblyscript
-      file: ./mapping.ts
-      eventHandlers:
-        - event: "Sync(uint112,uint112)"
-          handler: handleEvents
+    event:
+      - address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+        events: 
+          - "Sync(uint112,uint112)"
+
+mapping:
+  language: wasm/assemblyscript
+  file: ./mapping.ts
+  handler: handleBlocks
+
 dataDestinations:
-  - kind: ethereum/contract
+  - kind: ethereum
     network: sepolia
-    destination:
-      address: "0x0000000000000000000000000000000000000001"
+    address: "0x0000000000000000000000000000000000000001"

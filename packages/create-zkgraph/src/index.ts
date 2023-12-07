@@ -22,13 +22,17 @@ const cwd = process.cwd()
 const defaultTargetDir = 'zkgraph-project'
 
 const FRAMEWORKS = [{
-  name: 'default',
-  display: 'Default',
-  color: yellow,
-}, {
   name: 'hello',
   display: 'Hello',
   color: blue,
+}, {
+  name: 'event',
+  display: 'Event',
+  color: yellow,
+}, {
+  name: 'storage',
+  display: 'Storage',
+  color: green,
 }, {
   name: 'multiaddr',
   display: 'Multiaddr',

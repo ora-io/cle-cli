@@ -9,6 +9,9 @@ export async function instantiate(module: any, imports: any = {}) {
         // text = __liftString(text >>> 0)
         console.log(text)
       },
+      'wasm_write_context': function (_: number) {
+        // pass
+      },
       require(x: any) {
         // sdk/zkwasm/require1(i32) => i64
         ZKWASMMock.require(x)
@@ -28,15 +31,15 @@ export async function instantiate(module: any, imports: any = {}) {
     }),
   }
   // @ts-expect-error unknown
-  const { exports } = await WebAssembly.instantiate(module, adaptedImports)
+  const { exports } = await globalThis.WebAssembly.instantiate(module, adaptedImports)
   return exports
 }
 
-export const instantiateWasm = async (wasmUnit8Array: Uint8Array) => {
+export const instantiateWasm = async (wasmUint8Array: Uint8Array) => {
   return instantiate(
     await (async () => {
       return globalThis.WebAssembly.compile(
-        wasmUnit8Array.buffer,
+        wasmUint8Array.buffer,
       )
     })(),
     {},

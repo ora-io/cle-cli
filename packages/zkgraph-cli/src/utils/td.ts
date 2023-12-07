@@ -4,7 +4,6 @@ import axios from 'axios'
 import axiosRetry from 'axios-retry'
 
 import { ethers } from 'ethers'
-// @ts-expect-error non-types
 import { TaskDispatch } from '@hyperoracle/zkgraph-api'
 import { TdConfig } from '../constants'
 
