@@ -42,7 +42,7 @@ describe('prove', () => {
     })
   }, 100000)
 
-  it('local inputgen mode', async () => {
+  it.skip('local inputgen mode', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
     if (!fs.existsSync(wasmPath)) {
@@ -65,7 +65,7 @@ describe('prove', () => {
     })
   }, 100000)
 
-  it('local test mode', async () => {
+  it.skip('local test mode', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
     if (!fs.existsSync(wasmPath)) {

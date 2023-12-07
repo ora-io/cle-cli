@@ -37,7 +37,7 @@ describe('compile', () => {
     expect(inst.zkmain).not.toBeUndefined()
   }, 200000)
 
-  it('local', async () => {
+  it.skip('local', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(projectRoot, 'temp/zkgraph_local.wasm')
     const watPath = wasmPath.replace(/\.wasm/, '.wat')

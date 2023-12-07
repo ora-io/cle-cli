@@ -71,7 +71,7 @@ exports[`config > load object config 1`] = `
 
 exports[`config > merge config 1`] = `
 {
-  "CompilerServerEndpoint": "http://compiler.hyperoracle.io/compile",
+  "CompilerServerEndpoint": "http://compiler.dev.hyperoracle.io/compile",
   "JsonRpcProviderUrl": {
     "goerli": "https://eth-goerli.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
@@ -82,7 +82,7 @@ exports[`config > merge config 1`] = `
   "PinataJWT": "PinataJWT",
   "UserPrivateKey": "UserPrivateKey",
   "WasmBinPath": "WasmBinPath",
-  "ZkwasmProviderUrl": "https://zkwasm-explorer.delphinuslab.com:8090",
+  "ZkwasmProviderUrl": "https://rpc.zkwasmhub.com:8090",
   "logger": {
     "level": "info",
   },

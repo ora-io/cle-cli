@@ -9,16 +9,11 @@ describe('test codegen utils', () => {
   it('test codegenImportReplace full', () => {
     const code = fs.readFileSync(path.join(commandsFixturesRoot, 'mapping.ts'), 'utf-8')
     expect(codegenImportReplace(code, 'test')).toMatchInlineSnapshot(`
-      "import { require } from \\"test\\";
-      import { Bytes, Event, BigInt } from \\"test\\";
+      "//@ts-ignore
+      import { Bytes, Block } from \\"test\\";
 
-      export function handleEvents(events: Event[]): Bytes {
-        let state = new Bytes(0);
-        if (events.length > 0) {
-          state = events[0].address;
-        }
-        require(state.length == 20);
-        return state;
+      export function handleBlocks(blocks: Block[]): Bytes {
+        return Bytes.fromUTF8(\\"Hello zkGraph!\\");
       }
       "
     `)

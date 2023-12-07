@@ -9,6 +9,9 @@ export async function instantiate(module: any, imports: any = {}) {
         // text = __liftString(text >>> 0)
         console.log(text)
       },
+      'wasm_write_context': function (_: number) {
+        // pass
+      },
       require(x: any) {
         // sdk/zkwasm/require1(i32) => i64
         ZKWASMMock.require(x)

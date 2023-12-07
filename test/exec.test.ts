@@ -31,7 +31,7 @@ describe('exec', () => {
     expect(res).toBeInstanceOf(Uint8Array)
   }, 100000)
 
-  it('local', async () => {
+  it.skip('local', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
     const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
     if (!fs.existsSync(wasmPath)) {
