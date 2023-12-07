@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import { ethers } from 'ethers'
+import to from 'await-to-js'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, logDivider } from '../utils'
@@ -37,7 +38,7 @@ export async function publish(options: PublishOptions) {
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
 
-  const publishTxHash = await zkgapi.publish(
+  const [err, publishTxHash] = await to(zkgapi.publish(
     { wasmUint8Array, zkgraphYaml },
     zkWasmProviderUrl,
     provider,
@@ -45,7 +46,16 @@ export async function publish(options: PublishOptions) {
     newBountyRewardPerTrigger,
     signer,
     true,
-  )
+  ))
+  if (err) {
+    if (err instanceof zkgapi.Error.GraphAlreadyExist) {
+      logger.error(`[-] PUBLISH FAILED. ${err.message}`)
+      return publishTxHash
+    }
+    else {
+      throw err
+    }
+  }
 
   if (publishTxHash === '')
     logger.error('[-] PUBLISH FAILED.')
