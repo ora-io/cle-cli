@@ -211,7 +211,6 @@ zkgraph publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigg
 
 | Arguments                     | Description                                                |
 | ----------------------------- | ---------------------------------------------------------- |
-| `<deployed contract address>` | Contract address of deployed verification contract address |
 | `<ipfs hash>`                 | IPFS hash of uploaded zkGraph                              |
 | `<bounty reward per trigger>` | Bounty reward per trigger in ETH                           |
 
