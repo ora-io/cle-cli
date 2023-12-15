@@ -151,7 +151,7 @@ See also: [Verifier Contract Interface](https://github.com/DelphinusLab/halo2agg
 
 #### Usage
 ```bash
-zkgraph publish <deployed contract address> <ipfs_hash> <bounty_reward_per_trigger>
+zkgraph publish <ipfs_hash> <bounty_reward_per_trigger>
 ```
 
 #### Arguments
