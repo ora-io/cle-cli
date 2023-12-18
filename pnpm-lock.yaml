@@ -19,7 +19,7 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-lib':
-        specifier: ^1.0.0
+        specifier: ^1.0.0-alpha.0
         version: 1.0.0
       '@murongg/eslint-config':
         specifier: ^0.2.1
@@ -103,8 +103,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@hyperoracle/zkgraph-api':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.2-alpha.0
+        version: 1.0.2
       api:
         specifier: ^6.1.1
         version: 6.1.1(openapi-types@12.1.3)
@@ -152,7 +152,7 @@ importers:
         version: 0.3.11
     devDependencies:
       '@hyperoracle/zkgraph-lib':
-        specifier: ^1.0.0
+        specifier: ^1.0.0-alpha.0
         version: 1.0.0
       '@types/js-yaml':
         specifier: ^4.0.6
@@ -1198,12 +1198,12 @@ packages:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
     dev: true
 
-  /@hyperoracle/zkgraph-api@1.0.0:
-    resolution: {integrity: sha512-AZfGOQchEQCZaDIw9usmSTginm6iCuG+V8kmy3hAv1UfaxXzIWYqdLlRVLi2yrIfWx9BLq+jQzYMNRKoQJf9RQ==}
+  /@hyperoracle/zkgraph-api@1.0.2:
+    resolution: {integrity: sha512-/KW4FQyES3fFWApqIQ2j+bST/MgcBmJ+qVmk5PnbWMrVvrSBwVASVXMrHpXz9aqUTGdsYtT+8FDGEkaY4bteXA==}
     dependencies:
       '@ethereumjs/rlp': 5.0.1
       '@hyperoracle/zkwasm-service-helper': 1.0.1
-      '@murongg/utils': 0.1.11
+      '@murongg/utils': 0.1.19
       axios: 1.6.2
       axios-retry: 3.9.1
       bn.js: 5.2.1
@@ -1399,8 +1399,8 @@ packages:
       - typescript
     dev: true
 
-  /@murongg/utils@0.1.11:
-    resolution: {integrity: sha512-RqwAhRSjcnVxW5YSecWevVh3VoQZr9Rlp+T6DTljYmW3dBzOhqwvVor2Z14gNYMWJZ+6ABSg7B6Tx3x7XP4t8w==}
+  /@murongg/utils@0.1.19:
+    resolution: {integrity: sha512-XTqQg8NXvAR6ulTY7zpOM231/KizO1x+VdyeH/N83JyKeU9TdAbVrNUx576upzq2sJn/8R6DiOY9NJ3NNrTJcw==}
     dev: false
 
   /@noble/curves@1.1.0:
