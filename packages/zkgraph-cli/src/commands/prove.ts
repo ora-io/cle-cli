@@ -3,7 +3,7 @@ import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, validateProvider } from '../utils'
+import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, logLoadingAnimation, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -210,10 +210,25 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
     return
   }
   logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
-
   logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTED')
-  const result = await zkgapi.waitProve(zkWasmProviderUrl, taskId, true)
 
+  const loading = logLoadingAnimation()
+
+  const [err, result] = await to(zkgapi.waitProve(zkWasmProviderUrl, taskId, true))
+
+  if (err) {
+    loading.stopAndClear()
+    throw err
+  }
+  if (result?.status === 'Done') {
+    logger.info('[+] PROVE SUCCESS!')
+  }
+  else {
+    logger.error('[-] PROVE OR DRYRUN FAILED.')
+    loading.stopAndClear()
+    return
+  }
+  loading.stopAndClear()
   if (
     result.instances === null
     && result.batch_instances === null
