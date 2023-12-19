@@ -3,7 +3,7 @@ import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, logLoadingAnimation, validateProvider } from '../utils'
+import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, logLoadingAnimation, taskPrettyPrint, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -222,6 +222,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
   }
   if (result?.status === 'Done') {
     logger.info('[+] PROVE SUCCESS!')
+    taskPrettyPrint(result.taskDetails)
   }
   else {
     logger.error('[-] PROVE OR DRYRUN FAILED.')
