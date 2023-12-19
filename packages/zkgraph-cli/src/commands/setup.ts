@@ -3,6 +3,7 @@ import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
 import { getDispatcher, uploadWasmToTd } from '../utils/td'
+import { logLoadingAnimation, taskPrettyPrint } from '../utils'
 
 export interface SetupOptions {
   wasmPath: string
@@ -61,7 +62,15 @@ export async function setup(options: SetupOptions) {
     return
   }
   logger.info(`[+] SETUP TASK STARTED. TASK ID: ${taskId}`)
+  logger.info('[*] Please wait for image set up... (estimated: 1-5 min)')
+  const loading = logLoadingAnimation()
 
   const result = await waitSetup(zkWasmProviderUrl, taskId, true)
+  loading.stopAndClear()
+  taskPrettyPrint(result?.taskDetails, '[*] ')
+  const taskStatus = result?.taskDetails?.status === 'Done' ? 'SUCCESS' : 'FAILED'
+  logger.info(
+    `[${taskStatus === 'SUCCESS' ? '+' : '-'}] SET UP ${taskStatus}`,
+  )
   return result
 }

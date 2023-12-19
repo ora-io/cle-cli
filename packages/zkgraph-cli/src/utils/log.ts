@@ -1,7 +1,9 @@
+import { logger } from '../logger'
+
 export function logDivider() {
   const line = '='.repeat(process.stdout.columns)
-  // eslint-disable-next-line no-console
-  console.log(line)
+
+  logger.info(line)
 }
 
 export function logLoadingAnimation() {
@@ -44,4 +46,28 @@ export function logLoadingAnimation() {
       process.stdout.cursorTo(0)
     },
   }
+}
+
+function millToHumanReadable(mill: number) {
+  const min = Math.floor(mill / 60000)
+  const sec = (mill % 60000) / 1000
+  return `${min} min ${sec} sec`
+}
+
+export function taskPrettyPrint(resData: { submit_time: string | number | Date; process_started: number; process_finished: number }, prefix = '') {
+  logger.info(`${prefix}Task submit time: ${resData.submit_time}`)
+  logger.info(`${prefix}Process started: ${resData.process_started}`)
+  logger.info(`${prefix}Process finished: ${resData.process_finished}`)
+  logger.info(
+    `${prefix}Pending time: ${millToHumanReadable(
+      // @ts-expect-error TODO: fix this, it's incorrect, should new Date().getTime() or other
+      new Date(resData.process_started) - new Date(resData.submit_time),
+    )}`,
+  )
+  logger.info(
+    `${prefix}Running time: ${millToHumanReadable(
+      // @ts-expect-error TODO: fix this, it's incorrect, should new Date().getTime() or other
+      new Date(resData.process_finished) - new Date(resData.process_started),
+    )}`,
+  )
 }
