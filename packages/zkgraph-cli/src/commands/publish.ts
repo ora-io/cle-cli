@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import to from 'await-to-js'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, logDivider } from '../utils'
+import { loadJsonRpcProviderUrl, logDivider, logLoadingAnimation } from '../utils'
 import type { UserConfig } from '../../dist/index.cjs'
 
 export interface PublishOptions {
@@ -38,7 +38,11 @@ export async function publish(options: PublishOptions) {
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
 
-  const [err, publishTxHash] = await to(zkgapi.publish(
+  logger.info('[*] Please wait for publish tx... (estimated: 30 sec)')
+
+  const loading = logLoadingAnimation()
+
+  const [err, txReceipt] = await to(zkgapi.publish(
     { wasmUint8Array, zkgraphYaml },
     zkWasmProviderUrl,
     provider,
@@ -48,20 +52,28 @@ export async function publish(options: PublishOptions) {
     true,
   ))
   if (err) {
+    loading.stopAndClear()
     if (err instanceof zkgapi.Error.GraphAlreadyExist) {
       logger.error(`[-] PUBLISH FAILED. ${err.message}`)
-      return publishTxHash
+      return txReceipt?.transactionHash
     }
     else {
       throw err
     }
   }
 
-  if (publishTxHash === '')
+  loading.stopAndClear()
+  logger.info('[+] ZKGRAPH PUBLISHED SUCCESSFULLY!')
+  logger.info(
+      `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${txReceipt.networkName}`,
+  )
+  logger.info(`[*] Transaction hash: ${txReceipt.transactionHash}`)
+
+  if (txReceipt.transactionHash === '')
     logger.error('[-] PUBLISH FAILED.')
 
   else
-    logger.info(`[*] PUBLISH TX HASH: ${publishTxHash}`)
+    logger.info(`[*] PUBLISH TX HASH: ${txReceipt.transactionHash}`)
 
-  return publishTxHash
+  return txReceipt.transactionHash
 }
