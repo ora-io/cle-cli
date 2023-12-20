@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import to from 'await-to-js'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, logDivider, logLoadingAnimation } from '../utils'
+import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, logLoadingAnimation } from '../utils'
 import type { UserConfig } from '../../dist/index.cjs'
 
 export interface PublishOptions {
@@ -25,7 +25,7 @@ export async function publish(options: PublishOptions) {
   }
   const newBountyRewardPerTrigger = bountyRewardPerTrigger * 10 ** 9
 
-  const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const zkgraphYaml = loadYamlFromPath(yamlPath)
   if (!zkgraphYaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return

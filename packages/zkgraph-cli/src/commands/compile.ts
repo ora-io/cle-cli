@@ -6,7 +6,7 @@ import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { codegen, createOnNonexist, fromHexString, randomUniqueKey } from '../utils'
+import { codegen, createOnNonexist, fromHexString, loadYamlFromPath, randomUniqueKey } from '../utils'
 import { logger } from '../logger'
 import { parseTemplateTag } from '../tag'
 import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
@@ -53,7 +53,7 @@ async function compileLocal(options: CompileOptions) {
     return false
   }
 
-  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const yaml = loadYamlFromPath(yamlPath)
   if (!yaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return false
@@ -61,6 +61,10 @@ async function compileLocal(options: CompileOptions) {
 
   // general compile based on dsp. so local should be a boolean var rather than 'true'
   const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
+  if (!dsp) {
+    logger.error('[-] ERROR: Failed to get DSP')
+    return false
+  }
 
   // for CODE_GEN code, define imported lib function name
   const libDSPName = dsp.getLibDSPName()

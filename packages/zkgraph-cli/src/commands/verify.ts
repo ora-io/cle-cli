@@ -1,7 +1,7 @@
 // import fs from 'node:fs'
-import { Error, ZkGraphYaml, getVerifyProofParamsByTaskID, verify as verifyApi } from '@hyperoracle/zkgraph-api'
+import { Error, getVerifyProofParamsByTaskID, verify as verifyApi } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, logDivider } from '../utils'
+import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider } from '../utils'
 import type { UserConfig } from '../config'
 // import { AggregatorVerifierAddress } from '../constants'
 
@@ -15,7 +15,7 @@ export async function verify(options: VerifyOptions) {
   logger.info('>> VERIFY PROOF ONCHAIN')
   const { yamlPath, taskId, zkWasmProviderUrl, jsonRpcProviderUrl } = options
 
-  const zkgraphYaml = ZkGraphYaml.fromYamlPath(yamlPath)
+  const zkgraphYaml = loadYamlFromPath(yamlPath)
   if (!zkgraphYaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return

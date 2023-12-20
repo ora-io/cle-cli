@@ -1,7 +1,7 @@
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import { ethers } from 'ethers'
 import type { UserConfig } from '../config'
-import { loadJsonRpcProviderUrl, logLoadingAnimation } from '../utils'
+import { loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation } from '../utils'
 import { logger } from '../logger'
 
 export interface DepositOptions {
@@ -14,7 +14,7 @@ export interface DepositOptions {
 
 export async function deposit(options: DepositOptions) {
   const { jsonRpcProviderUrl, deployedContractAddress, depositAmount, userPrivateKey, yamlPath } = options
-  const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const zkgraphYaml = loadYamlFromPath(yamlPath)
   if (!zkgraphYaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return

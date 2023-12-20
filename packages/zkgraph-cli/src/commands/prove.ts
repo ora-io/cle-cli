@@ -3,7 +3,7 @@ import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, logLoadingAnimation, taskPrettyPrint, validateProvider } from '../utils'
+import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation, taskPrettyPrint, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
@@ -39,7 +39,7 @@ export async function prove(options: ProveOptions) {
     outputProofFilePath,
   } = options
 
-  const yaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const yaml = loadYamlFromPath(yamlPath)
   if (!yaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return

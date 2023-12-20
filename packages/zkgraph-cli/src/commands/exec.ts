@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import to from 'await-to-js'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import ethres from 'ethers'
-import { generateDspHubParams, loadJsonRpcProviderUrl, toHexString } from '../utils'
+import { generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, toHexString } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
@@ -17,7 +17,7 @@ export interface ExecOptions {
 export async function exec(options: ExecOptions) {
   const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
 
-  const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
+  const zkgraphYaml = loadYamlFromPath(yamlPath)
   if (!zkgraphYaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return
