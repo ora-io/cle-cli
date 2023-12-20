@@ -55,7 +55,7 @@ export async function publish(options: PublishOptions) {
     loading.stopAndClear()
     if (err instanceof zkgapi.Error.GraphAlreadyExist) {
       logger.error(`[-] PUBLISH FAILED. ${err.message}`)
-      return txReceipt?.transactionHash
+      return
     }
     else {
       throw err
