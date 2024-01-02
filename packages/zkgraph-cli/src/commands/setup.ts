@@ -26,7 +26,12 @@ export async function setup(options: SetupOptions) {
 
   const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
   if (deatails[0]?.data.result[0] !== null) {
-    logger.error('[*] IMAGE ALREADY EXISTS')
+    const taskDetails = deatails[0]?.data.result[0]
+    logger.warn('[*] IMAGE ALREADY EXISTS')
+    logger.info(
+      `[+] SET UP STATUS: ${taskDetails?.status}`,
+    )
+    logger.info(`[+] SET UP TASK ID: ${taskDetails.setup_task_id}`)
     return
   }
 
