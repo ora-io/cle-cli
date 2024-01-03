@@ -151,7 +151,7 @@ See also: [Verifier Contract Interface](https://github.com/DelphinusLab/halo2agg
 
 #### Usage
 ```bash
-zkgraph publish <ipfs_hash> <bounty_reward_per_trigger>
+zkgraph publish <ipfs_hash> [bounty_reward_per_trigger]
 ```
 
 #### Arguments
@@ -159,7 +159,7 @@ zkgraph publish <ipfs_hash> <bounty_reward_per_trigger>
 | Arguments                     | Description                                                |
 | ----------------------------- | ---------------------------------------------------------- |
 | `<ipfs hash>`                 | IPFS hash of uploaded zkGraph                              |
-| `<bounty reward per trigger>` | Bounty reward per trigger in ETH                           |
+| `[bounty reward per trigger]` | Bounty reward per trigger in ETH                           |
 
 ### Deposit
 

@@ -17,13 +17,13 @@ export interface PublishOptions {
 }
 
 export async function publish(options: PublishOptions) {
-  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger, yamlPath, wasmPath, zkWasmProviderUrl } = options
+  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger = 0, yamlPath, wasmPath, zkWasmProviderUrl } = options
   logger.info('>> PUBLISH ZKGRAPH')
   if (isNaN(bountyRewardPerTrigger)) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
     logDivider()
   }
-  const newBountyRewardPerTrigger = bountyRewardPerTrigger * 10 ** 9
+  const newBountyRewardPerTrigger = (Number(bountyRewardPerTrigger) || 0) * 10 ** 9
 
   const zkgraphYaml = zkgapi.ZkGraphYaml.fromYamlPath(yamlPath)
   if (!zkgraphYaml) {
