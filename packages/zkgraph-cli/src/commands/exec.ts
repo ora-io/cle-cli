@@ -57,7 +57,6 @@ export async function exec(options: ExecOptions) {
     zkgraphExecutable,
     execParams,
     local,
-    true,
   )
 
   logger.info(`[+] ZKGRAPH STATE OUTPUT: ${toHexString(state)}\n`)

@@ -49,7 +49,6 @@ export async function publish(options: PublishOptions) {
     ipfsHash,
     newBountyRewardPerTrigger,
     signer,
-    true,
   ))
   if (err) {
     loading.stopAndClear()

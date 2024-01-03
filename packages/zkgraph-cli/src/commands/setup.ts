@@ -70,7 +70,7 @@ export async function setup(options: SetupOptions) {
   logger.info('[*] Please wait for image set up... (estimated: 1-5 min)')
   const loading = logLoadingAnimation()
 
-  const result = await waitSetup(zkWasmProviderUrl, taskId, true)
+  const result = await waitSetup(zkWasmProviderUrl, taskId)
   loading.stopAndClear()
   taskPrettyPrint(result?.taskDetails, '[*] ')
   const taskStatus = result?.taskDetails?.status === 'Done' ? 'SUCCESS' : 'FAILED'

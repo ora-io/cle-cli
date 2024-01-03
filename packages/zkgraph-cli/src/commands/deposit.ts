@@ -37,7 +37,6 @@ export async function deposit(options: DepositOptions) {
     signer,
     deployedContractAddress,
     depositAmount,
-    true,
   )
 
   loading.stopAndClear()

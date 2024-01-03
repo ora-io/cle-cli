@@ -106,7 +106,6 @@ export async function prove(options: ProveOptions) {
     zkgraphExecutable,
     proveParams,
     local,
-    true,
   )
 
   if (inputgen) {
@@ -214,7 +213,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   const loading = logLoadingAnimation()
 
-  const [err, result] = await to(zkgapi.waitProve(zkWasmProviderUrl, taskId, true))
+  const [err, result] = await to(zkgapi.waitProve(zkWasmProviderUrl, taskId))
 
   if (err) {
     loading.stopAndClear()
