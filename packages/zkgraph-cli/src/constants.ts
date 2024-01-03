@@ -31,28 +31,6 @@ export const TAGS = {
   root: process.cwd(),
 }
 
-export const COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE = 'entry_[salt].[env].ts'
-
-export const COMPILE_CODEGEN = (libDSPName: string, mappingFileName: string, handleFuncName: string) => `
-import { zkmain_lib, asmain_lib, registerHandle } from "@hyperoracle/zkgraph-lib/dsp/${libDSPName}"
-import { ${handleFuncName} } from "./${mappingFileName}"
-
-declare function __call_as_start(): void;
-
-export function zkmain(): void {
-  __call_as_start();
-  registerHandle(${handleFuncName})
-  return zkmain_lib()
-}
-
-export function asmain(): Uint8Array {
-  __call_as_start();
-  registerHandle(${handleFuncName})
-  return asmain_lib()
-}
-function abort(a: usize, b: usize, c: u32, d: u32): void {}
-`
-
 export const NETWORKS = [
   {
     name: 'Sepolia',

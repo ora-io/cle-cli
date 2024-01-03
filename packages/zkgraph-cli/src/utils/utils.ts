@@ -20,21 +20,6 @@ export function toHexString(uint8array: Uint8Array) {
   return Buffer.from(uint8array).toString('hex')
 }
 
-/**
- * Generate a random key
- * @param length
- * @returns
- */
-export const randomUniqueKey = (length = 6) => {
-  const chars = 'abcdefghijklmnopqrstuvwxyz1234567890'
-  const maxPos = chars.length
-  let key = ''
-  for (let i = 0; i < length; i++)
-    key += chars.charAt(Math.floor(Math.random() * maxPos))
-
-  return key
-}
-
 export function convertToMd5(value: Uint8Array): string {
   const md5 = new Md5()
   md5.appendByteArray(value)

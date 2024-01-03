@@ -1,4 +1,3 @@
-import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import to from 'await-to-js'
@@ -6,10 +5,9 @@ import FormData from 'form-data'
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
-import { codegen, createOnNonexist, fromHexString, loadYamlFromPath, randomUniqueKey } from '../utils'
+import webjson from '@hyperoracle/zkgraph-lib/test/weblib/weblib.json'
+import { createOnNonexist, fromHexString, loadYamlFromPath } from '../utils'
 import { logger } from '../logger'
-import { parseTemplateTag } from '../tag'
-import { COMPILE_CODEGEN, COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE } from '../constants'
 import { checkExecExist } from '../utils/system'
 
 export interface CompileOptions {
@@ -20,8 +18,6 @@ export interface CompileOptions {
   watPath: string
   mappingPath: string
 }
-
-const wasmStartName = '__as_start'
 
 export async function compile(options: CompileOptions) {
   const {
@@ -59,39 +55,24 @@ async function compileLocal(options: CompileOptions) {
     return false
   }
 
-  // general compile based on dsp. so local should be a boolean var rather than 'true'
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
-  if (!dsp) {
-    logger.error('[-] ERROR: Failed to get DSP')
+  const res = await zkgapi.compile({ zkgraphYaml: yaml }, {
+    ...webjson,
+    'mapping.ts': getMappingContent(mappingPath),
+  }, { isLocal: local })
+
+  if (res.error) {
+    logger.error(`[-] COMPILATION ERROR. ${res.error.message}`)
     return false
   }
+  const wasmContent = res.outputs['inner_pre_pre.wasm']
+  const watContent = res.outputs['inner_pre_pre.wat']
 
-  // for CODE_GEN code, define imported lib function name
-  const libDSPName = dsp.getLibDSPName()
-
-  const mappingFileName = yaml.mapping.file
-  const handleFuncName = yaml.mapping.handler
-
-  // for entry file name only, not important.
-  const dspKey = zkgapi.dspHub.toHubKeyByYaml(yaml, { isLocal: local })
-
-  const srcDirPath = path.join(mappingPath, '..')
-  const entryFilename = getEntryFilename(dspKey)
-  const entryFilePath = await codegen(srcDirPath, entryFilename, COMPILE_CODEGEN(libDSPName, mappingFileName, handleFuncName))
-
-  // const innerPrePrePath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
   createOnNonexist(wasmPath)
 
-  // const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), innerPrePrePath, `${innerPrePrePath}.wat`))
-  const [compileErr] = await to(ascCompile(path.join(srcDirPath, entryFilePath), wasmPath, watPath))
+  fs.writeFileSync(wasmPath, wasmContent)
+  fs.writeFileSync(watPath, watContent)
 
-  if (compileErr) {
-    logger.error(`[-] COMPILATION ERROR. ${compileErr.message}`)
-    return false
-  }
   return true
-
-  // logCompileResult(wasmPath, watPath)
 }
 
 async function compileServer(options: CompileOptions) {
@@ -156,33 +137,6 @@ async function compileServer(options: CompileOptions) {
   fs.writeFileSync(watPath, wasmWat)
 
   return true
-  // logCompileResult(wasmPath, watPath)
-}
-
-async function ascCompile(entryFilePath: string, outputWasmPath: string, outputWatPath: string) {
-  const abortPath = getAbortTsFilepath(entryFilePath)
-
-  let commands: string[] = [
-    'npx asc',
-  ]
-  const common = [
-    `-o ${outputWasmPath}`,
-    `-t ${outputWatPath}`,
-    '-O', '--noAssert',
-    '--disable', 'bulk-memory',
-    '--disable', 'mutable-globals',
-    '--exportRuntime',
-    '--exportStart', wasmStartName,
-    '--memoryBase', '70000',
-    '--runtime stub',
-  ]
-  commands = commands.concat([
-    entryFilePath,
-    '--use', `abort=${abortPath}`,
-  ])
-  commands = commands.concat(common)
-
-  return await execAndRmSync(commands.join(' '), entryFilePath)
 }
 
 function logCompileResult(wasmPath: string, watPath: string): void {
@@ -195,27 +149,6 @@ function logCompileResult(wasmPath: string, watPath: string): void {
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
 }
 
-async function execAndRmSync(command: string, filepath: string) {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      execSync(command)
-      // norman: rmSync should seperate from execSync
-      fs.rmSync(filepath)
-      resolve()
-    }
-    catch (error) {
-      reject(error)
-    }
-  })
-}
-
-function getEntryFilename(env: string) {
-  return parseTemplateTag(COMPILE_TEMP_ENTRY_FILE_NAME_TEMPLATE, {
-    env,
-    salt: randomUniqueKey(10),
-  })
-}
-
-function getAbortTsFilepath(innerTsFilePath: string) {
-  return `${innerTsFilePath.replace(process.cwd(), '').substring(1).replace('.ts', '')}/abort`.replaceAll('\\', '/')
+function getMappingContent(filepath: string) {
+  return fs.readFileSync(filepath, 'utf-8')
 }
