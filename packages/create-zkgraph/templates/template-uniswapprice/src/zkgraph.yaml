@@ -16,7 +16,8 @@ mapping:
   file: ./mapping.ts
   handler: handleBlocks
 
-dataDestinations:
-  - kind: ethereum
-    network: sepolia
-    address: "0x0000000000000000000000000000000000000001"
+# Only enable for using zkAutomation
+# dataDestinations:
+#   - kind: ethereum
+#     network: sepolia
+#     address: "0x0000000000000000000000000000000000000001"
