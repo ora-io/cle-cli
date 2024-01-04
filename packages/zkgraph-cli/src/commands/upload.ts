@@ -1,12 +1,13 @@
+import fs from 'node:fs'
 import { upload as uploadApi } from '@hyperoracle/zkgraph-api'
-// import { computeAddress } from 'ethers/lib/utils.js'
+import { computeAddress } from 'ethers/lib/utils'
 import { logger } from '../logger'
-import { checkPinataAuthentication } from '../utils'
+import { checkPinataAuthentication, loadYamlFromPath } from '../utils'
 
 export interface UploadOptions {
   local: boolean
   wasmPath: string
-  // userPrivateKey: string
+  userPrivateKey: string
   yamlPath: string
   pinataEndpoint: string
   pinataJWT: string
@@ -16,24 +17,34 @@ export interface UploadOptions {
 export async function upload(options: UploadOptions) {
   logger.info('>> UPLOAD')
 
-  const { wasmPath, yamlPath, mappingPath, pinataEndpoint, pinataJWT } = options
+  const { wasmPath, yamlPath, mappingPath, pinataEndpoint, pinataJWT, userPrivateKey } = options
 
   if (!await checkPinataAuthentication(pinataJWT)) {
     logger.error('[-] PINATA AUTHENTICATION FAILED.')
     return
   }
 
-  // TODO: can we rm user addr from ipfs dir name?
-  // const userAddress = computeAddress(userPrivateKey).toLowerCase()
+  const yaml = loadYamlFromPath(yamlPath)
+
+  const userAddress = computeAddress(userPrivateKey).toLowerCase()
+
+  const mappingFile = fs.createReadStream(mappingPath)
+  const wasmFile = fs.createReadStream(wasmPath)
+  const yamlFile = fs.createReadStream(yamlPath)
+  const files = {
+    'mapping.ts': mappingFile,
+    'zkgraph.wasm': wasmFile,
+    'zkgraph.yaml': yamlFile,
+  }
 
   const { isUploadSuccess, response, errorMessage } = await uploadApi(
-    mappingPath,
-    wasmPath,
-    yamlPath,
-    // userAddress,
+    files,
+    {
+      userAddress,
+      graphName: yaml.name,
+    },
     pinataEndpoint,
     pinataJWT,
-    // true,
   )
   if (isUploadSuccess) {
     logger.info('[+] IPFS UPLOAD SUCCESS!')

@@ -1,4 +1,5 @@
-import type { ZkGraphYaml } from '@hyperoracle/zkgraph-api'
+import fs from 'node:fs'
+import { ZkGraphYaml } from '@hyperoracle/zkgraph-api'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
@@ -43,4 +44,16 @@ export function loadJsonRpcProviderUrl(yaml: Partial<ZkGraphYaml>, configJsonRpc
   }
 
   return JsonRpcProviderUrl
+}
+
+export function loadYamlFromPath(path: string) {
+  let fileContents = ''
+  try {
+    // Read the YAML file contents
+    fileContents = fs.readFileSync(path, 'utf8')
+  }
+  catch (error) {
+    console.error(error)
+  }
+  return ZkGraphYaml.fromYamlContent(fileContents)
 }

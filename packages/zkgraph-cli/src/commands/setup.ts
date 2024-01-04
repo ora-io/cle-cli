@@ -3,6 +3,7 @@ import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/zkgraph-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
 import { getDispatcher, uploadWasmToTd } from '../utils/td'
+import { logLoadingAnimation, taskPrettyPrint } from '../utils'
 
 export interface SetupOptions {
   wasmPath: string
@@ -25,7 +26,12 @@ export async function setup(options: SetupOptions) {
 
   const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
   if (deatails[0]?.data.result[0] !== null) {
-    logger.error('[*] IMAGE ALREADY EXISTS')
+    const taskDetails = deatails[0]?.data.result[0]
+    logger.warn('[*] IMAGE ALREADY EXISTS')
+    logger.info(
+      `[+] SET UP STATUS: ${taskDetails?.status}`,
+    )
+    logger.info(`[+] SET UP TASK ID: ${taskDetails.setup_task_id}`)
     return
   }
 
@@ -61,7 +67,15 @@ export async function setup(options: SetupOptions) {
     return
   }
   logger.info(`[+] SETUP TASK STARTED. TASK ID: ${taskId}`)
+  logger.info('[*] Please wait for image set up... (estimated: 1-5 min)')
+  const loading = logLoadingAnimation()
 
-  const result = await waitSetup(zkWasmProviderUrl, taskId, true)
+  const result = await waitSetup(zkWasmProviderUrl, taskId)
+  loading.stopAndClear()
+  taskPrettyPrint(result?.taskDetails, '[*] ')
+  const taskStatus = result?.taskDetails?.status === 'Done' ? 'SUCCESS' : 'FAILED'
+  logger.info(
+    `[${taskStatus === 'SUCCESS' ? '+' : '-'}] SET UP ${taskStatus}`,
+  )
   return result
 }
