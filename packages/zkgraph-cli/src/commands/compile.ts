@@ -8,7 +8,6 @@ import * as zkgapi from '@hyperoracle/zkgraph-api'
 import webjson from '@hyperoracle/zkgraph-lib/test/weblib/weblib.json'
 import { createOnNonexist, fromHexString, loadYamlFromPath } from '../utils'
 import { logger } from '../logger'
-import { checkExecExist } from '../utils/system'
 
 export interface CompileOptions {
   local: boolean
@@ -25,10 +24,6 @@ export async function compile(options: CompileOptions) {
     watPath,
     local,
   } = options
-  if (!checkExecExist('asc') || !checkExecExist('npx asc')) {
-    logger.error('[-] Please install assemblyscript in your package, you can run: npm install assemblyscript --save-dev')
-    return
-  }
 
   const succ = local ? await compileLocal(options) : await compileServer(options)
 
