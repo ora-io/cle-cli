@@ -2,8 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import to from 'await-to-js'
 import FormData from 'form-data'
-import type { AxiosRequestConfig } from 'axios'
-import axios from 'axios'
 import * as zkgapi from '@hyperoracle/zkgraph-api'
 import webjson from '@hyperoracle/zkgraph-lib/test/weblib/weblib.json'
 import { createOnNonexist, fromHexString, loadYamlFromPath } from '../utils'
@@ -25,13 +23,13 @@ export async function compile(options: CompileOptions) {
     local,
   } = options
 
-  const succ = local ? await compileLocal(options) : await compileServer(options)
+  const succ = local ? await compileBasic(options) : await compileServer(options)
 
   if (succ)
     logCompileResult(wasmPath, watPath)
 }
 
-async function compileLocal(options: CompileOptions) {
+async function compileBasic(options: CompileOptions) {
   const {
     yamlPath,
     wasmPath,
@@ -88,7 +86,7 @@ async function compileServer(options: CompileOptions) {
   // set to tmp wasm path when local compile
   options.wasmPath = tmpWasmPath
 
-  const succ = await compileLocal(options)
+  const succ = await compileBasic(options)
   if (!succ)
     return false
   // set back origin value
@@ -100,18 +98,7 @@ async function compileServer(options: CompileOptions) {
   data.append('wasmFile', fs.createReadStream(tmpWasmPath))
   data.append('yamlFile', fs.createReadStream(yamlPath))
 
-  // Set up request config
-  const requestConfig: AxiosRequestConfig = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: compilerServerEndpoint,
-    headers: {
-      ...data.getHeaders(),
-    },
-    data,
-    timeout: 50000,
-  }
-  const [requestErr, response] = await to(axios.request(requestConfig))
+  const [requestErr, response] = await to(zkgapi.compileRequest(compilerServerEndpoint, data))
 
   if (requestErr) {
     console.error(requestErr)
