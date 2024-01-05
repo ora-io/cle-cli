@@ -57,6 +57,10 @@ async function compileBasic(options: CompileOptions) {
     logger.error(`[-] COMPILATION ERROR. ${res.error.message}`)
     return false
   }
+  if (res.stderr.toString()) {
+    logger.error(`[-] COMPILATION ERROR. ${res.stderr.toString()}`)
+    return false
+  }
   const wasmContent = res.outputs['inner_pre_pre.wasm']
   const watContent = res.outputs['inner_pre_pre.wat']
 
