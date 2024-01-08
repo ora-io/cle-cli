@@ -55,7 +55,7 @@ export const NETWORKS = [
 
 export const TdConfig = {
   fee: '0.005',
-  contract: '0x25AA9Ec3CA462f5AEA7fbd83A207E29Df4691380',
+  contract: '0x47C7FC91bf15b2Af9075f55Ae0F57ce18b1328B3',
   queryrApi: 'https://zkwasm.hyperoracle.io/td',
   providerUrl: 'https://ethereum-sepolia.publicnode.com',
 }
