@@ -1,0 +1,27 @@
+{
+  "name": "cle-multiaddr-starter",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "compile-local": "cle compile --local",
+    "setup-local": "cle setup --local",
+    "exec-local": "cle exec --local",
+    "prove-local": "cle prove --local",
+    "upload-local": "cle upload --local",
+    "compile": "cle compile",
+    "setup": "cle setup",
+    "exec": "cle exec",
+    "prove": "cle prove",
+    "upload": "cle upload",
+    "verify": "cle verify",
+    "publish": "cle publish"
+  },
+  "dependencies": {
+    "@hyperoracle/cle-lib": "^1.0.0-alpha.0"
+  },
+  "devDependencies": {
+    "@hyperoracle/cle-cli": "1.0.0-alpha.0",
+    "assemblyscript": "^0.27.0"
+  }
+}

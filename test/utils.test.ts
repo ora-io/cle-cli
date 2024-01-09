@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { checkPinataAuthentication, fromHexString } from '../packages/zkgraph-cli/src/utils'
+import { checkPinataAuthentication, fromHexString } from '../packages/cle-cli/src/utils'
 
 describe('utils', () => {
   it('test fromHexString', () => {

@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { exec } from '../packages/zkgraph-cli/src/commands/exec'
+import { exec } from '../packages/cle-cli/src/commands/exec'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const washPath = process.cwd()
@@ -13,8 +13,8 @@ const jsonRpcProviderUrl = {
 
 describe('exec', () => {
   it('full', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(washPath, 'temp/zkgraph_full.wasm')
+    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+    const wasmPath = path.join(washPath, 'temp/cle_full.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return
@@ -32,8 +32,8 @@ describe('exec', () => {
   }, 100000)
 
   it.skip('local', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
+    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+    const wasmPath = path.join(washPath, 'temp/cle_local.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return

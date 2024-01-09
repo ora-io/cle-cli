@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { describe, it } from 'vitest'
-import { prove } from '../packages/zkgraph-cli/src/commands/prove'
+import { prove } from '../packages/cle-cli/src/commands/prove'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const washPath = process.cwd()
@@ -20,8 +20,8 @@ const expectedStateStr = 'a60ecf32309539dd84f27a9563754dca818b815e'
 
 describe('prove', () => {
   it('full inputgen mode', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(washPath, 'temp/zkgraph_full.wasm')
+    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+    const wasmPath = path.join(washPath, 'temp/cle_full.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return
@@ -43,8 +43,8 @@ describe('prove', () => {
   }, 100000)
 
   it.skip('local inputgen mode', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
+    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+    const wasmPath = path.join(washPath, 'temp/cle_local.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return
@@ -66,8 +66,8 @@ describe('prove', () => {
   }, 100000)
 
   it.skip('local test mode', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'zkgraph.yaml')
-    const wasmPath = path.join(washPath, 'temp/zkgraph_local.wasm')
+    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+    const wasmPath = path.join(washPath, 'temp/cle_local.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return

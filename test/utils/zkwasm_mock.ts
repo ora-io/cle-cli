@@ -1,4 +1,4 @@
-import { ZKGraphRequireFailed } from './error'
+import { CLERequireFailed } from './error'
 import { fromHexString, toHexString } from './utils'
 
 /* eslint-disable no-console */
@@ -96,7 +96,7 @@ export class ZKWASMMock {
   static require(a: any) {
     if (!a) {
     //   console.log("[-] zkwasm require condition is false");
-      throw new ZKGraphRequireFailed('Abort execution since the require condition is false.')
+      throw new CLERequireFailed('Abort execution since the require condition is false.')
       // TODO: change to graceful kill rather than throw Error?
     }
   }
