@@ -1,5 +1,5 @@
 {
-  "name": "@hyperoracle/zkgraph-cli",
+  "name": "@hyperoracle/cle-cli",
   "version": "1.0.0-alpha.0",
   "packageManager": "pnpm@8.6.0",
   "description": "",
