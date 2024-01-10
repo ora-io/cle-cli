@@ -37,15 +37,15 @@ async function release() {
 }
 
 async function updateTemplateVersion() {
-  const createZkGraphPath = path.resolve(rootDir, 'packages', 'create-zkgraph')
+  const createZkGraphPath = path.resolve(rootDir, 'packages', 'create-cle')
   const dirs = await fg('templates/template-*', { cwd: createZkGraphPath, onlyDirectories: true, markDirectories: true })
 
   for (const dir of dirs) {
     const packageJSON = await fs.readJSON(path.join(createZkGraphPath, dir, 'package.json'))
-    if (Reflect.has(packageJSON.devDependencies, '@hyperoracle/zkgraph-cli'))
-      packageJSON.devDependencies['@hyperoracle/zkgraph-cli'] = version
-    else if (Reflect.has(packageJSON.dependencies, '@hyperoracle/zkgraph-cli'))
-      packageJSON.dependencies['@hyperoracle/zkgraph-cli'] = version
+    if (Reflect.has(packageJSON.devDependencies, '@hyperoracle/cle-cli'))
+      packageJSON.devDependencies['@hyperoracle/cle-cli'] = version
+    else if (Reflect.has(packageJSON.dependencies, '@hyperoracle/cle-cli'))
+      packageJSON.dependencies['@hyperoracle/cle-cli'] = version
     await fs.writeJSON(path.join(createZkGraphPath, dir, 'package.json'), packageJSON, { spaces: 2 })
   }
 }
