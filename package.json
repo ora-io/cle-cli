@@ -1,6 +1,6 @@
 {
   "name": "@hyperoracle/monorepo",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "keywords": [],
