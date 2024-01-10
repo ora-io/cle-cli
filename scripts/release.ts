@@ -17,8 +17,8 @@ if (oldVersion === version) {
 }
 
 async function release() {
-  for (const name of packages) {
-    const packageRoot = path.resolve(rootDir, 'packages', name)
+  for (const pkg of packages) {
+    const packageRoot = path.resolve(rootDir, 'packages', pkg.dir)
     const packageJSON = await fs.readJSON(path.join(packageRoot, 'package.json'))
     packageJSON.version = version
     await fs.writeJSON(path.join(packageRoot, 'package.json'), packageJSON, { spaces: 2 })
@@ -42,10 +42,10 @@ async function updateTemplateVersion() {
 
   for (const dir of dirs) {
     const packageJSON = await fs.readJSON(path.join(createZkGraphPath, dir, 'package.json'))
-    if (Reflect.has(packageJSON.devDependencies, '@hyperoracle/cle-cli'))
-      packageJSON.devDependencies['@hyperoracle/cle-cli'] = version
-    else if (Reflect.has(packageJSON.dependencies, '@hyperoracle/cle-cli'))
-      packageJSON.dependencies['@hyperoracle/cle-cli'] = version
+    if (Reflect.has(packageJSON.devDependencies, '@hyperoracle/cle-cli-test'))
+      packageJSON.devDependencies['@hyperoracle/cle-cli-test'] = version
+    else if (Reflect.has(packageJSON.dependencies, '@hyperoracle/cle-cli-test'))
+      packageJSON.dependencies['@hyperoracle/cle-cli-test'] = version
     await fs.writeJSON(path.join(createZkGraphPath, dir, 'package.json'), packageJSON, { spaces: 2 })
   }
 }

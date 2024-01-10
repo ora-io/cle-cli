@@ -23,7 +23,7 @@
     "@hyperoracle/cle-lib-test": "^1.0.1-alpha.0"
   },
   "devDependencies": {
-    "@hyperoracle/cle-cli-test": "1.0.0-alpha.0",
+    "@hyperoracle/cle-cli-test": "1.0.0-alpha.2",
     "assemblyscript": "^0.27.0"
   }
 }

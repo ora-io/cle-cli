@@ -36,8 +36,8 @@ async function build() {
 }
 
 async function buildMetaFiles() {
-  for (const name of haveWorkspacePackages) {
-    const packageRoot = path.resolve(rootDir, 'packages', name)
+  for (const pkg of haveWorkspacePackages) {
+    const packageRoot = path.resolve(rootDir, 'packages', pkg.dir)
     const packageDist = path.resolve(packageRoot, 'dist')
 
     await fs.copyFile(path.join(rootDir, 'README.md'), path.join(packageDist, 'README.md'))
@@ -63,7 +63,7 @@ async function buildMetaFiles() {
 
     const packageJSON = await fs.readJSON(path.join(packageRoot, 'package.json'))
     for (const key of Object.keys(packageJSON.dependencies || {})) {
-      if (packages.includes(key))
+      if (packages.map(pkg => pkg.packName).includes(key))
         packageJSON.dependencies[key] = version
     }
     await fs.writeJSON(path.join(packageDist, 'package.json'), packageJSON, { spaces: 2 })
