@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { upload as uploadApi } from '@hyperoracle/cle-api'
+import { upload as uploadApi } from '@hyperoracle/cle-api-test'
 import { computeAddress } from 'ethers/lib/utils'
 import { logger } from '../logger'
 import { checkPinataAuthentication, loadYamlFromPath } from '../utils'

@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import to from 'await-to-js'
-import * as zkgapi from '@hyperoracle/cle-api'
+import * as zkgapi from '@hyperoracle/cle-api-test'
 import ethres from 'ethers'
 import { generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, toHexString } from '../utils'
 import { logger } from '../logger'

@@ -17,12 +17,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hyperoracle/cle-cli": "workspace:*"
+    "@hyperoracle/cle-cli-test": "workspace:*"
   },
   "devDependencies": {
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/cle-lib": "^1.0.0-alpha.0",
+    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.0",
     "@murongg/eslint-config": "^0.2.1",
     "@types/fs-extra": "^11.0.2",
     "@types/node": "^18.18.4",

@@ -1,4 +1,4 @@
-import { dspHub } from '@hyperoracle/cle-api'
+import { dspHub } from '@hyperoracle/cle-api-test'
 import { DspStaticParamsMap } from '../constants'
 
 export function getDspHubParams() {

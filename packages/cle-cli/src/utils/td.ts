@@ -4,7 +4,7 @@ import axios from 'axios'
 import axiosRetry from 'axios-retry'
 
 import { ethers } from 'ethers'
-import { TaskDispatch } from '@hyperoracle/cle-api'
+import { TaskDispatch } from '@hyperoracle/cle-api-test'
 import { TdConfig } from '../constants'
 
 axiosRetry(axios, {

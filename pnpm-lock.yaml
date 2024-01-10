@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@hyperoracle/zkgraph-cli':
+      '@hyperoracle/cle-cli-test':
         specifier: workspace:*
-        version: link:packages/zkgraph-cli
+        version: link:packages/cle-cli
     devDependencies:
       '@antfu/ni':
         specifier: ^0.21.8
@@ -18,9 +18,9 @@ importers:
       '@antfu/utils':
         specifier: ^0.7.6
         version: 0.7.6
-      '@hyperoracle/zkgraph-lib':
-        specifier: ^1.0.0-alpha.0
-        version: 1.0.0
+      '@hyperoracle/cle-lib-test':
+        specifier: ^1.0.1-alpha.0
+        version: 1.0.1-alpha.0
       '@murongg/eslint-config':
         specifier: ^0.2.1
         version: 0.2.1(eslint@8.55.0)(typescript@5.3.2)
@@ -76,35 +76,14 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4
 
-  packages/create-zkgraph:
-    devDependencies:
-      '@types/minimist':
-        specifier: ^1.2.3
-        version: 1.2.5
-      '@types/prompts':
-        specifier: ^2.4.6
-        version: 2.4.9
-      cross-spawn:
-        specifier: ^7.0.3
-        version: 7.0.3
-      kolorist:
-        specifier: ^1.8.0
-        version: 1.8.0
-      minimist:
-        specifier: ^1.2.8
-        version: 1.2.8
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
-
-  packages/zkgraph-cli:
+  packages/cle-cli:
     dependencies:
       '@antfu/utils':
         specifier: ^0.7.6
         version: 0.7.6
-      '@hyperoracle/zkgraph-api':
-        specifier: ^1.0.2-alpha.0
-        version: 1.0.2
+      '@hyperoracle/cle-api-test':
+        specifier: ^1.0.3-alpha.0
+        version: 1.0.3-alpha.0
       api:
         specifier: ^6.1.1
         version: 6.1.1(openapi-types@12.1.3)
@@ -123,9 +102,9 @@ importers:
       cac:
         specifier: ^6.7.14
         version: 6.7.14
-      create-zkgraph:
+      create-cle:
         specifier: workspace:*
-        version: link:../create-zkgraph
+        version: link:../create-cle
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
@@ -151,9 +130,9 @@ importers:
         specifier: ^0.3.11
         version: 0.3.11
     devDependencies:
-      '@hyperoracle/zkgraph-lib':
-        specifier: ^1.0.0-alpha.0
-        version: 1.0.0
+      '@hyperoracle/cle-lib-test':
+        specifier: ^1.0.1-alpha.0
+        version: 1.0.1-alpha.0
       '@types/js-yaml':
         specifier: ^4.0.6
         version: 4.0.9
@@ -163,6 +142,27 @@ importers:
       '@types/semver':
         specifier: ^7.5.3
         version: 7.5.6
+
+  packages/create-cle:
+    devDependencies:
+      '@types/minimist':
+        specifier: ^1.2.3
+        version: 1.2.5
+      '@types/prompts':
+        specifier: ^2.4.6
+        version: 2.4.9
+      cross-spawn:
+        specifier: ^7.0.3
+        version: 7.0.3
+      kolorist:
+        specifier: ^1.8.0
+        version: 1.8.0
+      minimist:
+        specifier: ^1.2.8
+        version: 1.2.8
+      prompts:
+        specifier: ^2.4.2
+        version: 2.4.2
 
 packages:
 
@@ -1198,12 +1198,13 @@ packages:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
     dev: true
 
-  /@hyperoracle/zkgraph-api@1.0.2:
-    resolution: {integrity: sha512-/KW4FQyES3fFWApqIQ2j+bST/MgcBmJ+qVmk5PnbWMrVvrSBwVASVXMrHpXz9aqUTGdsYtT+8FDGEkaY4bteXA==}
+  /@hyperoracle/cle-api-test@1.0.3-alpha.0:
+    resolution: {integrity: sha512-ebrWZC6cltcHVXxuUuesKoh4o2JHfSlpvnMwdwP6CLKpfovuD40NyGNzFbI/kswatpleTUbARxXm1ktlnb7SUg==}
     dependencies:
       '@ethereumjs/rlp': 5.0.1
       '@hyperoracle/zkwasm-service-helper': 1.0.1
       '@murongg/utils': 0.1.19
+      assemblyscript: 0.27.22
       axios: 1.6.2
       axios-retry: 3.9.1
       bn.js: 5.2.1
@@ -1220,8 +1221,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@hyperoracle/zkgraph-lib@1.0.0:
-    resolution: {integrity: sha512-ahit+i/WbwSH8mYEVQVd3m5pYkJr4/8+W413M/zXFEtNYMXojQyUjvYy+kdSy9rkwGsplx1c2uO1Fdx2WAmFSQ==}
+  /@hyperoracle/cle-lib-test@1.0.1-alpha.0:
+    resolution: {integrity: sha512-CoOswu38LfcOCY4qPffUXq+xHdaQWq9E/Clcz/KbaVAGf3sjESBLZkWtTdNR/SjDzCIF49F9JbB5iiXYG47yMw==}
     dependencies:
       assemblyscript: 0.27.22
     dev: true
@@ -1731,12 +1732,6 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/node@20.10.3:
-    resolution: {integrity: sha512-XJavIpZqiXID5Yxnxv3RUDKTN5b81ddNC3ecsA0SoFXz/QU8OGBwZGMomiq0zw+uuqbL/krztv/DINAQ/EV4gg==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
-
   /@types/normalize-package-data@2.4.4:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
@@ -1744,7 +1739,7 @@ packages:
   /@types/prompts@2.4.9:
     resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
     dependencies:
-      '@types/node': 20.10.3
+      '@types/node': 18.19.2
       kleur: 3.0.3
     dev: true
 

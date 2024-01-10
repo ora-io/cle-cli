@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { CLEYaml } from '@hyperoracle/cle-api'
+import { CLEYaml } from '@hyperoracle/cle-api-test'
 import type { UserConfig } from '../config'
 import { logger } from '../logger'
 import { logDivider } from './log'
