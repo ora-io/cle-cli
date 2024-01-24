@@ -4,7 +4,7 @@ import to from 'await-to-js'
 import FormData from 'form-data'
 import * as zkgapi from '@hyperoracle/cle-api-test'
 import webjson from '@hyperoracle/cle-lib-test/test/weblib/weblib.json'
-import { createOnNonexist, fromHexString, loadYamlFromPath } from '../utils'
+import { createOnNonexist, fromHexString, isTsFile, loadYamlFromPath } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
@@ -48,12 +48,15 @@ async function compileBasic(options: CompileOptions) {
     return false
   }
 
+  const paths = getFileTreeByDir(path.dirname(mappingPath))
+  const relativePaths = getRelativePaths(path.dirname(mappingPath), paths)
+  const fileMap = getFileContentsByFilePaths(relativePaths, path.dirname(mappingPath))
   const res = await zkgapi.compile({ cleYaml: yaml }, {
     ...webjson,
-    'mapping.ts': getMappingContent(mappingPath),
+    ...fileMap,
   }, { isLocal: local })
 
-  if (res.error || res.stderr) {
+  if (res.error) {
     logger.error(`[-] COMPILATION ERROR. ${res.error?.message}`)
     logger.error(`[-] ${res.stderr.toString()}`)
     return false
@@ -132,6 +135,36 @@ function logCompileResult(wasmPath: string, watPath: string): void {
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
 }
 
-function getMappingContent(filepath: string) {
-  return fs.readFileSync(filepath, 'utf-8')
+function getFileTreeByDir(dir: string) {
+  const fileTree: string[] = []
+  const files = fs.readdirSync(dir)
+  for (const file of files) {
+    const filePath = path.join(dir, file)
+    if (fs.statSync(filePath).isDirectory()) {
+      const subFiles = getFileTreeByDir(filePath)
+      fileTree.push(...subFiles)
+    }
+    else if (isTsFile(file)) {
+      fileTree.push(filePath)
+    }
+  }
+  return fileTree
+}
+
+function getRelativePaths(dir: string, filePaths: string[]): string[] {
+  const relativePaths: string[] = []
+  for (const filePath of filePaths) {
+    const relativePath = path.relative(dir, filePath)
+    relativePaths.push(relativePath)
+  }
+  return relativePaths
+}
+
+function getFileContentsByFilePaths(filePaths: string[], basePath: string) {
+  const fileContents: Record<string, string> = {}
+  for (const filePath of filePaths) {
+    const fileContent = fs.readFileSync(path.join(basePath, filePath), 'utf-8')
+    Reflect.set(fileContents, filePath, fileContent)
+  }
+  return fileContents
 }
