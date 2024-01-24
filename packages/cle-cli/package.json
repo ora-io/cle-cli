@@ -1,6 +1,6 @@
 {
   "name": "@hyperoracle/cle-cli-test",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/hyperoracle/cle-cli#readme",
