@@ -53,12 +53,9 @@ async function compileBasic(options: CompileOptions) {
     'mapping.ts': getMappingContent(mappingPath),
   }, { isLocal: local })
 
-  if (res.error) {
-    logger.error(`[-] COMPILATION ERROR. ${res.error.message}`)
-    return false
-  }
-  if (res.stderr.toString()) {
-    logger.error(`[-] COMPILATION ERROR. ${res.stderr.toString()}`)
+  if (res.error || res.stderr) {
+    logger.error(`[-] COMPILATION ERROR. ${res.error?.message}`)
+    logger.error(`[-] ${res.stderr.toString()}`)
     return false
   }
   const wasmContent = res.outputs['inner_pre_pre.wasm']
