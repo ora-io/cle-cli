@@ -67,6 +67,7 @@ export async function publish(options: PublishOptions) {
       `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${txReceipt.networkName}`,
   )
   logger.info(`[*] Transaction hash: ${txReceipt.transactionHash}`)
+  logger.info(`[*] Graph address deployed at: ${txReceipt.graphAddress}`)
 
   if (txReceipt.transactionHash === '')
     logger.error('[-] PUBLISH FAILED.')
