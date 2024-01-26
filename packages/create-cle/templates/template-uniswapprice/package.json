@@ -15,7 +15,8 @@
     "prove": "cle prove",
     "upload": "cle upload",
     "verify": "cle verify",
-    "publish": "cle publish"
+    "publish": "cle publish",
+    "deposit": "cle deposit"
   },
   "dependencies": {
     "@hyperoracle/cle-lib-test": "^1.0.1-alpha.0"
