@@ -24,8 +24,8 @@ function calcPrice(syncEvent: Event): BigInt {
   const reserve0 = source.slice(0, 32);
   const reserve1 = source.slice(32, 64);
 
-  const r0 = BigInt.fromBytesBigEndian(reserve0);
-  const r1 = BigInt.fromBytesBigEndian(reserve1);
+  const r0 = BigInt.fromBytes(reserve0);
+  const r1 = BigInt.fromBytes(reserve1);
   let price0 = r0
     .times(token0_factor)
     .times(price_factor)
