@@ -45,11 +45,11 @@
     "start": "esno src/index.ts"
   },
   "peerDependencies": {
-    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.0"
+    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.1"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/cle-api-test": "^1.0.3-alpha.0",
+    "@hyperoracle/cle-api-test": "^1.0.3-alpha.3",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
