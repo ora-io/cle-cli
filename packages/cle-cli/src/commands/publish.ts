@@ -45,7 +45,6 @@ export async function publish(options: PublishOptions) {
   const [err, txReceipt] = await to(zkgapi.publish(
     { wasmUint8Array, cleYaml },
     zkWasmProviderUrl,
-    provider,
     ipfsHash,
     newBountyRewardPerTrigger,
     signer,
