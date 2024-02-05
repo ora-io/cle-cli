@@ -61,9 +61,13 @@ export async function setup(options: SetupOptions) {
 
   logger.info('[+] Transaction Confirmed. Creating Setup Task')
   const data = await dispatcher.queryTask(txhash)
+  if (!data) {
+    logger.error('[+] SETUP TASK FAILED. The task result not found \n')
+    return
+  }
   const taskId = data.task?.id
   if (!taskId) {
-    logger.error('[+] SETUP TASK FAILED. \n')
+    logger.error('[+] SETUP TASK FAILED. The task result not found \n')
     return
   }
   logger.info(`[+] SETUP TASK STARTED. TASK ID: ${taskId}`)
