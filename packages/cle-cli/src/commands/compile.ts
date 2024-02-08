@@ -60,7 +60,7 @@ async function compileBasic(options: CompileOptions) {
   }))
 
   if (err) {
-    logger.error(`[-] COMPILATION ERROR. ${err.message}`)
+    logger.error(`[-] COMPILATION ERROR. ${err.message} ${(err as any).response?.data?.message || ''}`)
     return false
   }
 
