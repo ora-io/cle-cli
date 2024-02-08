@@ -63,6 +63,10 @@ export class Logger implements CLELogger {
   }
 }
 
+export function createLogger(level: LogLevel) {
+  return new Logger(level)
+}
+
 // eslint-disable-next-line import/no-mutable-exports
 export let logger = new Logger()
 setCLELogger(logger)
