@@ -3,7 +3,7 @@ import path from 'node:path'
 import * as zkgapi from '@hyperoracle/cle-api-test'
 import webjson from '@hyperoracle/cle-lib-test/test/weblib/weblib.json'
 import to from 'await-to-js'
-import { isTsFile } from '../utils'
+import { createOnNonexist, isTsFile } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
@@ -40,6 +40,9 @@ async function compileBasic(options: CompileOptions) {
     return false
   }
 
+  createOnNonexist(wasmPath)
+  createOnNonexist(watPath)
+
   const paths = getFileTreeByDir(path.dirname(mappingPath))
   const relativePaths = getRelativePaths(path.dirname(mappingPath), paths)
   const fileMap = getFileContentsByFilePaths(relativePaths, path.dirname(mappingPath))
@@ -69,6 +72,11 @@ async function compileBasic(options: CompileOptions) {
     logger.error(`[-] ${res.stderr?.toString()}`)
     return false
   }
+
+  const outWasmHex = res?.outputs[wasmPath]
+  const outWat = res?.outputs[watPath]
+  fs.writeFileSync(wasmPath, outWasmHex)
+  fs.writeFileSync(watPath, outWat)
 
   return true
 }
