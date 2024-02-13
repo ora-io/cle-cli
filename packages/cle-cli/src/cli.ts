@@ -8,7 +8,7 @@ import { upload } from './commands/upload'
 import { verify } from './commands/verify'
 import { publish } from './commands/publish'
 import { getConfig } from './config'
-import { createLogger, logger, setLogger } from './logger'
+import { logger, setLogger } from './logger'
 import { create } from './commands/create'
 import { generateCommandUsage, proveCLIHasModeOption } from './utils'
 import { deposit } from './commands/deposit'
@@ -18,7 +18,7 @@ export async function run() {
     const cli = cac('cle')
 
     const config = await getConfig()
-    setLogger(createLogger(config.logger?.level || 'info'))
+    setLogger(logger)
 
     const { proveUsage, execUsage } = generateCommandUsage()
     cli
