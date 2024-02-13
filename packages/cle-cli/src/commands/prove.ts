@@ -209,7 +209,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
     return
   }
   logger.info(`[+] PROVE TASK STARTED. TASK ID: ${taskId}`)
-  logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTED')
+  logger.info('[+] WAITING FOR PROVE RESULT. ABOUT 3 TO 5 MINUTES')
 
   const loading = logLoadingAnimation()
 
