@@ -6,7 +6,7 @@
 </p>
 <br/>
 <p align="center">
-  <a href="https://npmjs.com/package/@hyperoracle/cle-cli-test"><img src="https://img.shields.io/npm/v/@hyperoracle/cle-cli-test/latest.svg" alt="npm package"></a>
+  <a href="https://npmjs.com/package/@ora-io/cle-cli"><img src="https://img.shields.io/npm/v/@ora-io/cle-cli/latest.svg" alt="npm package"></a>
   <a href="https://github.com/hyperoracle/cle-cli/actions/workflows/ci.yml"><img src="https://github.com/hyperoracle/cle-cli/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
   <a href="https://www.npmjs.com/package/@hyperoracle/cle-lib"><img alt="npm peer dependency version (scoped)" src="https://img.shields.io/npm/dependency-version/%40hyperoracle%2Fcle-cli/peer/%40hyperoracle%2Fcle-lib"></a>
 </p>
@@ -256,7 +256,7 @@ cle --config my-config.js
 Since CLE ships with TypeScript typings, you can leverage your IDE's intellisense with jsdoc type hints:
 
 ```js
-/** @type {import('@hyperoracle/cle-cli-test').UserConfig} */
+/** @type {import('@ora-io/cle-cli').UserConfig} */
 export default {
   // ...
 }
@@ -264,7 +264,7 @@ export default {
 Alternatively, you can use the defineConfig helper which should provide intellisense without the need for jsdoc annotations:
 
 ```js
-import { defineConfig } from '@hyperoracle/cle-cli-test'
+import { defineConfig } from '@ora-io/cle-cli'
 
 export default defineConfig({
   // ...

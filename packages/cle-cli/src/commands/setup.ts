@@ -1,5 +1,5 @@
 import prompts from 'prompts'
-import { waitSetup, zkwasm_imagedetails } from '@hyperoracle/cle-api-test'
+import { waitSetup, zkwasm_imagedetails } from '@ora-io/cle-api'
 import { logger } from '../logger'
 import { TdConfig } from '../constants'
 import { getDispatcher, uploadWasmToTd } from '../utils/td'

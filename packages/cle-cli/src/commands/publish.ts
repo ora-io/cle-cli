@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { ethers } from 'ethers'
 import to from 'await-to-js'
-import * as zkgapi from '@hyperoracle/cle-api-test'
+import * as zkgapi from '@ora-io/cle-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, logLoadingAnimation } from '../utils'
 import type { UserConfig } from '../config'

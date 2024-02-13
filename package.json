@@ -1,5 +1,5 @@
 {
-  "name": "@hyperoracle/monorepo",
+  "name": "@ora-io/monorepo",
   "version": "1.0.0-alpha.5",
   "private": true,
   "packageManager": "pnpm@8.6.0",
@@ -17,13 +17,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@hyperoracle/cle-cli-test": "workspace:*"
+    "@ora-io/cle-cli": "workspace:*"
   },
   "devDependencies": {
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.1",
     "@murongg/eslint-config": "^0.2.1",
+    "@ora-io/cle-lib": "^1.0.1-alpha.2",
     "@types/fs-extra": "^11.0.2",
     "@types/node": "^18.18.4",
     "assemblyscript": "^0.27.12",

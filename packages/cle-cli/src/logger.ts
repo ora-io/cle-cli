@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import { type CLELogger, setCLELogger } from '@hyperoracle/cle-api-test'
+import { type CLELogger, setCLELogger } from '@ora-io/cle-api'
 import colors from 'picocolors'
 
 export type LogType = 'error' | 'warn' | 'info' | 'debug'

@@ -1,6 +1,6 @@
 //@ts-ignore
-import { require } from "@hyperoracle/cle-lib-test";
-import { Bytes, Event, Block } from "@hyperoracle/cle-lib-test";
+import { require } from "@ora-io/cle-lib";
+import { Bytes, Event, Block } from "@ora-io/cle-lib";
 
 var addr_Sync = Bytes.fromHexString(
   "0xa60ecf32309539dd84f27a9563754dca818b815e",

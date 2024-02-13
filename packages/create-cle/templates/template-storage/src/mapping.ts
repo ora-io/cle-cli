@@ -1,6 +1,6 @@
 //@ts-ignore
-import { require } from "@hyperoracle/cle-lib-test";
-import { Bytes, Account, Block, Slot } from "@hyperoracle/cle-lib-test";
+import { require } from "@ora-io/cle-lib";
+import { Bytes, Account, Block, Slot } from "@ora-io/cle-lib";
 
 let addr = Bytes.fromHexString('0xa60ecf32309539dd84f27a9563754dca818b815e');
 let key = Bytes.fromHexString('0x0000000000000000000000000000000000000000000000000000000000000008');

@@ -1,5 +1,5 @@
 {
-  "name": "@hyperoracle/cle-cli-test",
+  "name": "@ora-io/cle-cli",
   "version": "1.0.0-alpha.5",
   "packageManager": "pnpm@8.6.0",
   "description": "",
@@ -45,11 +45,11 @@
     "start": "esno src/index.ts"
   },
   "peerDependencies": {
-    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.1"
+    "@ora-io/cle-lib": "^1.0.1-alpha.2"
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
-    "@hyperoracle/cle-api-test": "^1.0.3-alpha.5",
+    "@ora-io/cle-api": "^1.0.3-alpha.6",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
@@ -67,7 +67,7 @@
     "unconfig": "^0.3.11"
   },
   "devDependencies": {
-    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.0",
+    "@ora-io/cle-lib": "^1.0.1-alpha.0",
     "@types/js-yaml": "^4.0.6",
     "@types/prompts": "^2.4.6",
     "@types/semver": "^7.5.3"

@@ -1,5 +1,5 @@
 // import fs from 'node:fs'
-import { Error, getVerifyProofParamsByTaskID, verify as verifyApi } from '@hyperoracle/cle-api-test'
+import { Error, getVerifyProofParamsByTaskID, verify as verifyApi } from '@ora-io/cle-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider } from '../utils'
 import type { UserConfig } from '../config'
