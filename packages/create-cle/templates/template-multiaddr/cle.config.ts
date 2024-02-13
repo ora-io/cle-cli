@@ -1,4 +1,4 @@
-import { UserConfig } from '@hyperoracle/cle-cli-test'
+import { UserConfig } from '@ora-io/cle-cli'
 
 export default {
   // Set up your config here

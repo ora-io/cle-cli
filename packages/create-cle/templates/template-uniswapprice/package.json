@@ -19,10 +19,10 @@
     "deposit": "cle deposit"
   },
   "dependencies": {
-    "@hyperoracle/cle-lib-test": "^1.0.1-alpha.1"
+    "@ora-io/cle-lib": "^1.0.1-alpha.2"
   },
   "devDependencies": {
-    "@hyperoracle/cle-cli-test": "1.0.0-alpha.4",
+    "@ora-io/cle-cli": "1.0.0-alpha.6",
     "assemblyscript": "^0.27.0"
   }
 }

@@ -203,7 +203,7 @@ cle --config my-config.js
 Since CLE ships with TypeScript typings, you can leverage your IDE's intellisense with jsdoc type hints:
 
 ```js
-/** @type {import('@hyperoracle/cle-cli-test').UserConfig} */
+/** @type {import('@ora-io/cle-cli').UserConfig} */
 export default {
   // ...
 }
@@ -211,7 +211,7 @@ export default {
 Alternatively, you can use the defineConfig helper which should provide intellisense without the need for jsdoc annotations:
 
 ```js
-import { defineConfig } from '@hyperoracle/cle-cli-test'
+import { defineConfig } from '@ora-io/cle-cli'
 
 export default defineConfig({
   // ...

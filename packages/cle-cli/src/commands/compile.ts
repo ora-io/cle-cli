@@ -1,10 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import * as zkgapi from '@ora-io/cle-api'
+import webjson from '@ora-io/cle-lib/test/weblib/weblib.json'
 import to from 'await-to-js'
-import FormData from 'form-data'
-import * as zkgapi from '@hyperoracle/cle-api-test'
-import webjson from '@hyperoracle/cle-lib-test/test/weblib/weblib.json'
-import { createOnNonexist, fromHexString, isTsFile, loadYamlFromPath } from '../utils'
+import { createOnNonexist, isTsFile } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
@@ -20,10 +19,9 @@ export async function compile(options: CompileOptions) {
   const {
     wasmPath,
     watPath,
-    local,
   } = options
 
-  const succ = local ? await compileBasic(options) : await compileServer(options)
+  const succ = await compileBasic(options)
 
   if (succ)
     logCompileResult(wasmPath, watPath)
@@ -42,85 +40,43 @@ async function compileBasic(options: CompileOptions) {
     return false
   }
 
-  const yaml = loadYamlFromPath(yamlPath)
-  if (!yaml) {
-    logger.error('[-] ERROR: Failed to get yaml')
-    return false
-  }
+  createOnNonexist(wasmPath)
+  createOnNonexist(watPath)
 
   const paths = getFileTreeByDir(path.dirname(mappingPath))
   const relativePaths = getRelativePaths(path.dirname(mappingPath), paths)
   const fileMap = getFileContentsByFilePaths(relativePaths, path.dirname(mappingPath))
-  const res = await zkgapi.compile({ cleYaml: yaml }, {
+
+  const relativeYamlPath = path.relative(path.dirname(mappingPath), yamlPath)
+  const yaml = fs.readFileSync(yamlPath, 'utf8')
+
+  const [err, res] = await to(zkgapi.compile({
     ...webjson,
     ...fileMap,
-  }, { isLocal: local })
+    [relativeYamlPath]: yaml,
+  }, {
+    isLocal: local,
+    yamlPath: path.relative(path.dirname(mappingPath), yamlPath),
+    outWasmPath: wasmPath,
+    outWatPath: watPath,
+    compilerServerEndpoint: options.compilerServerEndpoint,
+  }))
 
-  if (res.error) {
+  if (err) {
+    logger.error(`[-] COMPILATION ERROR. ${err.message} ${(err as any).response?.data?.message || ''}`)
+    return false
+  }
+
+  if (res?.error) {
     logger.error(`[-] COMPILATION ERROR. ${res.error?.message}`)
-    logger.error(`[-] ${res.stderr.toString()}`)
-    return false
-  }
-  const wasmContent = res.outputs['inner_pre_pre.wasm']
-  const watContent = res.outputs['inner_pre_pre.wat']
-
-  createOnNonexist(wasmPath)
-
-  fs.writeFileSync(wasmPath, wasmContent)
-  fs.writeFileSync(watPath, watContent)
-
-  return true
-}
-
-async function compileServer(options: CompileOptions) {
-  const {
-    yamlPath,
-    compilerServerEndpoint,
-    wasmPath,
-    watPath,
-    // mappingPath,
-  } = options
-  if (!yamlPath) {
-    logger.error('no yaml path provided')
+    logger.error(`[-] ${res.stderr?.toString()}`)
     return false
   }
 
-  const tmpWasmPath = path.join(path.dirname(wasmPath), '/temp/inner_pre_pre.wasm')
-  const originWasmPath = options.wasmPath
-  // set to tmp wasm path when local compile
-  options.wasmPath = tmpWasmPath
-
-  const succ = await compileBasic(options)
-  if (!succ)
-    return false
-  // set back origin value
-  options.wasmPath = originWasmPath
-
-  // Set up form data
-  const data = new FormData()
-  // data.append("asFile", createReadStream(mappingPath));
-  data.append('wasmFile', fs.createReadStream(tmpWasmPath))
-  data.append('yamlFile', fs.createReadStream(yamlPath))
-
-  const [requestErr, response] = await to(zkgapi.compileRequest(compilerServerEndpoint, data))
-
-  if (requestErr) {
-    console.error(requestErr)
-    logger.error(`[-] ERROR WHEN COMPILING. ${requestErr.message}`)
-    return false
-  }
-  if (!response) {
-    logger.error('[-] ERROR WHEN COMPILING. invalid response')
-    return false
-  }
-  const wasmModuleHex = response.data.wasmModuleHex
-  const wasmWat = response.data.wasmWat
-
-  createOnNonexist(wasmPath)
-  fs.writeFileSync(wasmPath, fromHexString(wasmModuleHex))
-
-  createOnNonexist(watPath)
-  fs.writeFileSync(watPath, wasmWat)
+  const outWasmHex = res?.outputs[wasmPath]
+  const outWat = res?.outputs[watPath]
+  fs.writeFileSync(wasmPath, outWasmHex)
+  fs.writeFileSync(watPath, outWat)
 
   return true
 }

@@ -42,10 +42,10 @@ async function updateTemplateVersion() {
 
   for (const dir of dirs) {
     const packageJSON = await fs.readJSON(path.join(createZkGraphPath, dir, 'package.json'))
-    if (Reflect.has(packageJSON.devDependencies, '@hyperoracle/cle-cli-test'))
-      packageJSON.devDependencies['@hyperoracle/cle-cli-test'] = version
-    else if (Reflect.has(packageJSON.dependencies, '@hyperoracle/cle-cli-test'))
-      packageJSON.dependencies['@hyperoracle/cle-cli-test'] = version
+    if (Reflect.has(packageJSON.devDependencies, '@ora-io/cle-cli'))
+      packageJSON.devDependencies['@ora-io/cle-cli'] = version
+    else if (Reflect.has(packageJSON.dependencies, '@ora-io/cle-cli'))
+      packageJSON.dependencies['@ora-io/cle-cli'] = version
     await fs.writeJSON(path.join(createZkGraphPath, dir, 'package.json'), packageJSON, { spaces: 2 })
   }
 }

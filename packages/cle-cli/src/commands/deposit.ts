@@ -1,4 +1,4 @@
-import * as zkgapi from '@hyperoracle/cle-api-test'
+import * as zkgapi from '@ora-io/cle-api'
 import { ethers } from 'ethers'
 import type { UserConfig } from '../config'
 import { loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation } from '../utils'

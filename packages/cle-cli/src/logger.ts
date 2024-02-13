@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import { type CLELogger, setCLELogger } from '@hyperoracle/cle-api-test'
+import { type CLELogger, setCLELogger } from '@ora-io/cle-api'
 import colors from 'picocolors'
 
 export type LogType = 'error' | 'warn' | 'info' | 'debug'
@@ -61,6 +61,10 @@ export class Logger implements CLELogger {
   debug(...args: any[]): void {
     this.output('debug', args.join(''))
   }
+}
+
+export function createLogger(level: LogLevel) {
+  return new Logger(level)
 }
 
 // eslint-disable-next-line import/no-mutable-exports
