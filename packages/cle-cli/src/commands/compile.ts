@@ -21,13 +21,13 @@ export async function compile(options: CompileOptions) {
     watPath,
   } = options
 
-  const succ = await compileBasic(options)
+  const succ = await compileRun(options)
 
   if (succ)
     logCompileResult(wasmPath, watPath)
 }
 
-async function compileBasic(options: CompileOptions) {
+async function compileRun(options: CompileOptions) {
   const {
     yamlPath,
     wasmPath,
