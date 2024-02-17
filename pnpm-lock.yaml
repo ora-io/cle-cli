@@ -82,8 +82,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@ora-io/cle-api':
-        specifier: ^1.0.3-alpha.7
-        version: 1.0.3-alpha.7
+        specifier: ^1.0.3-alpha.8
+        version: 1.0.3-alpha.8
       api:
         specifier: ^6.1.1
         version: 6.1.1(openapi-types@12.1.3)
@@ -1995,8 +1995,8 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
-  /@ora-io/cle-api@1.0.3-alpha.7:
-    resolution: {integrity: sha512-yssdFsTqAD7fNEZ9Sw4uIWuoaeKtl4kUbI4fW2Nnal+acfwc8X4fU8smO7oA1N9eMHxMlwHERlcGr1VrvdJLZg==}
+  /@ora-io/cle-api@1.0.3-alpha.8:
+    resolution: {integrity: sha512-w/NpZdUKqHMFQM6KDaVmJlogIhcDv35yj1nn3cTjfKxpZ6t8NRhcuLppB8XvYend+Y98yboW3Wygkbbo4kfNow==}
     dependencies:
       '@ethereumjs/rlp': 5.0.2
       '@murongg/utils': 0.1.20
@@ -3624,7 +3624,7 @@ packages:
   /bs58@4.0.1:
     resolution: {integrity: sha512-Ok3Wdf5vOIlBrgCvTq96gBkJw+JUEzdBgyaza5HLtPm7yTHkjRy8+JzNyHF7BHa0bNWOQIp3m5YF0nnFcOIKLw==}
     dependencies:
-      base-x: 3.0.5
+      base-x: 3.0.9
     dev: false
 
   /bson@4.7.2:

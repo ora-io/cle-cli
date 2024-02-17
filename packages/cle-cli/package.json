@@ -1,6 +1,6 @@
 {
   "name": "@ora-io/cle-cli",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/hyperoracle/cle-cli#readme",
@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.6",
-    "@ora-io/cle-api": "^1.0.3-alpha.7",
+    "@ora-io/cle-api": "^1.0.3-alpha.8",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",
