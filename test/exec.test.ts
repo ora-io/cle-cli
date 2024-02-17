@@ -14,7 +14,7 @@ const jsonRpcProviderUrl = {
 describe('exec', () => {
   it('full', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
-    const wasmPath = path.join(washPath, 'temp/cle_full.wasm')
+    const wasmPath = path.join(washPath, 'temp/cle.wasm')
     if (!fs.existsSync(wasmPath)) {
       console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
       return
@@ -22,7 +22,7 @@ describe('exec', () => {
 
     const res = await exec({
       yamlPath,
-      local: false,
+      // local: false,
       wasmPath,
       params: [2279547],
       jsonRpcProviderUrl,
@@ -31,22 +31,22 @@ describe('exec', () => {
     expect(res).toBeInstanceOf(Uint8Array)
   }, 100000)
 
-  it.skip('local', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
-    const wasmPath = path.join(washPath, 'temp/cle_local.wasm')
-    if (!fs.existsSync(wasmPath)) {
-      console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
-      return
-    }
+  // it.skip('local', async () => {
+  //   const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+  //   const wasmPath = path.join(washPath, 'temp/cle_local.wasm')
+  //   if (!fs.existsSync(wasmPath)) {
+  //     console.warn('Wasm not found. Please prioritize the execution of unit tests for compile.')
+  //     return
+  //   }
 
-    const res = await exec({
-      yamlPath,
-      local: true,
-      wasmPath,
-      params: [2279547],
-      jsonRpcProviderUrl,
-    })
-    expect(res).not.toBeUndefined()
-    expect(res).toBeInstanceOf(Uint8Array)
-  }, 100000)
+  //   const res = await exec({
+  //     yamlPath,
+  //     // local: true,
+  //     wasmPath,
+  //     params: [2279547],
+  //     jsonRpcProviderUrl,
+  //   })
+  //   expect(res).not.toBeUndefined()
+  //   expect(res).toBeInstanceOf(Uint8Array)
+  // }, 100000)
 })

@@ -5,7 +5,7 @@ import { logger } from '../logger'
 import { checkPinataAuthentication, loadYamlFromPath } from '../utils'
 
 export interface UploadOptions {
-  local: boolean
+  // local: boolean
   wasmPath: string
   userPrivateKey: string
   yamlPath: string
@@ -36,15 +36,16 @@ export async function upload(options: UploadOptions) {
     'cle.wasm': wasmFile,
     'cle.yaml': yamlFile,
   }
+  const directoryTag = { userAddress, graphName: yaml.name }
+  const directoryName = `${directoryTag.graphName}-${directoryTag.userAddress}`
 
   const { isUploadSuccess, response, errorMessage } = await uploadApi(
     files,
     {
-      userAddress,
-      graphName: yaml.name,
+      pinataEndpoint,
+      pinataJWT,
+      directoryName,
     },
-    pinataEndpoint,
-    pinataJWT,
   )
   if (isUploadSuccess) {
     logger.info('[+] IPFS UPLOAD SUCCESS!')
