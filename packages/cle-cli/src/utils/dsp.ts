@@ -25,11 +25,11 @@ export function generateDspHubParamsMap(hub: Map<string, {
   > = {}
 
   for (const dspName of hub.keys()) {
-    if (dspName.includes(':local'))
-      continue
+    // if (dspName.includes(':local'))
+    //   continue
     const dsp = hub.get(dspName)
 
-    Reflect.set(dspParamsMap, dspName.replace(':full', ''), {
+    Reflect.set(dspParamsMap, dspName/* .replace(':full', '') */, {
       execParams: dsp?.execParams.filter(item => !DoNotIncludeParams.includes(item)),
       proveParams: dsp?.proveParams.filter(item => !DoNotIncludeParams.includes(item)),
     })

@@ -14,8 +14,7 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
 
-  WasmBinPath: '[root]/build/cle_full.wasm',
-  LocalWasmBinPath: '[root]/build/cle_local.wasm',
+  WasmBinPath: '[root]/build/cle.wasm',
 
   YamlPath: '[root]/src/cle.yaml',
   MappingPath: '[root]/src/mapping.ts',

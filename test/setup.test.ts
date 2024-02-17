@@ -6,7 +6,7 @@ const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 describe('setup', () => {
   // TODO: This is temporary
   it.skipIf(true)('full', async () => {
-    const wasmPath = path.join(commandsFixturesRoot, 'cle_full.wasm')
+    const wasmPath = path.join(commandsFixturesRoot, 'cle.wasm')
 
     const res = await setup({
       wasmPath,

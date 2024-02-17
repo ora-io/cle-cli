@@ -7,7 +7,7 @@ import { logger } from '../logger'
 import type { UserConfig } from '../config'
 
 export interface ExecOptions {
-  local: boolean
+  // local: boolean
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
@@ -15,14 +15,14 @@ export interface ExecOptions {
 }
 // TODO: prepare all params, dsp select params.
 export async function exec(options: ExecOptions) {
-  const { yamlPath, jsonRpcProviderUrl, wasmPath, local, params = [] } = options
+  const { yamlPath, jsonRpcProviderUrl, wasmPath, params = [] } = options
 
   const cleYaml = loadYamlFromPath(yamlPath)
   if (!cleYaml) {
     logger.error('[-] ERROR: Failed to get yaml')
     return
   }
-  const dsp = zkgapi.dspHub.getDSPByYaml(cleYaml, { isLocal: local })
+  const dsp = zkgapi.dspHub.getDSPByYaml(cleYaml)
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
@@ -56,7 +56,7 @@ export async function exec(options: ExecOptions) {
   const state = await zkgapi.execute(
     cleExecutable,
     execParams,
-    local,
+    // local,
   )
 
   logger.info(`[+] CLE STATE OUTPUT: ${toHexString(state)}\n`)

@@ -23,16 +23,16 @@ export async function run() {
     const { proveUsage, execUsage } = generateCommandUsage()
     cli
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
-      .option('--local', 'Compile for Local Image')
+      // .option('--local', 'Compile for Local Image')
       .option('--yaml-path <path>', 'Path to yaml file')
       .option('--mapping-path <path>', 'Path to mapping file')
       .example('cle compile')
       .action((options) => {
-        const { local = false, yamlPath = '', mappingPath = '' } = options
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+        const { yamlPath = '', mappingPath = '' } = options
+        const wasmPath = config.WasmBinPath
 
         compile({
-          local,
+          // local,
           yamlPath: yamlPath || config.YamlPath,
           compilerServerEndpoint: config.CompilerServerEndpoint,
           wasmPath,
@@ -43,14 +43,14 @@ export async function run() {
 
     cli
       .command('exec [...params]', 'Execute Full Image')
-      .option('--local', 'Execute Local Image')
+      // .option('--local', 'Execute Local Image')
       .example('cle exec 0000000')
-      .action((params, options) => {
-        const { local = false } = options
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+      .action((params, _options) => {
+        // const { local = false } = options
+        const wasmPath = config.WasmBinPath
 
         exec({
-          local,
+          // local,
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
@@ -64,13 +64,14 @@ Usage cases:
 
     cli
       .command('setup', 'Set Up Full Image')
-      .option('--local', 'Set Up Local Image')
+      // .option('--local', 'Set Up Local Image')
       .option('-k, --circuit-size <size>', 'Circuit size (k in 2^k) of image')
       .example('cle setup -k 20')
       .action((options) => {
-        const { circuitSize = '', local = false } = options
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
-        const size = !circuitSize || circuitSize === 0 ? local ? 20 : 22 : Number(circuitSize)
+        // const { circuitSize = '', local = false } = options
+        const { circuitSize = '' } = options
+        const wasmPath = config.WasmBinPath
+        const size = !circuitSize || circuitSize === 0 ? 22 : Number(circuitSize)
         setup({
           circuitSize: size,
           wasmPath,
@@ -81,7 +82,7 @@ Usage cases:
 
     const proveCLI = cli
       .command('prove [...params]', 'Prove Full Image')
-      .option('--local', 'Prove Local Image')
+      // .option('--local', 'Prove Local Image')
       .option('-i, --inputgen', 'Run in input generation Mode')
       .option('-t, --test', 'Run in test Mode')
       .option('-p, --prove', 'Run in prove Mode')
@@ -90,7 +91,7 @@ Usage cases:
       .example('cle prove 2279547 a60ecf32309539dd84f27a9563754dca818b815e -p')
       .action((params, options) => {
         // eslint-disable-next-line prefer-const
-        let { inputgen = false, test = false, prove = false, local = false } = options
+        let { inputgen = false, test = false, prove = false } = options
         const hasMode = proveCLIHasModeOption()
         if (!hasMode)
           test = true
@@ -100,14 +101,14 @@ Usage cases:
           proveCLI.outputHelp()
           return
         }
-        const wasmPath = local ? config.LocalWasmBinPath : config.WasmBinPath
+        const wasmPath = config.WasmBinPath
 
         proveHandler({
           params,
           inputgen,
           test,
           prove,
-          local,
+          // local,
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
@@ -123,13 +124,13 @@ Usage cases:
 
     cli
       .command('upload', 'Upload CLE (Code and Full Image)')
-      .option('--local', 'Upload Local CLE (Code and Local Image)')
+      // .option('--local', 'Upload Local CLE (Code and Local Image)')
       .example('cle upload')
-      .action((options) => {
-        const { local = false } = options
+      .action((_options) => {
+        // const { local = false } = options
         upload({
-          local,
-          wasmPath: local ? config.LocalWasmBinPath : config.WasmBinPath,
+          // local,
+          wasmPath: config.WasmBinPath,
           yamlPath: config.YamlPath,
           pinataEndpoint: config.PinataEndpoint,
           pinataJWT: config.PinataJWT,

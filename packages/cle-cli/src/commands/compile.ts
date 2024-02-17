@@ -7,7 +7,7 @@ import { createOnNonexist, isTsFile } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
-  local: boolean
+  // local: boolean
   yamlPath?: string
   compilerServerEndpoint: string
   wasmPath: string
@@ -21,19 +21,19 @@ export async function compile(options: CompileOptions) {
     watPath,
   } = options
 
-  const succ = await compileBasic(options)
+  const succ = await compileRun(options)
 
   if (succ)
     logCompileResult(wasmPath, watPath)
 }
 
-async function compileBasic(options: CompileOptions) {
+async function compileRun(options: CompileOptions) {
   const {
     yamlPath,
     wasmPath,
     watPath,
     mappingPath,
-    local,
+    // local,
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
@@ -55,7 +55,7 @@ async function compileBasic(options: CompileOptions) {
     ...fileMap,
     [relativeYamlPath]: yaml,
   }, {
-    isLocal: local,
+    // isLocal: local,
     yamlPath: path.relative(path.dirname(mappingPath), yamlPath),
     outWasmPath: wasmPath,
     outWatPath: watPath,

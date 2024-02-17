@@ -260,7 +260,7 @@ Please note that (during testnet phrase) your address balance (in zkwasm server)
 #### WasmBinPath
 
 - **Type:** `string`
-- **Default**: `[root]/build/cle_full.wasm`
+- **Default**: `[root]/build/cle.wasm`
 
 CLE CLI Build-In a tag name is `root`.  
 The `root` is user project root path.  

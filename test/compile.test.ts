@@ -11,13 +11,13 @@ describe('compile', () => {
   // TODO: This is temporary
   it.runIf(process.platform !== 'win32')('full', async () => {
     const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
-    const wasmPath = path.join(projectRoot, 'temp/cle_full.wasm')
+    const wasmPath = path.join(projectRoot, 'temp/cle.wasm')
     const watPath = wasmPath.replace(/\.wasm/, '.wat')
     const mappingPath = path.join(commandsFixturesRoot, 'mapping.ts')
 
     await compile({
       yamlPath,
-      local: false,
+      // local: false,
       compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
       wasmPath,
       watPath,
@@ -37,23 +37,23 @@ describe('compile', () => {
     expect(inst.zkmain).not.toBeUndefined()
   }, 200000)
 
-  it.skip('local', async () => {
-    const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
-    const wasmPath = path.join(projectRoot, 'temp/cle_local.wasm')
-    const watPath = wasmPath.replace(/\.wasm/, '.wat')
-    const mappingPath = path.join(commandsFixturesRoot, 'mapping.ts')
+  // it.skip('local', async () => {
+  //   const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
+  //   const wasmPath = path.join(projectRoot, 'temp/cle_local.wasm')
+  //   const watPath = wasmPath.replace(/\.wasm/, '.wat')
+  //   const mappingPath = path.join(commandsFixturesRoot, 'mapping.ts')
 
-    await compile({
-      yamlPath,
-      local: true,
-      compilerServerEndpoint: '',
-      wasmPath,
-      watPath,
-      mappingPath,
-    })
-    const hasWasm = fs.existsSync(wasmPath)
-    const hasWat = fs.existsSync(watPath)
-    expect(hasWasm).toBeTruthy()
-    expect(hasWat).toBeTruthy()
-  }, 100000)
+  //   await compile({
+  //     yamlPath,
+  //     // local: true,
+  //     compilerServerEndpoint: '',
+  //     wasmPath,
+  //     watPath,
+  //     mappingPath,
+  //   })
+  //   const hasWasm = fs.existsSync(wasmPath)
+  //   const hasWat = fs.existsSync(watPath)
+  //   expect(hasWasm).toBeTruthy()
+  //   expect(hasWat).toBeTruthy()
+  // }, 100000)
 })

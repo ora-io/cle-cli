@@ -37,10 +37,6 @@ export interface UserConfig {
    * @default "[root]/build/cle.wasm"
    */
   WasmBinPath?: string
-  /**
-   * @default "[root]/build/cle_local.wasm"
-   */
-  LocalWasmBinPath?: string
 
   /**
    * @default "[root]/src/cle.yaml"
@@ -108,7 +104,7 @@ export async function getConfig(configFile?: string, configRoot?: string) {
   const userConfig = await loadConfigFromFile(configFile, configRoot)
 
   userConfig.WasmBinPath = parseTemplateTag(userConfig.WasmBinPath || '', TAGS)
-  userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
+  // userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
   userConfig.YamlPath = parseTemplateTag(userConfig.YamlPath || '', TAGS)
   userConfig.MappingPath = parseTemplateTag(userConfig.MappingPath || '', TAGS)
 

@@ -3,6 +3,7 @@ import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
 import * as zkgapi from '@ora-io/cle-api'
+import type { Input } from 'zkwasm-toolchain'
 import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation, taskPrettyPrint, validateProvider } from '../utils'
 import { logger } from '../logger'
 import type { UserConfig } from '../config'
@@ -14,7 +15,7 @@ export interface ProveOptions {
   inputgen: boolean
   test: boolean
   prove: boolean
-  local: boolean
+  // local: boolean
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
@@ -30,7 +31,7 @@ export async function prove(options: ProveOptions) {
     inputgen,
     test,
     prove,
-    local,
+    // local,
     wasmPath,
     yamlPath,
     jsonRpcProviderUrl,
@@ -44,7 +45,7 @@ export async function prove(options: ProveOptions) {
     logger.error('[-] ERROR: Failed to get yaml')
     return
   }
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml, { isLocal: local })
+  const dsp = zkgapi.dspHub.getDSPByYaml(yaml)
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
@@ -102,24 +103,23 @@ export async function prove(options: ProveOptions) {
     cleYaml: yaml as zkgapi.CLEYaml,
   }
 
-  const [privateInputStr, publicInputStr] = await zkgapi.proveInputGen(
+  const input = await zkgapi.proveInputGen(
     cleExecutable,
     proveParams,
-    local,
   )
 
   if (inputgen) {
     // Input generation mode
-    logger.info('[+] PRIVATE INPUT FOR ZKWASM:' + `\n${privateInputStr}`)
-    logger.info('[+] PUBLIC INPUT FOR ZKWASM:' + `\n${publicInputStr}`)
+    logger.info('[+] PRIVATE INPUT FOR ZKWASM:' + `\n${input.getPrivateInputStr()}`)
+    logger.info('[+] PUBLIC INPUT FOR ZKWASM:' + `\n${input.getPublicInputStr()}`)
   }
   else if (test) {
     // Test mode
-    await testMode(wasmUint8Array, privateInputStr, publicInputStr)
+    await testMode(wasmUint8Array, input)
   }
   else if (prove) {
     // Prove mode
-    await proveMode(userPrivateKey, md5, privateInputStr, publicInputStr, zkWasmProviderUrl, outputProofFilePath)
+    await proveMode(userPrivateKey, md5, input.getPrivateInputStr(), input.getPublicInputStr(), zkWasmProviderUrl, outputProofFilePath)
   }
 }
 /**
@@ -128,7 +128,7 @@ export async function prove(options: ProveOptions) {
  * @param privateInputStr
  * @param publicInputStr
  */
-async function testMode(wasmUint8Array: Uint8Array, privateInputStr: string, publicInputStr: string) {
+async function testMode(wasmUint8Array: Uint8Array, input: Input) {
   const cleExecutable = {
     wasmUint8Array,
     cleYaml: null,
@@ -136,8 +136,7 @@ async function testMode(wasmUint8Array: Uint8Array, privateInputStr: string, pub
 
   const [mockErr, mockSuccess] = await to(zkgapi.proveMock(
     cleExecutable,
-    privateInputStr,
-    publicInputStr,
+    input,
   ))
 
   if (mockErr) {
