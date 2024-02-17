@@ -61,6 +61,10 @@ export class Logger implements CLELogger {
   debug(...args: any[]): void {
     this.output('debug', args.join(''))
   }
+
+  log(...args: any[]): void {
+    this.info(...args)
+  }
 }
 
 export function createLogger(level: LogLevel) {
