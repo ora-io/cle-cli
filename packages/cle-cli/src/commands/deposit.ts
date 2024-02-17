@@ -33,9 +33,9 @@ export async function deposit(options: DepositOptions) {
   const loading = logLoadingAnimation()
 
   const txReceipt = await zkgapi.deposit(
-    signer,
     deployedContractAddress,
-    depositAmount,
+    signer,
+    { depositAmount },
   )
 
   loading.stopAndClear()
