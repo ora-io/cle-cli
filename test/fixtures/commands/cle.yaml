@@ -2,7 +2,7 @@ specVersion: 0.0.2
 apiVersion: 0.0.2
 name: eg_hello
 description: "This demo CLE always set a ascii string as the output state. "
-repository: https://github.com/hyperoracle/cle
+repository: https://github.com/ora-io/cle
 dataSources:
   - kind: ethereum
     network: sepolia
