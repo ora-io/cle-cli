@@ -15,4 +15,4 @@ To upload and publish your CLE, you should `Upload` (upload code to IPFS), and t
 - **prove**: ` npx cle prove <block id> <expected state> -i|-t|-p`  
 - ……
 
-Read more: https://github.com/hyperoracle/cle-cli#cli
+Read more: https://github.com/ora-io/cle-cli#cli

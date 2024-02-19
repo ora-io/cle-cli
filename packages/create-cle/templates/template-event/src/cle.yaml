@@ -2,7 +2,7 @@ specVersion: 0.0.2
 apiVersion: 0.0.2
 name: eg_event
 description: "This demo CLE shows 3 ways to access / filter out source events."
-repository: https://github.com/hyperoracle/zkgraph
+repository: https://github.com/ora-io/zkgraph
 dataSources:
   - kind: ethereum
     network: sepolia

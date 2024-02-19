@@ -204,7 +204,7 @@ export async function init(argTargetDir?: string, argTemplate?: string) {
       break
   }
   console.log()
-  console.log('Read docs: https://github.com/hyperoracle/cle-cli#cli')
+  console.log('Read docs: https://github.com/ora-io/cle-cli#cli')
   console.log()
 }
 

@@ -1,14 +1,14 @@
 
 <p align="center">
-  <a href="https://www.hyperoracle.io" target="_blank" rel="noopener noreferrer">
-    <img width="180" src="https://github.com/hyperoracle/media-kit/blob/main/Logos/Colored_Logo.png?raw=true" alt="HyperOracle logo">
+  <a href="https://www.ora.io" target="_blank" rel="noopener noreferrer">
+    <img width="180" src="https://github.com/ora-io/media-kit/blob/main/Logos/logo%20type_blue_V1.png?raw=true" alt="ORA logo">
   </a>
 </p>
 <br/>
 <p align="center">
   <a href="https://npmjs.com/package/@ora-io/cle-cli"><img src="https://img.shields.io/npm/v/@ora-io/cle-cli/latest.svg" alt="npm package"></a>
-  <a href="https://github.com/hyperoracle/cle-cli/actions/workflows/ci.yml"><img src="https://github.com/hyperoracle/cle-cli/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
-  <a href="https://www.npmjs.com/package/@hyperoracle/cle-lib"><img alt="npm peer dependency version (scoped)" src="https://img.shields.io/npm/dependency-version/%40hyperoracle%2Fcle-cli/peer/%40hyperoracle%2Fcle-lib"></a>
+  <a href="https://github.com/ora-io/cle-cli/actions/workflows/ci.yml"><img src="https://github.com/ora-io/cle-cli/actions/workflows/ci.yml/badge.svg?branch=main" alt="build status"></a>
+  <a href="https://www.npmjs.com/package/@ora-io/cle-lib"><img alt="npm peer dependency version (scoped)" src="https://img.shields.io/npm/dependency-version/%ora-io%2Fcle-cli/peer/%ora-io%2Fcle-lib"></a>
 </p>
 <br/>
 
