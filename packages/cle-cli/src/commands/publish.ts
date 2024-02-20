@@ -44,10 +44,12 @@ export async function publish(options: PublishOptions) {
 
   const [err, txReceipt] = await to(zkgapi.publish(
     { wasmUint8Array, cleYaml },
-    zkWasmProviderUrl,
-    ipfsHash,
-    newBountyRewardPerTrigger,
     signer,
+    {
+      proverUrl: zkWasmProviderUrl,
+      ipfsHash,
+      bountyRewardPerTrigger: newBountyRewardPerTrigger,
+    },
   ))
   if (err) {
     loading.stopAndClear()
@@ -63,7 +65,7 @@ export async function publish(options: PublishOptions) {
   loading.stopAndClear()
   logger.info('[+] CLE PUBLISHED SUCCESSFULLY!')
   logger.info(
-      `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${txReceipt.networkName}`,
+    `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${txReceipt.networkName}`,
   )
   logger.info(`[*] Transaction hash: ${txReceipt.transactionHash}`)
   logger.info(`[*] Graph address deployed at: ${txReceipt.graphAddress}`)
