@@ -32,9 +32,9 @@ export async function upload(options: UploadOptions) {
   const wasmFile = fs.createReadStream(wasmPath)
   const yamlFile = fs.createReadStream(yamlPath)
   const files = {
-    'mapping.ts': mappingFile,
-    'cle.wasm': wasmFile,
-    'cle.yaml': yamlFile,
+    'src/mapping.ts': mappingFile,
+    'build/cle.wasm': wasmFile,
+    'src/cle.yaml': yamlFile,
   }
   const directoryTag = { userAddress, graphName: yaml.name }
   const directoryName = `${directoryTag.graphName}-${directoryTag.userAddress}`
