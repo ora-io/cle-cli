@@ -17,7 +17,7 @@ export interface PublishOptions {
 }
 
 export async function publish(options: PublishOptions) {
-  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger = 0, yamlPath, wasmPath, zkWasmProviderUrl } = options
+  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger = 0.05, yamlPath, wasmPath, zkWasmProviderUrl } = options
   logger.info('>> PUBLISH CLE')
   if (isNaN(bountyRewardPerTrigger)) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
