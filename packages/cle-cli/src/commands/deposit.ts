@@ -1,4 +1,4 @@
-import * as zkgapi from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import { ethers } from 'ethers'
 import type { UserConfig } from '../config'
 import { loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation } from '../utils'
@@ -32,7 +32,7 @@ export async function deposit(options: DepositOptions) {
   logger.info('[*] Please wait for deposit tx... (estimated: 30 sec)')
   const loading = logLoadingAnimation()
 
-  const txReceipt = await zkgapi.deposit(
+  const txReceipt = await cleApi.deposit(
     deployedContractAddress,
     signer,
     { depositAmount },

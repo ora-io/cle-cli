@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import to from 'await-to-js'
-import * as zkgapi from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import ethres from 'ethers'
 import { generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, toHexString } from '../utils'
 import { logger } from '../logger'
@@ -22,7 +22,7 @@ export async function exec(options: ExecOptions) {
     logger.error('[-] ERROR: Failed to get yaml')
     return
   }
-  const dsp = zkgapi.dspHub.getDSPByYaml(cleYaml)
+  const dsp = cleApi.dspHub.getDSPByYaml(cleYaml)
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
@@ -53,7 +53,7 @@ export async function exec(options: ExecOptions) {
     cleYaml,
   }
 
-  const state = await zkgapi.execute(
+  const state = await cleApi.execute(
     cleExecutable,
     execParams,
     // local,

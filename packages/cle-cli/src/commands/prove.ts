@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import { providers } from 'ethers'
 import to from 'await-to-js'
 import prompts from 'prompts'
-import * as zkgapi from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import type { Input } from 'zkwasm-toolchain'
 import { convertToMd5, generateDspHubParams, loadJsonRpcProviderUrl, loadYamlFromPath, logLoadingAnimation, taskPrettyPrint, validateProvider } from '../utils'
 import { logger } from '../logger'
@@ -45,7 +45,7 @@ export async function prove(options: ProveOptions) {
     logger.error('[-] ERROR: Failed to get yaml')
     return
   }
-  const dsp = zkgapi.dspHub.getDSPByYaml(yaml)
+  const dsp = cleApi.dspHub.getDSPByYaml(yaml)
   if (!dsp) {
     logger.error('[-] ERROR: Failed to get DSP')
     return
@@ -100,10 +100,10 @@ export async function prove(options: ProveOptions) {
 
   const cleExecutable = {
     wasmUint8Array,
-    cleYaml: yaml as zkgapi.CLEYaml,
+    cleYaml: yaml as cleApi.CLEYaml,
   }
 
-  const input = await zkgapi.proveInputGen(
+  const input = await cleApi.proveInputGen(
     cleExecutable,
     proveParams,
   )
@@ -134,7 +134,7 @@ async function testMode(wasmUint8Array: Uint8Array, input: Input) {
     cleYaml: null,
   }
 
-  const [mockErr, mockSuccess] = await to(zkgapi.proveMock(
+  const [mockErr, mockSuccess] = await to(cleApi.proveMock(
     cleExecutable,
     input,
   ))
@@ -146,7 +146,7 @@ async function testMode(wasmUint8Array: Uint8Array, input: Input) {
 
   if (mockSuccess) {
     logger.info('[+] ZKWASM MOCK EXECUTION SUCCESS!')
-    if (zkgapi.hasDebugOnlyFunc)
+    if (cleApi.hasDebugOnlyFunc)
       logger.warn('[+] PLEASE REMOVE DEBUG FUNCTION (e.g. console.log) BEFORE PROVE MODE')
     else
       logger.warn('[+] READY FOR PROVE MODE: npx cle prove <block id> <expected state> --prove')
@@ -194,7 +194,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   const [queryTaskErr, data] = await to(dispatcher.queryTask(txhash))
   if (queryTaskErr) {
-    if (queryTaskErr instanceof zkgapi.Error.TDNoTaskFound) {
+    if (queryTaskErr instanceof cleApi.Error.TDNoTaskFound) {
       logger.error('[-] PLEASE REQUIRE FINISH SETUP FIRST.')
       return
     }
@@ -212,7 +212,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   const loading = logLoadingAnimation()
 
-  const [err, result] = await to(zkgapi.waitProve(zkWasmProviderUrl, taskId))
+  const [err, result] = await to(cleApi.waitProve(zkWasmProviderUrl, taskId))
 
   if (err) {
     loading.stopAndClear()

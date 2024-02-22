@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import * as zkgapi from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import webjson from '@ora-io/cle-lib/test/weblib/weblib.json'
 import to from 'await-to-js'
 import { CLEYaml } from '@ora-io/cle-api'
@@ -76,7 +76,7 @@ async function compileRun(options: CompileOptions) {
 
   const relativeYamlPath = path.relative(dirPath, yamlPath)
 
-  const [err, res] = await to(zkgapi.compile({
+  const [err, res] = await to(cleApi.compile({
     ...webjson,
     ...fileMap,
     [relativeYamlPath]: yaml,

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { ethers } from 'ethers'
 import to from 'await-to-js'
-import * as zkgapi from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import { logger } from '../logger'
 import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, logLoadingAnimation } from '../utils'
 import type { UserConfig } from '../config'
@@ -42,7 +42,7 @@ export async function publish(options: PublishOptions) {
 
   const loading = logLoadingAnimation()
 
-  const [err, txReceipt] = await to(zkgapi.publish(
+  const [err, txReceipt] = await to(cleApi.publish(
     { wasmUint8Array, cleYaml },
     signer,
     {
@@ -53,7 +53,7 @@ export async function publish(options: PublishOptions) {
   ))
   if (err) {
     loading.stopAndClear()
-    if (err instanceof zkgapi.Error.GraphAlreadyExist) {
+    if (err instanceof cleApi.Error.GraphAlreadyExist) {
       logger.error(`[-] PUBLISH FAILED. ${err.message}`)
       return
     }
