@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-### Scaffolding Your First cle Project
+### Scaffolding Your First CLE Project
 
 With NPM:
 ```bash
