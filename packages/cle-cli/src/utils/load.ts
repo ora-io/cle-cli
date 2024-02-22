@@ -57,3 +57,7 @@ export function loadYamlFromPath(path: string) {
   }
   return CLEYaml.fromYamlContent(fileContents)
 }
+
+export function loadMappingPathFromYaml(yaml: CLEYaml) {
+  return yaml.mapping.file
+}

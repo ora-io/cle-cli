@@ -44,11 +44,6 @@ export interface UserConfig {
   YamlPath?: string
 
   /**
-   * @default "[root]/src/mapping.ts"
-   */
-  MappingPath?: string
-
-  /**
    * @default "[root]/build/proof_[taskId].txt"
    */
   OutputProofFilePath?: string
@@ -106,7 +101,6 @@ export async function getConfig(configFile?: string, configRoot?: string) {
   userConfig.WasmBinPath = parseTemplateTag(userConfig.WasmBinPath || '', TAGS)
   // userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
   userConfig.YamlPath = parseTemplateTag(userConfig.YamlPath || '', TAGS)
-  userConfig.MappingPath = parseTemplateTag(userConfig.MappingPath || '', TAGS)
 
   return userConfig as Required<UserConfig>
 }

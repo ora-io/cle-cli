@@ -25,10 +25,9 @@ export async function run() {
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
       // .option('--local', 'Compile for Local Image')
       .option('--yaml-path <path>', 'Path to yaml file')
-      .option('--mapping-path <path>', 'Path to mapping file')
       .example('cle compile')
       .action((options) => {
-        const { yamlPath = '', mappingPath = '' } = options
+        const { yamlPath = '' } = options
         const wasmPath = config.WasmBinPath
 
         compile({
@@ -37,7 +36,6 @@ export async function run() {
           compilerServerEndpoint: config.CompilerServerEndpoint,
           wasmPath,
           watPath: wasmPath.replace(/\.wasm/, '.wat'),
-          mappingPath: mappingPath || config.MappingPath,
         })
       })
 
@@ -134,7 +132,6 @@ Usage cases:
           yamlPath: config.YamlPath,
           pinataEndpoint: config.PinataEndpoint,
           pinataJWT: config.PinataJWT,
-          mappingPath: config.MappingPath,
           userPrivateKey: config.UserPrivateKey,
         })
       })

@@ -13,7 +13,6 @@ describe('compile', () => {
     const yamlPath = path.join(commandsFixturesRoot, 'cle.yaml')
     const wasmPath = path.join(projectRoot, 'temp/cle.wasm')
     const watPath = wasmPath.replace(/\.wasm/, '.wat')
-    const mappingPath = path.join(commandsFixturesRoot, 'mapping.ts')
 
     await compile({
       yamlPath,
@@ -21,7 +20,6 @@ describe('compile', () => {
       compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
       wasmPath,
       watPath,
-      mappingPath,
     })
     const hasWasm = fs.existsSync(wasmPath)
     const hasWat = fs.existsSync(watPath)

@@ -17,7 +17,6 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
   WasmBinPath: '[root]/build/cle.wasm',
 
   YamlPath: '[root]/src/cle.yaml',
-  MappingPath: '[root]/src/mapping.ts',
 
   OutputProofFilePath: '[root]/build/proof_[taskId].txt',
 

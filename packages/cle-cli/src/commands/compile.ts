@@ -3,7 +3,8 @@ import path from 'node:path'
 import * as zkgapi from '@ora-io/cle-api'
 import webjson from '@ora-io/cle-lib/test/weblib/weblib.json'
 import to from 'await-to-js'
-import { createOnNonexist, isTsFile } from '../utils'
+import { CLEYaml } from '@ora-io/cle-api'
+import { createOnNonexist, isTsFile, loadMappingPathFromYaml } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
@@ -12,7 +13,6 @@ export interface CompileOptions {
   compilerServerEndpoint: string
   wasmPath: string
   watPath: string
-  mappingPath: string
 }
 
 export async function compile(options: CompileOptions) {
@@ -32,11 +32,21 @@ async function compileRun(options: CompileOptions) {
     yamlPath,
     wasmPath,
     watPath,
-    mappingPath,
     // local,
   } = options
   if (!yamlPath) {
     logger.error('no yaml path provided')
+    return false
+  }
+  const yaml = fs.readFileSync(yamlPath, 'utf8')
+  const yamlMappingPath = loadMappingPathFromYaml(CLEYaml.fromYamlContent(yaml))
+  if (!yamlMappingPath) {
+    logger.error('[-] no mapping path provided in cle.yaml')
+    return false
+  }
+  const mappingPath = path.join(path.dirname(yamlPath), yamlMappingPath)
+  if (!isTsFile(mappingPath)) {
+    logger.error('[-] mapping path provided in cle.yaml is not a ts file')
     return false
   }
 
@@ -48,7 +58,6 @@ async function compileRun(options: CompileOptions) {
   const fileMap = getFileContentsByFilePaths(relativePaths, path.dirname(mappingPath))
 
   const relativeYamlPath = path.relative(path.dirname(mappingPath), yamlPath)
-  const yaml = fs.readFileSync(yamlPath, 'utf8')
 
   const [err, res] = await to(zkgapi.compile({
     ...webjson,

@@ -1,8 +1,9 @@
 import fs from 'node:fs'
+import path from 'node:path'
 import { upload as uploadApi } from '@ora-io/cle-api'
 import { computeAddress } from 'ethers/lib/utils'
 import { logger } from '../logger'
-import { checkPinataAuthentication, loadYamlFromPath } from '../utils'
+import { checkPinataAuthentication, isTsFile, loadMappingPathFromYaml, loadYamlFromPath } from '../utils'
 
 export interface UploadOptions {
   // local: boolean
@@ -11,13 +12,12 @@ export interface UploadOptions {
   yamlPath: string
   pinataEndpoint: string
   pinataJWT: string
-  mappingPath: string
 }
 
 export async function upload(options: UploadOptions) {
   logger.info('>> UPLOAD')
 
-  const { wasmPath, yamlPath, mappingPath, pinataEndpoint, pinataJWT, userPrivateKey } = options
+  const { wasmPath, yamlPath, pinataEndpoint, pinataJWT, userPrivateKey } = options
 
   if (!await checkPinataAuthentication(pinataJWT)) {
     logger.error('[-] PINATA AUTHENTICATION FAILED.')
@@ -25,6 +25,17 @@ export async function upload(options: UploadOptions) {
   }
 
   const yaml = loadYamlFromPath(yamlPath)
+
+  const yamlMappingPath = loadMappingPathFromYaml(yaml)
+  if (!yamlMappingPath) {
+    logger.error('[-] no mapping path provided in cle.yaml')
+    return false
+  }
+  const mappingPath = path.join(path.dirname(yamlPath), yamlMappingPath)
+  if (!isTsFile(mappingPath)) {
+    logger.error('[-] mapping path provided in cle.yaml is not a ts file')
+    return false
+  }
 
   const userAddress = computeAddress(userPrivateKey).toLowerCase()
 
