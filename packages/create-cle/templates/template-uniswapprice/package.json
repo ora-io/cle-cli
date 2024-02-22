@@ -17,7 +17,7 @@
     "@ora-io/cle-lib": "^1.0.1-alpha.4"
   },
   "devDependencies": {
-    "@ora-io/cle-cli": "1.0.0-alpha.9",
+    "@ora-io/cle-cli": "1.0.0-alpha.10",
     "assemblyscript": "^0.27.0"
   }
 }
