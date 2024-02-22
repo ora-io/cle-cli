@@ -25,9 +25,10 @@ export async function run() {
       .command('compile', 'Compile for Full Image (Link Compiled with Compiler Server)')
       // .option('--local', 'Compile for Local Image')
       .option('--yaml-path <path>', 'Path to yaml file')
+      .option('--dir <path>', 'Path to directory containing cle.yaml')
       .example('cle compile')
       .action((options) => {
-        const { yamlPath = '' } = options
+        const { yamlPath = '', dir } = options
         const wasmPath = config.WasmBinPath
 
         compile({
@@ -36,6 +37,7 @@ export async function run() {
           compilerServerEndpoint: config.CompilerServerEndpoint,
           wasmPath,
           watPath: wasmPath.replace(/\.wasm/, '.wat'),
+          dirPath: dir,
         })
       })
 

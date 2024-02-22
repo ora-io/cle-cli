@@ -16,7 +16,30 @@ describe('compile', () => {
 
     await compile({
       yamlPath,
-      // local: false,
+      compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
+      wasmPath,
+      watPath,
+    })
+    const hasWasm = fs.existsSync(wasmPath)
+    const hasWat = fs.existsSync(watPath)
+    expect(hasWasm).toBeTruthy()
+    expect(hasWat).toBeTruthy()
+
+    const wasm = fs.readFileSync(wasmPath)
+    const wasmUint8Array = new Uint8Array(wasm)
+
+    const inst = await instantiateWasm(wasmUint8Array)
+
+    expect(inst.asmain).not.toBeUndefined()
+    expect(inst.zkmain).not.toBeUndefined()
+  }, 200000)
+
+  it.runIf(process.platform !== 'win32')('dir', async () => {
+    const wasmPath = path.join(projectRoot, 'temp/cle.wasm')
+    const watPath = wasmPath.replace(/\.wasm/, '.wat')
+
+    await compile({
+      dirPath: commandsFixturesRoot,
       compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
       wasmPath,
       watPath,

@@ -8,8 +8,8 @@ import { createOnNonexist, isTsFile, loadMappingPathFromYaml } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
-  // local: boolean
   yamlPath?: string
+  dirPath?: string
   compilerServerEndpoint: string
   wasmPath: string
   watPath: string
@@ -29,11 +29,26 @@ export async function compile(options: CompileOptions) {
 
 async function compileRun(options: CompileOptions) {
   const {
-    yamlPath,
     wasmPath,
     watPath,
-    // local,
   } = options
+
+  let {
+    yamlPath,
+    dirPath,
+  } = options
+
+  if (dirPath) {
+    if (!fs.existsSync(dirPath)) {
+      // if dirPath is relative
+      if (fs.existsSync(path.join(process.cwd(), dirPath)))
+        dirPath = path.join(process.cwd(), dirPath)
+    }
+    const yamlPathInDir = path.join(dirPath, 'cle.yaml')
+    if (fs.existsSync(yamlPathInDir))
+      yamlPath = yamlPathInDir
+  }
+
   if (!yamlPath) {
     logger.error('no yaml path provided')
     return false
@@ -52,12 +67,14 @@ async function compileRun(options: CompileOptions) {
 
   createOnNonexist(wasmPath)
   createOnNonexist(watPath)
+  if (!dirPath)
+    dirPath = path.dirname(mappingPath)
 
-  const paths = getFileTreeByDir(path.dirname(mappingPath))
-  const relativePaths = getRelativePaths(path.dirname(mappingPath), paths)
-  const fileMap = getFileContentsByFilePaths(relativePaths, path.dirname(mappingPath))
+  const paths = getFileTreeByDir(dirPath)
+  const relativePaths = getRelativePaths(dirPath, paths)
+  const fileMap = getFileContentsByFilePaths(relativePaths, dirPath)
 
-  const relativeYamlPath = path.relative(path.dirname(mappingPath), yamlPath)
+  const relativeYamlPath = path.relative(dirPath, yamlPath)
 
   const [err, res] = await to(zkgapi.compile({
     ...webjson,

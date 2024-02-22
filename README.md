@@ -73,10 +73,10 @@ cle compile [root]
 
 #### Options
 
-| Options                 | Description             |
-| ----------------------- | ----------------------- |
-| `--yaml-path <path>`    | Path to yaml file       |
-| `--mapping-path <path>` | Path to mapping file    |
+| Options              | Description                           |
+| -------------------- | ------------------------------------- |
+| `--yaml-path <path>` | Path to yaml file                     |
+| `--dir <path>`       | Path to directory containing cle.yaml |
 
 ### Execute
 
@@ -141,7 +141,7 @@ cle prove <blockId> <offchainData> <expectedStateStr> [root]
 | Arguments          | Description                                     |
 | ------------------ | ----------------------------------------------- |
 | `<block id>`       | Block number (or block hash) as runtime context |
-| `<expected state>` | State output of the CLE execution           |
+| `<expected state>` | State output of the CLE execution               |
 | `<offchainData>`   | offchain data                                   |
 
 
@@ -194,10 +194,10 @@ cle publish <ipfs_hash> [bounty_reward_per_trigger]
 
 #### Arguments
 
-| Arguments                     | Description                                                |
-| ----------------------------- | ---------------------------------------------------------- |
-| `<ipfs hash>`                 | IPFS hash of uploaded CLE                              |
-| `[bounty reward per trigger]` | Bounty reward per trigger in ETH                           |
+| Arguments                     | Description                      |
+| ----------------------------- | -------------------------------- |
+| `<ipfs hash>`                 | IPFS hash of uploaded CLE        |
+| `[bounty reward per trigger]` | Bounty reward per trigger in ETH |
 
 ### Deposit
 
