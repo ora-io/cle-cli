@@ -64,6 +64,11 @@ function getVerifyProofParamsByProofFile(taskId: string, outputProofFilePath: st
     taskId: taskId || '',
   })
 
+  if (!fs.existsSync(outputProofFile)) {
+    logger.error('[-] ERROR: Failed to get proof file')
+    process.exit(1)
+  }
+
   const content = fs.readFileSync(outputProofFile, 'utf-8')
   const regex = /Instances:\n(.*?)\n\nBatched Instances:\n(.*?)\n\nProof transcripts:\n(.*?)\n\nAux data:\n(.*?)\n\n/s
   const matches = content.match(regex)
