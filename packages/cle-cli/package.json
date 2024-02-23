@@ -50,6 +50,7 @@
   "dependencies": {
     "@antfu/utils": "^0.7.6",
     "@ora-io/cle-api": "^1.0.3-alpha.11",
+    "@ora-io/zkwasm-service-helper": "^1.0.3",
     "api": "^6.1.1",
     "assemblyscript": "^0.27.12",
     "await-to-js": "^3.0.0",

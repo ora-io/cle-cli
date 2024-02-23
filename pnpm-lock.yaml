@@ -84,6 +84,9 @@ importers:
       '@ora-io/cle-api':
         specifier: ^1.0.3-alpha.11
         version: 1.0.3-alpha.11
+      '@ora-io/zkwasm-service-helper':
+        specifier: ^1.0.3
+        version: 1.0.3
       api:
         specifier: ^6.1.1
         version: 6.1.1(openapi-types@12.1.3)

@@ -147,6 +147,7 @@ Usage cases:
           yamlPath: config.YamlPath,
           zkWasmProviderUrl: config.ZkwasmProviderUrl,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
+          outputProofFilePath: config.OutputProofFilePath,
         })
       })
 
