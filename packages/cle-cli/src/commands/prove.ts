@@ -248,10 +248,11 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   fs.writeFileSync(
     outputProofFile,
-    `Instances:\n${result.instances
+    `Instances:\n${result.instances // TODO: checkout how to return/write 2-dim instances
     }\n\nBatched Instances:\n${result.batch_instances
     }\n\nProof transcripts:\n${result.proof
     }\n\nAux data:\n${result.aux
+    }${result.extra ? '\n\nExtra data:\n' : ''}${result.extra
     }\n`,
   )
 }

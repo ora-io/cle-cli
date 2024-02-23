@@ -80,7 +80,7 @@ function getVerifyProofParamsByProofFile(taskId: string, outputProofFilePath: st
     const auxDataValue = matches[4].trim().split('\n')
 
     return {
-      instances: ZkWasmUtil.hexStringsToBytes(instancesValue, 32),
+      instances: [ZkWasmUtil.hexStringsToBytes(instancesValue, 32)], // TODO: checkout how to read/return 2-dim instances
       batch_instances: ZkWasmUtil.hexStringsToBytes(batchedInstancesValue, 32),
       aggregate_proof: ZkWasmUtil.hexStringsToBytes(proofTranscriptsValue, 32),
       aux: ZkWasmUtil.hexStringsToBytes(auxDataValue, 32),
