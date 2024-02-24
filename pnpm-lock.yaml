@@ -82,8 +82,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6
       '@ora-io/cle-api':
-        specifier: ^1.0.3-alpha.11
-        version: 1.0.3-alpha.11
+        specifier: ^1.0.3-alpha.14
+        version: 1.0.3-alpha.14
       '@ora-io/zkwasm-service-helper':
         specifier: ^1.0.3
         version: 1.0.3
@@ -1998,8 +1998,8 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
-  /@ora-io/cle-api@1.0.3-alpha.11:
-    resolution: {integrity: sha512-Lw4WQBj0nnsFn45oKaDiJMoLZwSJ3VQxPu+KPnXLVKka0AGT3Yrh3G4IrdoMtNUS2nR0Un+fJc3PZ2GsRlcnEA==}
+  /@ora-io/cle-api@1.0.3-alpha.14:
+    resolution: {integrity: sha512-4IuNvsKVPoONjrhd4iI2bNmLj9WMnjuzQvS2NdUC0xXITuHNwfLR0K/7nGXvG65flfsuSDV7umUVZMwj0SB8Ng==}
     dependencies:
       '@ethereumjs/rlp': 5.0.2
       '@murongg/utils': 0.1.20
@@ -7820,6 +7820,7 @@ packages:
   /socks@2.7.3:
     resolution: {integrity: sha512-vfuYK48HXCTFD03G/1/zkIls3Ebr2YNa4qU9gHDZdblHLiqhJrJGkY3+0Nx0JpN9qBhJbVObc1CNciT1bIZJxw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+    deprecated: please use 2.7.4 or 2.8.1 to fix package-lock issue
     dependencies:
       ip-address: 9.0.5
       smart-buffer: 4.2.0

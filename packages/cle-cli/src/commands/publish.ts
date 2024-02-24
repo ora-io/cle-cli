@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import to from 'await-to-js'
 import * as cleApi from '@ora-io/cle-api'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, logLoadingAnimation } from '../utils'
+import { loadYamlFromPath, logDivider, logLoadingAnimation } from '../utils'
 import type { UserConfig } from '../config'
 
 export interface PublishOptions {
@@ -31,7 +31,17 @@ export async function publish(options: PublishOptions) {
     return
   }
 
-  const JsonRpcProviderUrl = loadJsonRpcProviderUrl(cleYaml, jsonRpcProviderUrl, false)
+  const networkName = cleYaml.decidePublishNetwork()
+  if (!networkName) {
+    logger.error('[-] ERROR: Failed to get network')
+    return
+  }
+  const JsonRpcProviderUrl = (jsonRpcProviderUrl as any)?.[networkName as any]
+  if (!JsonRpcProviderUrl) {
+    logger.error('[-] ERROR: Failed to get JsonRpcProviderUrl')
+    return
+  }
+
   const provider = new ethers.providers.JsonRpcProvider(JsonRpcProviderUrl)
   const signer = new ethers.Wallet(userPrivateKey, provider)
 
@@ -65,7 +75,7 @@ export async function publish(options: PublishOptions) {
   loading.stopAndClear()
   logger.info('[+] CLE PUBLISHED SUCCESSFULLY!')
   logger.info(
-    `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${txReceipt.networkName}`,
+    `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${networkName}`,
   )
   logger.info(`[*] Transaction hash: ${txReceipt.transactionHash}`)
   logger.info(`[*] Graph address deployed at: ${txReceipt.graphAddress}`)
