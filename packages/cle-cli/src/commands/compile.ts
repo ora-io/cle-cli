@@ -4,7 +4,7 @@ import * as cleApi from '@ora-io/cle-api'
 import webjson from '@ora-io/cle-lib/test/weblib/weblib.json'
 import to from 'await-to-js'
 import { CLEYaml } from '@ora-io/cle-api'
-import { createOnNonexist, isTsFile, loadMappingPathFromYaml } from '../utils'
+import { createOnNonexist, getFileContentsByFilePaths, getRelativePaths, getTsFileTreeByDir, isTsFile, loadMappingPathFromYaml } from '../utils'
 import { logger } from '../logger'
 
 export interface CompileOptions {
@@ -70,7 +70,7 @@ async function compileRun(options: CompileOptions) {
   if (!dirPath)
     dirPath = path.dirname(mappingPath)
 
-  const paths = getFileTreeByDir(dirPath)
+  const paths = getTsFileTreeByDir(dirPath)
   const relativePaths = getRelativePaths(dirPath, paths)
   const fileMap = getFileContentsByFilePaths(relativePaths, dirPath)
 
@@ -115,38 +115,4 @@ function logCompileResult(wasmPath: string, watPath: string): void {
   // Log status
   logger.info(`[+] Output written to \`${path.dirname(wasmPath)}\` folder.`)
   logger.info('[+] COMPILATION SUCCESS!' + '\n')
-}
-
-function getFileTreeByDir(dir: string) {
-  const fileTree: string[] = []
-  const files = fs.readdirSync(dir)
-  for (const file of files) {
-    const filePath = path.join(dir, file)
-    if (fs.statSync(filePath).isDirectory()) {
-      const subFiles = getFileTreeByDir(filePath)
-      fileTree.push(...subFiles)
-    }
-    else if (isTsFile(file)) {
-      fileTree.push(filePath)
-    }
-  }
-  return fileTree
-}
-
-function getRelativePaths(dir: string, filePaths: string[]): string[] {
-  const relativePaths: string[] = []
-  for (const filePath of filePaths) {
-    const relativePath = path.relative(dir, filePath)
-    relativePaths.push(relativePath)
-  }
-  return relativePaths
-}
-
-function getFileContentsByFilePaths(filePaths: string[], basePath: string) {
-  const fileContents: Record<string, string> = {}
-  for (const filePath of filePaths) {
-    const fileContent = fs.readFileSync(path.join(basePath, filePath), 'utf-8')
-    Reflect.set(fileContents, filePath, fileContent)
-  }
-  return fileContents
 }

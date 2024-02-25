@@ -3,7 +3,7 @@ import path from 'node:path'
 import { upload as uploadApi } from '@ora-io/cle-api'
 import { computeAddress } from 'ethers/lib/utils'
 import { logger } from '../logger'
-import { checkPinataAuthentication, isTsFile, loadMappingPathFromYaml, loadYamlFromPath } from '../utils'
+import { checkPinataAuthentication, getRelativePaths, getTsFileTreeByDir, isTsFile, loadMappingPathFromYaml, loadYamlFromPath } from '../utils'
 
 export interface UploadOptions {
   // local: boolean
@@ -39,14 +39,25 @@ export async function upload(options: UploadOptions) {
 
   const userAddress = computeAddress(userPrivateKey).toLowerCase()
 
-  const mappingFile = fs.createReadStream(mappingPath)
+  // const mappingFile = fs.createReadStream(mappingPath)
   const wasmFile = fs.createReadStream(wasmPath)
   const yamlFile = fs.createReadStream(yamlPath)
+
+  const dirPath = path.dirname(mappingPath)
+
+  const paths = getTsFileTreeByDir(dirPath)
+  const fileMap = {}
+  paths.forEach((filePath) => {
+    const relativePath = getRelativePaths(dirPath, [filePath])
+    Reflect.set(fileMap, `src/${relativePath}`, fs.createReadStream(filePath))
+  })
+
   const files = {
-    'src/mapping.ts': mappingFile,
     'build/cle.wasm': wasmFile,
     'src/cle.yaml': yamlFile,
+    ...fileMap,
   }
+
   const directoryTag = { userAddress, graphName: yaml.name }
   const directoryName = `${directoryTag.graphName}-${directoryTag.userAddress}`
 
