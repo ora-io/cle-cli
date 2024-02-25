@@ -1,10 +1,7 @@
-import fs from 'node:fs'
-import type { ProofParams } from '@ora-io/cle-api'
 import { Error, constants, verify as verifyApi } from '@ora-io/cle-api'
 import { ethers } from 'ethers'
-import { ZkWasmUtil } from '@ora-io/zkwasm-service-helper'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider } from '../utils'
+import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, readProofParamsFile } from '../utils'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
 import { TAGS } from '../constants'
@@ -31,7 +28,13 @@ export async function verify(options: VerifyOptions) {
   // Get deployed verification contract address.
   // TODO: I reused this func to save code, but the naming is a bit misleading, fix it later.
   // const verifierAddress = loadJsonRpcProviderUrl(cleYaml, AggregatorVerifierAddress, false)
-  const proofParams = getVerifyProofParamsByProofFile(taskId, outputProofFilePath)
+
+  const proofFilPath = parseTemplateTag(outputProofFilePath, {
+    ...TAGS,
+    taskId: taskId || '',
+  })
+
+  const proofParams = readProofParamsFile(proofFilPath)
   const network = cleYaml.decidePublishNetwork()
   if (!network) {
     logger.error('[-] ERROR: Failed to get network')
@@ -56,38 +59,4 @@ export async function verify(options: VerifyOptions) {
     logger.error('>> VERIFY PROOF ONCHAIN FAILED')
 
   return verifyResult
-}
-
-function getVerifyProofParamsByProofFile(taskId: string, outputProofFilePath: string): ProofParams {
-  const outputProofFile = parseTemplateTag(outputProofFilePath, {
-    ...TAGS,
-    taskId: taskId || '',
-  })
-
-  if (!fs.existsSync(outputProofFile)) {
-    logger.error('[-] ERROR: Failed to get proof file')
-    process.exit(1)
-  }
-
-  const content = fs.readFileSync(outputProofFile, 'utf-8')
-  const regex = /Instances:\n(.*?)\n\nBatched Instances:\n(.*?)\n\nProof transcripts:\n(.*?)\n\nAux data:\n(.*?)\n\n/s
-  const matches = content.match(regex)
-
-  if (matches) {
-    const instancesValue = matches[1].trim().split('\n')
-    const batchedInstancesValue = matches[2].trim().split('\n')
-    const proofTranscriptsValue = matches[3].trim().split('\n')
-    const auxDataValue = matches[4].trim().split('\n')
-
-    return {
-      instances: [ZkWasmUtil.hexStringsToBytes(instancesValue, 32)], // TODO: checkout how to read/return 2-dim instances
-      batch_instances: ZkWasmUtil.hexStringsToBytes(batchedInstancesValue, 32),
-      aggregate_proof: ZkWasmUtil.hexStringsToBytes(proofTranscriptsValue, 32),
-      aux: ZkWasmUtil.hexStringsToBytes(auxDataValue, 32),
-    }
-  }
-  else {
-    logger.error('[-] ERROR: Failed to get proof file')
-    process.exit(1)
-  }
 }
