@@ -81,5 +81,5 @@ export async function setup(options: SetupOptions) {
   logger.info(
     `[${taskStatus === 'SUCCESS' ? '+' : '-'}] SET UP ${taskStatus}`,
   )
-  return result
+  return result as any
 }

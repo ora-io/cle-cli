@@ -1,6 +1,6 @@
 {
   "name": "@ora-io/cle-cli",
-  "version": "1.0.0-alpha.13",
+  "version": "1.0.0-alpha.14",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/ora-io/cle-cli#readme",
