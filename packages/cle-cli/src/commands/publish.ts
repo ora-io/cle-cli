@@ -23,7 +23,7 @@ export async function publish(options: PublishOptions) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
     logDivider()
   }
-  const newBountyRewardPerTrigger = Number(bountyRewardPerTrigger) || 0.05
+  const newBountyRewardPerTrigger = Number(bountyRewardPerTrigger)
 
   const cleYaml = loadYamlFromPath(yamlPath)
   if (!cleYaml) {
