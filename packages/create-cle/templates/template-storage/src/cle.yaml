@@ -2,7 +2,7 @@ specVersion: 0.0.2
 apiVersion: 0.0.2
 name: eg_storage
 description: "This demo CLE shows 2 ways to access a slot value."
-repository: https://github.com/ora-io/zkgraph
+repository: https://github.com/ora-io/cle
 dataSources:
   - kind: ethereum
     network: sepolia

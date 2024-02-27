@@ -26,7 +26,7 @@ async function build() {
     execSync('pnpm run clean', { stdio: 'inherit' })
   }
 
-  consola.info('Create zkGraph build')
+  consola.info('Create CLE build')
   execSync('pnpm run -C packages/create-cle build', { stdio: 'inherit' })
 
   consola.info('CLI build')

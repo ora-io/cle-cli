@@ -1,7 +1,7 @@
 specVersion: 0.0.1
 name: ex_addr
 description: "Demo graph for zkAutomation. Use the source contract address as the trigger payload."
-repository: https://github.com/ora-io/zkgraph
+repository: https://github.com/ora-io/cle
 dataSources:
   - kind: ethereum/contract
     network: sepolia

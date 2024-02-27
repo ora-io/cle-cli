@@ -2,7 +2,7 @@ specVersion: 0.0.2
 apiVersion: 0.0.2
 name: eg_autoprice
 description: "This demo CLE shows Uniswap price-based zkAutomation case. Calculate ETH/USDC price, set it as the trigger payload whenever price > theshold."
-repository: https://github.com/ora-io/zkgraph
+repository: https://github.com/ora-io/cle
 dataSources:
   - kind: ethereum
     network: sepolia

@@ -17,5 +17,5 @@ for (const pkg of packages) {
     cwd = path.join(cwd, 'dist')
 
   execSync(command, { stdio: 'inherit', cwd })
-  consola.success(`Published zkGraph ${pkg.packName}`)
+  consola.success(`Published CLE ${pkg.packName}`)
 }

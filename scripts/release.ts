@@ -37,16 +37,16 @@ async function release() {
 }
 
 async function updateTemplateVersion() {
-  const createZkGraphPath = path.resolve(rootDir, 'packages', 'create-cle')
-  const dirs = await fg('templates/template-*', { cwd: createZkGraphPath, onlyDirectories: true, markDirectories: true })
+  const createCLEPath = path.resolve(rootDir, 'packages', 'create-cle')
+  const dirs = await fg('templates/template-*', { cwd: createCLEPath, onlyDirectories: true, markDirectories: true })
 
   for (const dir of dirs) {
-    const packageJSON = await fs.readJSON(path.join(createZkGraphPath, dir, 'package.json'))
+    const packageJSON = await fs.readJSON(path.join(createCLEPath, dir, 'package.json'))
     if (Reflect.has(packageJSON.devDependencies, '@ora-io/cle-cli'))
       packageJSON.devDependencies['@ora-io/cle-cli'] = version
     else if (Reflect.has(packageJSON.dependencies, '@ora-io/cle-cli'))
       packageJSON.dependencies['@ora-io/cle-cli'] = version
-    await fs.writeJSON(path.join(createZkGraphPath, dir, 'package.json'), packageJSON, { spaces: 2 })
+    await fs.writeJSON(path.join(createCLEPath, dir, 'package.json'), packageJSON, { spaces: 2 })
   }
 }
 
