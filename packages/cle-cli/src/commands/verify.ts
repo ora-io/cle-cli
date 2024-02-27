@@ -1,7 +1,7 @@
-import { Error, constants, verify as verifyApi } from '@ora-io/cle-api'
+import * as cleApi from '@ora-io/cle-api'
 import { ethers } from 'ethers'
 import { logger } from '../logger'
-import { loadJsonRpcProviderUrl, loadYamlFromPath, logDivider, readProofParamsFile } from '../utils'
+import { loadYamlFromPath, logDivider, readProofParamsFile } from '../utils'
 import type { UserConfig } from '../config'
 import { parseTemplateTag } from '../tag'
 import { TAGS } from '../constants'
@@ -23,8 +23,6 @@ export async function verify(options: VerifyOptions) {
     return
   }
 
-  const jsonRpcUrl = loadJsonRpcProviderUrl(cleYaml, jsonRpcProviderUrl, false)
-
   // Get deployed verification contract address.
   // TODO: I reused this func to save code, but the naming is a bit misleading, fix it later.
   // const verifierAddress = loadJsonRpcProviderUrl(cleYaml, AggregatorVerifierAddress, false)
@@ -40,13 +38,17 @@ export async function verify(options: VerifyOptions) {
     logger.error('[-] ERROR: Failed to get network')
     return
   }
-  const verifierAddress = (constants.AggregatorVerifierAddress as any)[network]
+  if (!jsonRpcProviderUrl)
+    throw new Error('missing JsonRpcProviderUrl')
 
-  const verifyResult = await verifyApi(
+  const jsonRpcUrl = (jsonRpcProviderUrl as any)[network]
+  const verifierAddress = (cleApi.constants.AggregatorVerifierAddress as any)[network]
+
+  const verifyResult = await cleApi.verify(
     proofParams,
     { verifierAddress, provider: new ethers.providers.JsonRpcProvider(jsonRpcUrl) },
   ).catch((error: Error) => {
-    if (error instanceof Error.ProveTaskNotReady)
+    if (error instanceof cleApi.Error.ProveTaskNotReady)
       logger.error(`>> PROOF IS NOT READY. ${error.message}`)
   })
 
