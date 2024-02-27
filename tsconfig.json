@@ -12,8 +12,8 @@
     "skipDefaultLibCheck": true
   },
   "exclude": [
-    "packages/create-zkgraph/template-*/**/*",
-    "packages/create-zkgraph/templates/**/**/*",
+    "packages/create-cle/template-*/**/*",
+    "packages/create-cle/templates/**/**/*",
     "node_modules",
     "test/fixtures/**/*"
   ]

@@ -11,11 +11,11 @@ if (version.includes('beta'))
 else if (version.includes('alpha'))
   command += ' --tag alpha'
 
-for (const name of packages) {
-  let cwd = path.join('packages', name)
-  if (haveWorkspacePackages.includes(name))
+for (const pkg of packages) {
+  let cwd = path.join('packages', pkg.dir)
+  if (haveWorkspacePackages.map(pkg => pkg.packName).includes(pkg.packName))
     cwd = path.join(cwd, 'dist')
 
   execSync(command, { stdio: 'inherit', cwd })
-  consola.success(`Published zkGraph ${name}`)
+  consola.success(`Published CLE ${pkg.packName}`)
 }

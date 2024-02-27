@@ -26,18 +26,18 @@ async function build() {
     execSync('pnpm run clean', { stdio: 'inherit' })
   }
 
-  consola.info('Create zkGraph build')
-  execSync('pnpm run -C packages/create-zkgraph build', { stdio: 'inherit' })
+  consola.info('Create CLE build')
+  execSync('pnpm run -C packages/create-cle build', { stdio: 'inherit' })
 
   consola.info('CLI build')
-  execSync('pnpm run -C packages/zkgraph-cli build', { stdio: 'inherit' })
+  execSync('pnpm run -C packages/cle-cli build', { stdio: 'inherit' })
 
   buildMetaFiles()
 }
 
 async function buildMetaFiles() {
-  for (const name of haveWorkspacePackages) {
-    const packageRoot = path.resolve(rootDir, 'packages', name)
+  for (const pkg of haveWorkspacePackages) {
+    const packageRoot = path.resolve(rootDir, 'packages', pkg.dir)
     const packageDist = path.resolve(packageRoot, 'dist')
 
     await fs.copyFile(path.join(rootDir, 'README.md'), path.join(packageDist, 'README.md'))
@@ -63,7 +63,7 @@ async function buildMetaFiles() {
 
     const packageJSON = await fs.readJSON(path.join(packageRoot, 'package.json'))
     for (const key of Object.keys(packageJSON.dependencies || {})) {
-      if (packages.includes(key))
+      if (packages.map(pkg => pkg.packName).includes(key))
         packageJSON.dependencies[key] = version
     }
     await fs.writeJSON(path.join(packageDist, 'package.json'), packageJSON, { spaces: 2 })

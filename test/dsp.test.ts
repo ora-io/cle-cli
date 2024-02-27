@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { generateDspHubParamsMap } from '../packages/zkgraph-cli/src/utils'
+import { generateDspHubParamsMap } from '../packages/cle-cli/src/utils'
 import { dspHub } from './mock/dsp'
 
 describe('test dsp utils', () => {

@@ -1,0 +1,23 @@
+specVersion: 0.0.2
+apiVersion: 0.0.2
+name: eg_event
+description: "This demo CLE shows 3 ways to access / filter out source events."
+repository: https://github.com/ora-io/cle
+dataSources:
+  - kind: ethereum
+    network: sepolia
+    event:
+      - address: '0xa60ecf32309539dd84f27a9563754dca818b815e'
+        events: 
+          - "Sync(uint112,uint112)"
+
+mapping:
+  language: wasm/assemblyscript
+  file: ./mapping.ts
+  handler: handleBlocks
+
+# Only enable for using zkAutomation
+# dataDestinations:
+#   - kind: ethereum
+#     network: sepolia
+#     address: "0x0000000000000000000000000000000000000001"
