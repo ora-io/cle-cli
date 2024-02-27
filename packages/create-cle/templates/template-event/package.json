@@ -15,10 +15,10 @@
     "deposit": "cle deposit"
   },
   "dependencies": {
-    "@ora-io/cle-lib": "^1.0.1-alpha.4"
+    "@ora-io/cle-lib": "^0.1.0"
   },
   "devDependencies": {
-    "@ora-io/cle-cli": "1.0.0-alpha.14",
+    "@ora-io/cle-cli": "0.1.0",
     "assemblyscript": "^0.27.0"
   }
 }

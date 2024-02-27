@@ -1,6 +1,6 @@
 {
   "name": "@ora-io/monorepo",
-  "version": "1.0.0-alpha.14",
+  "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "keywords": [],
@@ -23,7 +23,7 @@
     "@antfu/ni": "^0.21.8",
     "@antfu/utils": "^0.7.6",
     "@murongg/eslint-config": "^0.2.1",
-    "@ora-io/cle-lib": "^1.0.1-alpha.4",
+    "@ora-io/cle-lib": "^0.1.0",
     "@types/fs-extra": "^11.0.2",
     "@types/node": "^18.18.4",
     "assemblyscript": "^0.27.12",
