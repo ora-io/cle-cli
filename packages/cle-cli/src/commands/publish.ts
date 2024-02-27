@@ -48,6 +48,7 @@ export async function publish(options: PublishOptions) {
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
 
+  logger.info(`[*] Publishing with RewardPerTrigger = ${newBountyRewardPerTrigger}`)
   logger.info('[*] Please wait for publish tx... (estimated: 30 sec)')
 
   const loading = logLoadingAnimation()
@@ -63,7 +64,7 @@ export async function publish(options: PublishOptions) {
   ))
   if (err) {
     loading.stopAndClear()
-    if (err instanceof cleApi.Error.GraphAlreadyExist) {
+    if (err instanceof cleApi.Error.CLEAlreadyExist || err instanceof cleApi.Error.CLEAddressMissing || err instanceof cleApi.Error.TxFailed) {
       logger.error(`[-] PUBLISH FAILED. ${err.message}`)
       return
     }
@@ -74,17 +75,8 @@ export async function publish(options: PublishOptions) {
 
   loading.stopAndClear()
   logger.info('[+] CLE PUBLISHED SUCCESSFULLY!')
-  logger.info(
-    `[*] Transaction confirmed in block ${txReceipt.blockNumber} on ${networkName}`,
-  )
-  logger.info(`[*] Transaction hash: ${txReceipt.transactionHash}`)
-  logger.info(`[*] Graph address deployed at: ${txReceipt.graphAddress}`)
-
-  if (txReceipt.transactionHash === '')
-    logger.error('[-] PUBLISH FAILED.')
-
-  else
-    logger.info(`[*] PUBLISH TX HASH: ${txReceipt.transactionHash}`)
+  logger.info(`[*] Transaction Hash: ${txReceipt.transactionHash}, confirmed in block ${txReceipt.blockNumber} on ${networkName}`)
+  logger.info(`[*] CLE ID (i.e. CLE contract address): ${txReceipt.cleAddress}`)
 
   return txReceipt.transactionHash
 }
