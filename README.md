@@ -1,5 +1,44 @@
 # CLE CLI
 
+## Getting Started
+
+### Creating Your First CLE Project
+
+With NPM:
+```bash
+npm create cle@latest
+```
+
+With Yarn:
+
+```bash
+yarn create cle@latest
+```
+
+With PNPM:
+
+```bash
+pnpm create cle@latest
+```
+
+Then follow the prompts!
+
+To create a **uniswapprice** template, you can directly specify the project name and the desired template using additional command line options. For instance, you can run the following command:
+
+```sh
+# npm 6.x
+npm create cle@latest my-cle-uniswapprice --template uniswapprice
+
+# npm 7+, extra double-dash is needed:
+npm create cle@latest my-cle-uniswapprice -- --template uniswapprice
+
+# yarn
+yarn create cle@latest my-cle-uniswapprice --template uniswapprice
+
+# pnpm
+pnpm create cle@latest my-cle-uniswapprice --template uniswapprice
+```
+
 ## CLI
 
 > Note: Only `full` image will be processed by zkOracle node. `unsafe` (define `unsafe: true` in the `cle.yaml`) means the CLE is compiled locally and only contains partial computation (so that proving and executing will be faster).
