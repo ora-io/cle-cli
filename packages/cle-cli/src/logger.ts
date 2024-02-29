@@ -1,5 +1,6 @@
 /* eslint no-console: 0 */
-import { type CLELogger, setCLELogger } from '@ora-io/cle-api'
+import type { CLELogger } from 'zkwasm-toolchain'
+import { setCLELogger } from 'zkwasm-toolchain'
 import colors from 'picocolors'
 
 export type LogType = 'error' | 'warn' | 'info' | 'debug'
@@ -64,6 +65,9 @@ export class Logger implements CLELogger {
 
   log(...args: any[]): void {
     this.info(...args)
+  }
+  write(arg: string): void {
+    process.stdout.write(arg)
   }
 }
 
