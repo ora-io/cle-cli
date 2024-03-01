@@ -24,6 +24,8 @@ export class Logger implements CLELogger {
     second: 'numeric',
   })
 
+  private writeCache: string[] = []
+
   constructor(level: LogLevel = 'info', prefix = '[CLE]') {
     this.level = level
     this.prefix = prefix
@@ -64,6 +66,16 @@ export class Logger implements CLELogger {
 
   log(...args: any[]): void {
     this.info(...args)
+  }
+
+  write(msg: string) {
+    if (msg === '\n') {
+      this.debug(this.writeCache.join(''))
+      this.writeCache = []
+    }
+    else {
+      this.writeCache.push(msg)
+    }
   }
 }
 
