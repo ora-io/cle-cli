@@ -1,5 +1,5 @@
 //@ts-ignore
-import { require } from "@ora-io/cle-lib";
+import { require, console } from "@ora-io/cle-lib";
 import { Bytes, Block, Event, BigInt } from "@ora-io/cle-lib";
 
 var esig_sync = Bytes.fromHexString(
@@ -35,6 +35,7 @@ function calcPrice(syncEvent: Event): BigInt {
 }
 
 export function handleBlocks(blocks: Block[]): Bytes {
+  console.log("Entering handleBlocks...");
   let lastSyncEvent: Event | null = null;
 
   let events = blocks[0].events;
@@ -49,7 +50,7 @@ export function handleBlocks(blocks: Block[]): Bytes {
 
   if (lastSyncEvent == null) {
     // Don't Trigger if there's no event in the block
-    require(false);
+    require(false, "Trigger condition failed.");
     return Bytes.empty(); // Omit compile error, never goes here
   } else {
     let price0 = calcPrice(lastSyncEvent);
@@ -61,7 +62,7 @@ export function handleBlocks(blocks: Block[]): Bytes {
       BigInt.fromI32(threshold_eth_price * 10 ** price_decimals),
     );
     // ATTENTION: REMOVE THIS IF YOU WANT TO SEE THE OUTPUT
-    require(triggerCondition);
+    require(triggerCondition, "Trigger condition failed.");
 
     // Set payload to the current price0 when triggering destination contract.
     let payload = Bytes.fromHexString(price0.toString(16)).padStart(32, 0);

@@ -1,11 +1,12 @@
 //@ts-ignore
-import { require } from "@ora-io/cle-lib";
+import { require, console } from "@ora-io/cle-lib";
 import { Bytes, Block, Event } from "@ora-io/cle-lib";
 
 let addr = Bytes.fromHexString('0xa60ecf32309539dd84f27a9563754dca818b815e');
 let esig_sync = Bytes.fromHexString("0x1c411e9a96e071241c2f21f7726b17ae89e3cab4c78be50e062b03a9fffbbad1");
 
 export function handleBlocks(blocks: Block[]): Bytes {
+  console.log("Entering handleBlocks...");
   // init output state
   let state: Bytes;
 
@@ -21,12 +22,13 @@ export function handleBlocks(blocks: Block[]): Bytes {
   let eventsByAcctEsig: Event[] = blocks[0].account(addr).eventsByEsig(esig_sync)
 
   // require match event count > 0
-  require(eventsByAcctEsig.length > 0)
+  require(eventsByAcctEsig.length > 0, "Trigger condition failed.")
 
   // this 2 way to access event are equal effects, alway true when there's only 1 event matched in the block (e.g. block# 2279547 on sepolia).
   require(
     events[0].data == eventsByAcct[0].data 
-    && events[0].data == eventsByAcctEsig[0].data
+    && events[0].data == eventsByAcctEsig[0].data,
+    "Trigger condition failed."
   );
 
   // set state to the address of the 1st (matched) event, demo purpose only.
