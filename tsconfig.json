@@ -12,8 +12,6 @@
     "skipDefaultLibCheck": true
   },
   "exclude": [
-    "packages/create-cle/template-*/**/*",
-    "packages/create-cle/templates/**/**/*",
     "node_modules",
     "test/fixtures/**/*"
   ]

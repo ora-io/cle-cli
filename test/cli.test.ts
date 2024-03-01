@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { version } from '../package.json'
 import { execCommand } from './utils/node'
 
-const runCLI = 'node ./packages/cle-cli/dist/bin/cle.js'
+const runCLI = 'node ./bin/cle.js'
 
 describe('test CLI', () => {
   it('test run', () => {

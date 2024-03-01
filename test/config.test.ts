@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { getConfig, loadConfigFromFile } from '../packages/cle-cli/src/config'
+import { getConfig, loadConfigFromFile } from '../src/config'
 
 const configFixturesRoot = path.join(__dirname, 'fixtures/config')
 

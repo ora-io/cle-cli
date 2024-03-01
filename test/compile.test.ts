@@ -1,8 +1,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { compile } from '../packages/cle-cli/src/commands/compile'
-import { instantiateWasm } from './utils/wasm'
+import { instantiateWasm } from 'zkwasm-toolchain'
+import { compile } from '../src/commands/compile'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const projectRoot = process.cwd()

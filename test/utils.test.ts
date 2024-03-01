@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { checkPinataAuthentication, fromHexString, readProofParamsFile, writeProofParamsFile } from '../packages/cle-cli/src/utils'
+import { checkPinataAuthentication, fromHexString, readProofParamsFile, writeProofParamsFile } from '../src/utils'
 
 const fixturesRoot = path.join(__dirname, 'fixtures')
 
