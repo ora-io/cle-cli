@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe, it } from 'vitest'
-import { setup } from '../packages/cle-cli/src/commands/setup'
+import { setup } from '../src/commands/setup'
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 
 describe('setup', () => {

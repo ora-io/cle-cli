@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { getTsFiles, isTsFile } from '../packages/cle-cli/src/utils'
+import { getTsFiles, isTsFile } from '../src/utils'
 
 const utilsFixturesRoot = path.join(__dirname, 'fixtures/utils')
 

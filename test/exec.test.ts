@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { exec } from '../packages/cle-cli/src/commands/exec'
+import { exec } from '../src/commands/exec'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const washPath = process.cwd()

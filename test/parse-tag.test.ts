@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseTemplateTag } from '../packages/cle-cli/src/tag'
+import { parseTemplateTag } from '../src/tag'
 
 describe('tag', () => {
   it('parse', () => {

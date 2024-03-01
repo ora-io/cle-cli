@@ -1,46 +1,95 @@
 {
-  "name": "@ora-io/monorepo",
+  "name": "@ora-io/cle-cli",
   "version": "0.1.2",
-  "private": true,
   "packageManager": "pnpm@8.6.0",
+  "description": "",
+  "homepage": "https://github.com/ora-io/cle-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ora-io/cle-cli.git",
+    "directory": "packages/cle-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/ora-io/cle-cli/issues"
+  },
   "keywords": [],
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "bin": {
+    "cle": "bin/cle.js"
+  },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
-    "clean": "rimraf packages/*/dist",
-    "build": "esno scripts/build.ts",
+    "clean": "rimraf dist",
+    "build": "unbuild",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "nr build",
-    "publish": "nr prepublishOnly && esno scripts/publish.ts",
-    "release": "esno scripts/release.ts",
+    "release": "cle-scripts release && cle-scripts publish",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "peerDependencies": {
+    "@ora-io/cle-lib": "^0.1.1"
+  },
   "dependencies": {
-    "@ora-io/cle-cli": "workspace:*"
+    "@ora-io/cle-api": "^0.1.1",
+    "@ora-io/zkwasm-service-helper": "^1.0.3",
+    "api": "^6.1.1",
+    "await-to-js": "^3.0.0",
+    "axios": "^1.5.1",
+    "axios-retry": "^3.8.0",
+    "cac": "^6.7.14",
+    "create-cle": "^0.1.1",
+    "ethers": "^5.7.2",
+    "form-data": "^4.0.0",
+    "nanoid": "^5.0.1",
+    "picocolors": "^1.0.0",
+    "prompts": "^2.4.2",
+    "semver": "^7.5.4",
+    "ts-md5": "^1.3.1",
+    "unconfig": "^0.3.11"
   },
   "devDependencies": {
-    "@antfu/ni": "^0.21.8",
-    "@antfu/utils": "^0.7.6",
     "@murongg/eslint-config": "^0.2.1",
     "@ora-io/cle-lib": "^0.1.1",
-    "@types/fs-extra": "^11.0.2",
-    "@types/node": "^18.18.4",
-    "assemblyscript": "^0.27.12",
-    "bumpp": "^9.2.0",
+    "@ora-io/release-scripts": "^0.0.1",
+    "@types/fs-extra": "^11.0.4",
+    "@types/js-yaml": "^4.0.6",
+    "@types/prompts": "^2.4.6",
+    "@types/semver": "^7.5.3",
+    "assemblyscript": "^0.27.24",
     "consola": "^3.2.3",
-    "eslint": "^8.51.0",
-    "esno": "^4.0.0",
-    "fast-glob": "^3.3.1",
-    "fs-extra": "^11.1.1",
-    "lint-staged": "^13.3.0",
-    "pnpm": "^8.8.0",
+    "eslint": "^8.57.0",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
+    "lint-staged": "^15.2.2",
     "rimraf": "^5.0.5",
     "simple-git-hooks": "^2.9.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
-    "vite": "^4.4.11",
-    "vitest": "^0.31.4"
+    "vitest": "^1.3.1",
+    "zkwasm-toolchain": "^0.0.4"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

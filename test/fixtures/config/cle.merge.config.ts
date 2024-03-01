@@ -1,4 +1,4 @@
-import { defineConfig } from '../../../packages/cle-cli/src/config'
+import { defineConfig } from '../../../src/config'
 
 export default defineConfig({
   JsonRpcProviderUrl: {

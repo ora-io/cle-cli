@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { describe, it } from 'vitest'
-import { prove } from '../packages/cle-cli/src/commands/prove'
+import { prove } from '../src/commands/prove'
 
 const commandsFixturesRoot = path.join(__dirname, 'fixtures/commands')
 const washPath = process.cwd()
