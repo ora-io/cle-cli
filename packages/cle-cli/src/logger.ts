@@ -26,6 +26,13 @@ export class Logger implements CLELogger {
 
   private writeCache: string[] = []
 
+  private tagMap: Record<LogType, string> = {
+    error: colors.red(colors.bold(this.prefix)),
+    warn: colors.yellow(colors.bold(this.prefix)),
+    info: colors.cyan(colors.bold(this.prefix)),
+    debug: colors.gray(colors.bold(this.prefix)),
+  }
+
   constructor(level: LogLevel = 'info', prefix = '[CLE]') {
     this.level = level
     this.prefix = prefix
@@ -36,12 +43,7 @@ export class Logger implements CLELogger {
     if (this.thresh >= LogLevels[type]) {
       const method = type === 'info' ? 'log' : type
       const format = () => {
-        const tag
-            = type === 'info'
-              ? colors.cyan(colors.bold(this.prefix))
-              : type === 'warn'
-                ? colors.yellow(colors.bold(this.prefix))
-                : colors.red(colors.bold(this.prefix))
+        const tag = this.tagMap[type]
         return `${colors.dim(this.timeFormatter.format(new Date()))} ${tag} ${msg}`
       }
       console[method](format())
