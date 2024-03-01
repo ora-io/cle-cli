@@ -1,5 +1,5 @@
 //@ts-ignore
-import { require } from "@ora-io/cle-lib";
+import { require, console } from "@ora-io/cle-lib";
 import { Bytes, Event, Block } from "@ora-io/cle-lib";
 
 var addr_Sync = Bytes.fromHexString(
@@ -17,6 +17,7 @@ var esig_SubmissionReceived = Bytes.fromHexString(
 );
 
 export function handleBlocks(blocks: Block[]): Bytes {
+  console.log("Entering handleBlocks...");
   let events: Event[] = blocks[0].events;
 
   let countMatched = 0;
@@ -31,7 +32,7 @@ export function handleBlocks(blocks: Block[]): Bytes {
       countMatched += 1;
     }
   }
-  require(countMatched == 4);
+  require(countMatched == 4, "Trigger condition failed.");
 
   let state = new Bytes(1);
   state[0] = countMatched;
