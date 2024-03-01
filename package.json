@@ -1,6 +1,6 @@
 {
   "name": "@ora-io/monorepo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "packageManager": "pnpm@8.6.0",
   "keywords": [],
