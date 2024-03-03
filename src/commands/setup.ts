@@ -9,10 +9,10 @@ export interface SetupOptions {
   wasmPath: string
   circuitSize: number
   userPrivateKey: string
-  zkWasmProviderUrl: string
+  ProverProviderUrl: string
 }
 export async function setup(options: SetupOptions) {
-  const { wasmPath, circuitSize, zkWasmProviderUrl, userPrivateKey } = options
+  const { wasmPath, circuitSize, ProverProviderUrl, userPrivateKey } = options
 
   logger.info('>> SET UP')
 
@@ -24,7 +24,7 @@ export async function setup(options: SetupOptions) {
   const md5 = await uploadWasmToTd(wasmPath)
   logger.info(`[*] IMAGE MD5: ${md5}`)
 
-  const deatails = await zkwasm_imagedetails(zkWasmProviderUrl, md5)
+  const deatails = await zkwasm_imagedetails(ProverProviderUrl, md5)
   if (deatails[0]?.data.result[0] !== null) {
     const taskDetails = deatails[0]?.data.result[0]
     logger.warn('[*] IMAGE ALREADY EXISTS')
@@ -74,7 +74,7 @@ export async function setup(options: SetupOptions) {
   logger.info('[*] Please wait for image set up... (estimated: 1-5 min)')
   const loading = logLoadingAnimation()
 
-  const result = await waitSetup(zkWasmProviderUrl, taskId)
+  const result = await waitSetup(ProverProviderUrl, taskId)
   loading.stopAndClear()
   taskPrettyPrint(result?.taskDetails, '[*] ')
   const taskStatus = result?.taskDetails?.status === 'Done' ? 'SUCCESS' : 'FAILED'

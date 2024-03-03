@@ -262,7 +262,7 @@ Update your private key here to sign messages & send txs.
 The CLI will inform you before sending out any tx.
 The `cle.config.ts` is in `.gitignore` by default. CLI will never upload / disclose your private key by default.
 
-#### ZkwasmProviderUrl
+#### ProverProviderUrl
 
 - **Type:** `string`
 - **Default**: `https://rpc.zkwasmhub.com:8090`

@@ -20,9 +20,16 @@ export interface UserConfig {
   UserPrivateKey?: string
 
   /**
+   * @deprecated Please use ProverProviderUrl instead
    * @default "https://rpc.zkwasmhub.com:8090"
    */
   ZkwasmProviderUrl?: string
+
+  /**
+   * @default "https://rpc.zkwasmhub.com:8090"
+   */
+  ProverProviderUrl?: string
+
   /**
    * @default "http://compiler.dev.hyperoracle.io/compile"
    */
@@ -101,6 +108,6 @@ export async function getConfig(configFile?: string, configRoot?: string) {
   userConfig.WasmBinPath = parseTemplateTag(userConfig.WasmBinPath || '', TAGS)
   // userConfig.LocalWasmBinPath = parseTemplateTag(userConfig.LocalWasmBinPath || '', TAGS)
   userConfig.YamlPath = parseTemplateTag(userConfig.YamlPath || '', TAGS)
-
+  userConfig.ProverProviderUrl = userConfig.ProverProviderUrl || userConfig.ZkwasmProviderUrl
   return userConfig as Required<UserConfig>
 }

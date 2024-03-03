@@ -9,7 +9,7 @@ import { TAGS } from '../constants'
 export interface VerifyOptions {
   taskId: string
   yamlPath: string
-  zkWasmProviderUrl: string
+  ProverProviderUrl: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
   outputProofFilePath: string
 }

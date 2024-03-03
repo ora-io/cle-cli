@@ -9,7 +9,12 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
 
   UserPrivateKey: '',
 
+  /**
+   * @deprecated Please use ProverProviderUrl instead
+   */
   ZkwasmProviderUrl: 'https://rpc.zkwasmhub.com:8090',
+
+  ProverProviderUrl: 'https://rpc.zkwasmhub.com:8090',
   CompilerServerEndpoint: 'http://compiler.hyperoracle.io/compile',
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
