@@ -19,7 +19,7 @@ export interface ProveOptions {
   wasmPath: string
   yamlPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
-  zkWasmProviderUrl: string
+  ProverProviderUrl: string
   userPrivateKey: string
   outputProofFilePath: string
   params?: any[]
@@ -35,7 +35,7 @@ export async function prove(options: ProveOptions) {
     wasmPath,
     yamlPath,
     jsonRpcProviderUrl,
-    zkWasmProviderUrl,
+    ProverProviderUrl,
     userPrivateKey,
     outputProofFilePath,
   } = options
@@ -119,7 +119,7 @@ export async function prove(options: ProveOptions) {
   }
   else if (prove) {
     // Prove mode
-    await proveMode(userPrivateKey, md5, input.getPrivateInputStr(), input.getPublicInputStr(), zkWasmProviderUrl, outputProofFilePath)
+    await proveMode(userPrivateKey, md5, input.getPrivateInputStr(), input.getPublicInputStr(), ProverProviderUrl, outputProofFilePath)
   }
 }
 /**
@@ -160,11 +160,11 @@ async function testMode(wasmUint8Array: Uint8Array, input: Input) {
  * @param md5
  * @param privateInputStr
  * @param publicInputStr
- * @param zkWasmProviderUrl
+ * @param ProverProviderUrl
  * @param outputProofFilePath
  * @returns
  */
-async function proveMode(userPrivateKey: string, md5: string, privateInputStr: string, publicInputStr: string, zkWasmProviderUrl: string, outputProofFilePath: string) {
+async function proveMode(userPrivateKey: string, md5: string, privateInputStr: string, publicInputStr: string, ProverProviderUrl: string, outputProofFilePath: string) {
   const response = await prompts({
     type: 'confirm',
     name: 'value',
@@ -212,7 +212,7 @@ async function proveMode(userPrivateKey: string, md5: string, privateInputStr: s
 
   const loading = logLoadingAnimation()
 
-  const [err, result] = await to(cleApi.waitProve(zkWasmProviderUrl, taskId))
+  const [err, result] = await to(cleApi.waitProve(ProverProviderUrl, taskId))
 
   if (err) {
     loading.stopAndClear()

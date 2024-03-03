@@ -13,11 +13,11 @@ export interface PublishOptions {
   wasmPath: string
   jsonRpcProviderUrl: UserConfig['JsonRpcProviderUrl']
   userPrivateKey: string
-  zkWasmProviderUrl: string
+  ProverProviderUrl: string
 }
 
 export async function publish(options: PublishOptions) {
-  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger = 0.05, yamlPath, wasmPath, zkWasmProviderUrl } = options
+  const { ipfsHash, jsonRpcProviderUrl, userPrivateKey, bountyRewardPerTrigger = 0.05, yamlPath, wasmPath, ProverProviderUrl } = options
   logger.info('>> PUBLISH CLE')
   if (isNaN(bountyRewardPerTrigger)) {
     logger.warn('[-] BOUNTY REWARD IS NOT A VALID NUMBER.')
@@ -57,7 +57,7 @@ export async function publish(options: PublishOptions) {
     { wasmUint8Array, cleYaml },
     signer,
     {
-      proverUrl: zkWasmProviderUrl,
+      proverUrl: ProverProviderUrl,
       ipfsHash,
       bountyRewardPerTrigger: newBountyRewardPerTrigger,
     },

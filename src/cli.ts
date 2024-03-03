@@ -76,7 +76,7 @@ Usage cases:
           circuitSize: size,
           wasmPath,
           userPrivateKey: config.UserPrivateKey,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          ProverProviderUrl: config.ProverProviderUrl,
         })
       })
 
@@ -112,7 +112,7 @@ Usage cases:
           wasmPath,
           yamlPath: config.YamlPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          ProverProviderUrl: config.ProverProviderUrl,
           userPrivateKey: config.UserPrivateKey,
           outputProofFilePath: config.OutputProofFilePath,
         })
@@ -145,7 +145,7 @@ Usage cases:
         verify({
           taskId,
           yamlPath: config.YamlPath,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          ProverProviderUrl: config.ProverProviderUrl,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
           outputProofFilePath: config.OutputProofFilePath,
         })
@@ -166,7 +166,7 @@ Usage cases:
           wasmPath: config.WasmBinPath,
           jsonRpcProviderUrl: config.JsonRpcProviderUrl,
           userPrivateKey: config.UserPrivateKey,
-          zkWasmProviderUrl: config.ZkwasmProviderUrl,
+          ProverProviderUrl: config.ProverProviderUrl,
         })
       })
 
