@@ -41,7 +41,7 @@ pnpm create cle@latest my-cle-uniswapprice --template uniswapprice
 
 ## CLI
 
-> Note: Only `full` image will be processed by zkOracle node. `unsafe` (define `unsafe: true` in the `cle.yaml`) means the CLE is compiled locally and only contains partial computation (so that proving and executing will be faster).
+> Note: `unsafe` (define `unsafe: true` in the `cle.yaml`) means the CLE is compiled locally and only contains partial computation (so that proving and executing will be faster).
 
 The workflow of local CLE development must follow: `Develop` (code in /src) -> `Compile` (get compiled wasm image) -> `Execute` (get expected output) -> `Prove` (generate input and pre-test for actual proving in zkOracle) -> `Verify` (verify proof on-chain).
 
@@ -258,19 +258,19 @@ It is recommended to use providers that support debug_getRawReceipts RPC method.
 
 - **Type:** `string`
 
-Update your private key here to sign zkwasm messages.
-Please note that (during testnet phrase) your address balance (in zkwasm server) should > 0.
-
+Update your private key here to sign messages & send txs.
+The CLI will inform you before sending out any tx.
+The `cle.config.ts` is in `.gitignore` by default. CLI will never upload / disclose your private key by default.
 
 #### ZkwasmProviderUrl
 
 - **Type:** `string`
-- **Default**: `https://zkwasm-explorer.delphinuslab.com:8090`
+- **Default**: `https://rpc.zkwasmhub.com:8090`
 
 #### CompilerServerEndpoint
 
 - **Type:** `string`
-- **Default**: `http://compiler.hyperoracle.io/compile`
+- **Default**: `http://compiler.ora.io/compile`
 
 #### PinataEndpoint
 
