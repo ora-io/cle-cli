@@ -16,7 +16,7 @@ describe('compile', () => {
 
     await compile({
       yamlPath,
-      compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
+      compilerServerEndpoint: 'http://compiler.dev.ora.io/compile',
       wasmPath,
       watPath,
     })
@@ -37,10 +37,9 @@ describe('compile', () => {
   it.runIf(process.platform !== 'win32')('dir', async () => {
     const wasmPath = path.join(projectRoot, 'temp/cle.wasm')
     const watPath = wasmPath.replace(/\.wasm/, '.wat')
-
     await compile({
       dirPath: commandsFixturesRoot,
-      compilerServerEndpoint: 'http://compiler.dev.hyperoracle.io/compile',
+      compilerServerEndpoint: 'http://compiler.dev.ora.io/compile',
       wasmPath,
       watPath,
     })

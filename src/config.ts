@@ -31,7 +31,7 @@ export interface UserConfig {
   ProverProviderUrl?: string
 
   /**
-   * @default "http://compiler.dev.hyperoracle.io/compile"
+   * @default "http://compiler.dev.ora.io/compile"
    */
   CompilerServerEndpoint?: string
   /**
