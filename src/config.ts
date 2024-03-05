@@ -31,7 +31,7 @@ export interface UserConfig {
   ProverProviderUrl?: string
 
   /**
-   * @default "http://compiler.dev.ora.io/compile"
+   * @default "https://compiler.ora.io/compile/"
    */
   CompilerServerEndpoint?: string
   /**

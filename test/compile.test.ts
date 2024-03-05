@@ -16,7 +16,7 @@ describe('compile', () => {
 
     await compile({
       yamlPath,
-      compilerServerEndpoint: 'http://compiler.dev.ora.io/compile',
+      compilerServerEndpoint: 'https://compiler.dev.ora.io/compile/',
       wasmPath,
       watPath,
     })
@@ -39,7 +39,7 @@ describe('compile', () => {
     const watPath = wasmPath.replace(/\.wasm/, '.wat')
     await compile({
       dirPath: commandsFixturesRoot,
-      compilerServerEndpoint: 'http://compiler.dev.ora.io/compile',
+      compilerServerEndpoint: 'https://compiler.dev.ora.io/compile/',
       wasmPath,
       watPath,
     })
