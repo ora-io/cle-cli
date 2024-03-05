@@ -69,13 +69,11 @@ async function compileRun(options: CompileOptions) {
   createOnNonexist(watPath)
   if (!dirPath)
     dirPath = path.dirname(mappingPath)
-
   const paths = getTsFileTreeByDir(dirPath)
   const relativePaths = getRelativePaths(dirPath, paths)
   const fileMap = getFileContentsByFilePaths(relativePaths, dirPath)
 
   const relativeYamlPath = path.relative(dirPath, yamlPath)
-
   const [err, res] = await to(cleApi.compile({
     ...webjson,
     ...fileMap,

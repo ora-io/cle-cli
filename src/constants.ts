@@ -15,7 +15,7 @@ export const DEFAULT_CONFIG: Required<UserConfig> = {
   ZkwasmProviderUrl: 'https://rpc.zkwasmhub.com:8090',
 
   ProverProviderUrl: 'https://rpc.zkwasmhub.com:8090',
-  CompilerServerEndpoint: 'http://compiler.hyperoracle.io/compile',
+  CompilerServerEndpoint: 'https://compiler.ora.io/compile/',
   PinataEndpoint: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
   PinataJWT: '',
 

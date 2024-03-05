@@ -2,7 +2,7 @@
 
 exports[`config > load default config 1`] = `
 {
-  "CompilerServerEndpoint": "http://compiler.hyperoracle.io/compile",
+  "CompilerServerEndpoint": "http://compiler.ora.io/compile",
   "JsonRpcProviderUrl": {
     "goerli": "https://eth-goerli.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
@@ -24,7 +24,7 @@ exports[`config > load default config 1`] = `
 
 exports[`config > load function config 1`] = `
 {
-  "CompilerServerEndpoint": "http://compiler.hyperoracle.io/compile",
+  "CompilerServerEndpoint": "http://compiler.ora.io/compile",
   "JsonRpcProviderUrl": {
     "goerli": "https://eth-goerli.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
@@ -46,7 +46,7 @@ exports[`config > load function config 1`] = `
 
 exports[`config > load object config 1`] = `
 {
-  "CompilerServerEndpoint": "http://compiler.hyperoracle.io/compile",
+  "CompilerServerEndpoint": "http://compiler.ora.io/compile",
   "JsonRpcProviderUrl": {
     "goerli": "https://eth-goerli.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
@@ -68,7 +68,7 @@ exports[`config > load object config 1`] = `
 
 exports[`config > merge config 1`] = `
 {
-  "CompilerServerEndpoint": "http://compiler.hyperoracle.io/compile",
+  "CompilerServerEndpoint": "https://compiler.ora.io/compile/",
   "JsonRpcProviderUrl": {
     "goerli": "https://eth-goerli.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
     "mainnet": "https://eth-mainnet.nodereal.io/v1/5c1f0a30d6ff4093a31afce579bca8d6",
