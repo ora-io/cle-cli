@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ora-io/cle-api':
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: ^0.1.2
+    version: 0.1.2
   '@ora-io/zkwasm-service-helper':
     specifier: ^1.0.3
     version: 1.0.3
@@ -1754,8 +1754,8 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  /@ora-io/cle-api@0.1.1:
-    resolution: {integrity: sha512-bQO4+8Bkcnp+ycepCgXgNpVeO5ZB0GSTCN15P9JUvj1RQTas86P5PjM+mU6CuCdrvqFBZ8i9YKPfrD+vPKhQbQ==}
+  /@ora-io/cle-api@0.1.2:
+    resolution: {integrity: sha512-FmlKzM6C8u42wL50NbywnN2wlK6FZSgRNw3k3sKgH58ryGcgYrF3O0deZKAPUEL/IxmnsNNBNPFbaDhbYsoasg==}
     dependencies:
       '@ethereumjs/rlp': 5.0.2
       '@murongg/utils': 0.1.21
@@ -1769,7 +1769,7 @@ packages:
       js-yaml: 4.1.0
       semver: 7.6.0
       web3-eth-contract: 1.10.4
-      zkwasm-toolchain: 0.0.6
+      zkwasm-toolchain: 0.0.7
     transitivePeerDependencies:
       - aws-crt
       - bufferutil
@@ -8931,8 +8931,8 @@ packages:
     resolution: {integrity: sha512-3vz0H0jSUCAJcBvEHFxViBS7su0+Ca3fxqO8cePTHwJixRhqE7bp3E/2TDYkV3Oax2k+OmgAmkRnfgam8Svpgg==}
     dev: true
 
-  /zkwasm-toolchain@0.0.6:
-    resolution: {integrity: sha512-wQy046r6OMqy5aKKGefXIkb5sYsCi7osQ1cnLBcYfctW6Cs6hg3GOSoqabYNUdRDwuHNeX/ZRoq4jw8VqIoWcw==}
+  /zkwasm-toolchain@0.0.7:
+    resolution: {integrity: sha512-BjPdVgyumQSg0hwkCw6QmXrfo0wac0gAlqVG+vQFvX5BudWQ9xEVNfV+NBuotQ9rzUPV4LEBis+5rRfi6U8BvQ==}
     dev: false
 
   github.com/DelphinusLab/delphinus-web3subscriber/b623f2174498bde8746d2acd43519680c968e466:

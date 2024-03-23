@@ -270,7 +270,7 @@ The `cle.config.ts` is in `.gitignore` by default. CLI will never upload / discl
 #### CompilerServerEndpoint
 
 - **Type:** `string`
-- **Default**: `http://compiler.ora.io/compile`
+- **Default**: `https://compiler.ora.io/compile/`
 
 #### PinataEndpoint
 
