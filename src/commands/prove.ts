@@ -90,7 +90,6 @@ export async function prove(options: ProveOptions) {
   const wasm = fs.readFileSync(wasmPath)
   const wasmUint8Array = new Uint8Array(wasm)
   const md5 = convertToMd5(wasmUint8Array).toUpperCase()
-
   const proveParams = dsp.toProveParams(
     {
       provider,
@@ -165,6 +164,13 @@ async function testMode(wasmUint8Array: Uint8Array, input: Input) {
  * @returns
  */
 async function proveMode(userPrivateKey: string, md5: string, privateInputStr: string, publicInputStr: string, ProverProviderUrl: string, outputProofFilePath: string) {
+  const [checkSetupErr] = await to(cleApi.requireImageDetails(ProverProviderUrl, md5))
+  if (checkSetupErr) {
+    if (checkSetupErr instanceof cleApi.Error.ImageNotExists || checkSetupErr instanceof cleApi.Error.ImageInvalid)
+      logger.error('[-] ', checkSetupErr.message)
+    return
+  }
+
   const response = await prompts({
     type: 'confirm',
     name: 'value',
