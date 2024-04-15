@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ora-io/cle-api':
-    specifier: ^0.1.2
-    version: 0.1.2
+    specifier: ^0.1.3
+    version: 0.1.3
   '@ora-io/zkwasm-service-helper':
     specifier: ^1.0.3
     version: 1.0.3
@@ -59,8 +59,8 @@ devDependencies:
     specifier: ^0.2.1
     version: 0.2.1(eslint@8.57.0)(typescript@5.3.3)
   '@ora-io/cle-lib':
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: ^0.1.2
+    version: 0.1.2
   '@ora-io/release-scripts':
     specifier: ^0.0.1
     version: 0.0.1(typescript@5.3.3)
@@ -1754,8 +1754,8 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  /@ora-io/cle-api@0.1.2:
-    resolution: {integrity: sha512-FmlKzM6C8u42wL50NbywnN2wlK6FZSgRNw3k3sKgH58ryGcgYrF3O0deZKAPUEL/IxmnsNNBNPFbaDhbYsoasg==}
+  /@ora-io/cle-api@0.1.3:
+    resolution: {integrity: sha512-YFX/0Chzb+VymiVfk/9BdDFz1ShyagfA2Il6fiwH8Tbmj7wXhdBpHSLFUJcv/qdhLz/H/zb1lh9xDzjyJXrT0Q==}
     dependencies:
       '@ethereumjs/rlp': 5.0.2
       '@murongg/utils': 0.1.21
@@ -1779,8 +1779,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@ora-io/cle-lib@0.1.1:
-    resolution: {integrity: sha512-cJLSAPb+r1CvLl51lPAk2DoAVmEdzE/uJu2qCplXZm3yNBzWGelVOai4DlzvOgSe3AWBefkDnYtRVxMLOa/wnA==}
+  /@ora-io/cle-lib@0.1.2:
+    resolution: {integrity: sha512-4XOsHVKh24EEr8rWPCqmel/PmHn7OsTQC4wwosj/ADF3JtwddFQhYVTGFeFUOyhkRL0L3GuQdAPUkfdrNukanw==}
     dependencies:
       assemblyscript: 0.27.24
     dev: true
