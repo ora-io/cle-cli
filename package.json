@@ -1,6 +1,6 @@
 {
   "name": "@ora-io/cle-cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "packageManager": "pnpm@8.6.0",
   "description": "",
   "homepage": "https://github.com/ora-io/cle-cli#readme",
@@ -50,10 +50,10 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@ora-io/cle-lib": "^0.1.2"
+    "@ora-io/cle-lib": "^0.1.3"
   },
   "dependencies": {
-    "@ora-io/cle-api": "^0.1.3",
+    "@ora-io/cle-api": "^0.1.5",
     "@ora-io/zkwasm-service-helper": "^1.0.3",
     "api": "^6.1.1",
     "await-to-js": "^3.0.0",
@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@murongg/eslint-config": "^0.2.1",
-    "@ora-io/cle-lib": "^0.1.2",
+    "@ora-io/cle-lib": "^0.1.3",
     "@ora-io/release-scripts": "^0.0.1",
     "@types/fs-extra": "^11.0.4",
     "@types/js-yaml": "^4.0.6",
